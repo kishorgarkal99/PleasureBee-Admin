@@ -1,13 +1,15 @@
 import Header from "./components/Header"
+import Layout from "./components/Layout"
+import Auth from "./pages/Auth"
 
 function App() {
   return (
     <>
       <div className="w-full h-screen">
         <Header title="PleasureBee" />
-        <main className="w-full h-full flex justify-center items-center">
-          <h1 className="text-4xl font-bold">Pleasure Bee</h1>
-        </main>
+        <Layout>
+          <Auth />
+        </Layout>
       </div>
     </>
   )
