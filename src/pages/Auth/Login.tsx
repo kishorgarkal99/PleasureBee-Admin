@@ -1,11 +1,46 @@
-import React from 'react'
+import React, { useState } from 'react'
+// import { useNavigate } from 'react-router-dom';
+
 type LoginProp = {
     callback: React.Dispatch<React.SetStateAction<boolean>>
 }
+
 const Login = ({ callback }: LoginProp) => {
+
+    const [formData, setFormData] = useState({
+        email: "",
+        password: "",
+    });
+
+    const { email, password } = formData;
+
+    // const navigate = useNavigate();
+
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData((prevState) => ({
+            ...prevState,
+            [e.target.name]: e.target.value,
+        }));
+    };
+
+    const onSubmit = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault();
+
+        const admin = {
+            email,
+            password,
+        };
+        console.log(admin)
+        /*
+        login dispacher will be implemented and called here
+        */
+        //   navigate("/home");
+    }
+
+
     return (
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form className="space-y-4" action="#" method="POST">
+            <form onSubmit={() => onSubmit} className="space-y-4" action="#" method="POST">
                 <div className="mt-2">
                     <input
                         id="email"
@@ -13,6 +48,8 @@ const Login = ({ callback }: LoginProp) => {
                         type="email"
                         placeholder="Enter email address"
                         autoComplete="email"
+                        value={email}
+                        onChange={onChange}
                         required
                         className="block w-full rounded-md border-0 p-2 text-md text-gray-900 shadow-sm ring-1 ring-inset ring-gray-500 outline-0 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-pink-700 sm:text-sm sm:leading-6"
                     />
@@ -25,6 +62,8 @@ const Login = ({ callback }: LoginProp) => {
                             type="password"
                             placeholder="Enter password"
                             autoComplete="current-password"
+                            value={password}
+                            onChange={onChange}
                             required
                             className="block w-full rounded-md border-0 p-2 text-md text-gray-900 outline-0 shadow-sm ring-1 ring-inset ring-gray-500 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-pink-700 sm:text-sm sm:leading-6"
                         />
