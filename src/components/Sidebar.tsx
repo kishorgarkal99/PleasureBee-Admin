@@ -11,7 +11,7 @@ const Sidebar = ({ menuItems }: SideBarProp) => {
         <div>
             {
                 menuItems?.map((menu) => (<div>
-                    <img src={menu.icon}/>
+                    <img src={menu.icon} />
                     <span>{menu.title}</span>
                 </div>))
             }
