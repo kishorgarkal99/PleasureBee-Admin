@@ -23,7 +23,7 @@ const sideBarItems = [
     {
         menuTitle: "Users",
         icon: users,
-        url: ""
+        url: "/users"
     },
     {
         menuTitle: "Matches",
@@ -53,7 +53,7 @@ const sideBarItems = [
 ]
 const Sidebar = () => {
     return (
-        <div className="bottom-0 min-h-screen ">
+        <div className="bottom-0 min-h-screen fixed">
             <aside className="shadow-xl min-h-screen rounded-lg dark:border-gray-700 z-20 md:w-64 overflow-y-auto bg-white flex-shrink-0">
                 <div className="py-4 text-gray-700 ">
                     <div className="md:hidden absolute z-30 w-16 top-2 bottom-2 left-2 flex flex-col bg-gradient-to-r from-gray-100 to-white rounded-full shadow-xl">
