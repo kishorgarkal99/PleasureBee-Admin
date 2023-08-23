@@ -1,7 +1,5 @@
 import Header from "../components/Header"
-import Layout from "../components/Layout"
 import Sidebar from "../components/Sidebar"
-import Auth from "./Auth"
 
 const Home = () => {
     return (
@@ -9,12 +7,8 @@ const Home = () => {
             <Sidebar />
             <div className="w-full">
                 <Header title="Pleasure Bee" />
-
-                <Layout>
-                    <Auth />
-                </Layout>
+                <h1 className="text-center text-4xl font-bold">Dashboard home</h1>
             </div>
-
         </div>
     )
 }
