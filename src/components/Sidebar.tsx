@@ -2,8 +2,8 @@ import { NavLink } from "react-router-dom"
 import home from "../assets/icons/home.svg"
 import users from "../assets/icons/users.svg"
 import premium from "../assets/icons/king.svg"
-import ranking from "../assets/icons/king.svg"
-import analytics from "../assets/icons/ranking.svg"
+import ranking from "../assets/icons/ranking.svg"
+import analytics from "../assets/icons/analytics.svg"
 import settings from "../assets/icons/settings.svg"
 import help from "../assets/icons/help.svg"
 import feedback from "../assets/icons/feedback.svg"
@@ -113,7 +113,7 @@ const Sidebar = () => {
                                 <>
                                     <NavLink
                                         key={index}
-                                        className="ml-2 py-3 p2-4 flex items-center w-full rounded-md transition-colors duration-150 hover:text-gray-800 hover:bg-purple-100"
+                                        className="ml-2 py-3 p2-4 flex items-center w-full rounded-md transitions duration-150 hover:text-gray-800 hover:bg-purple-100 hover:scale-105"
                                         to={item.url}
                                     >
                                         <img

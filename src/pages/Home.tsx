@@ -59,10 +59,10 @@ const Home = () => {
                                     </div>
                                     <div>
                                         <p className="mb-2 text-sm font-medium text-gray-600 ">
-                                            Requests
+                                            Active users
                                         </p>
                                         <p className="text-lg font-semibold text-gray-700 ">
-                                            2500
+                                            500+
                                         </p>
                                     </div>
                                 </div>
