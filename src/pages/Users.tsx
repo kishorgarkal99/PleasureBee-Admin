@@ -6,7 +6,7 @@ const users = [
     {
         fname: "Fidel",
         lname: "Alemayehu",
-        email: "email@email.com",
+        phone: "+25190008560",
         avatar: "https://tecdn.b-cdn.net/img/new/avatars/5.webp",
         about: "My name is Fidel Alemayehu, and I'm a software engineer",
         verified: false,
@@ -15,7 +15,7 @@ const users = [
     {
         fname: "Arnab",
         lname: "Ghosh",
-        email: "arnab@email.com",
+        phone: "+9190048560",
         avatar: "https://tecdn.b-cdn.net/img/new/avatars/1.webp",
         about: "My name is Arnab Ghosh, and I'm a software engineer",
         verified: true,
@@ -24,7 +24,7 @@ const users = [
     {
         fname: "Fikireab",
         lname: "Mekuriaw",
-        email: "fikireab@email.com",
+        phone: "+25190008560",
         avatar: "https://tecdn.b-cdn.net/img/new/avatars/1.webp",
         about: "My name is Fikireab Mekuriaw, and I'm a software engineer",
         verified: false,
@@ -33,7 +33,7 @@ const users = [
     {
         fname: "Fidel",
         lname: "Alemayehu",
-        email: "email@email.com",
+        phone: "+25190008560",
         avatar: "https://tecdn.b-cdn.net/img/new/avatars/5.webp",
         about: "My name is Fidel Alemayehu, and I'm a software engineer",
         verified: false,
@@ -42,7 +42,7 @@ const users = [
     {
         fname: "Fidel",
         lname: "Alemayehu",
-        email: "email@email.com",
+        phone: "+25190008560",
         avatar: "https://tecdn.b-cdn.net/img/new/avatars/5.webp",
         about: "My name is Fidel Alemayehu, and I'm a software engineer",
         verified: false,
@@ -51,7 +51,7 @@ const users = [
     {
         fname: "Fidel",
         lname: "Alemayehu",
-        email: "email@email.com",
+        phone: "+25190008560",
         avatar: "https://tecdn.b-cdn.net/img/new/avatars/5.webp",
         about: "My name is Fidel Alemayehu, and I'm a software engineer",
         verified: true,
@@ -60,7 +60,7 @@ const users = [
     {
         fname: "Fidel",
         lname: "Alemayehu",
-        email: "email@email.com",
+        phone: "+25190008560",
         avatar: "https://tecdn.b-cdn.net/img/new/avatars/5.webp",
         about: "My name is Fidel Alemayehu, and I'm a software engineer",
         verified: false,
@@ -80,7 +80,7 @@ const Users = () => {
                             <thead>
                                 <tr className="text-xs font-semibold tracking-wide text-left text-gray-700 uppercase border-b border-purple-700 bg-gradient-to-b from-white to-gray-200">
                                     <th className="px-4 py-3">User</th>
-                                    <th className="px-4 py-3">Email</th>
+                                    <th className="px-4 py-3">Phone</th>
                                     <th className="px-4 py-3">Status</th>
                                     <th className="px-4 py-3">Subscription</th>
                                     <th className="px-4 py-3">Actions</th>
@@ -112,7 +112,7 @@ const Users = () => {
                                             </div>
                                         </td>
 
-                                        <td className="px-4 py-3 text-sm">{user.email}</td>
+                                        <td className="px-4 py-3 text-sm">{user.phone}</td>
 
                                         <td className="px-4 py-3 text-xs">
                                             <span

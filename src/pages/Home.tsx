@@ -1,5 +1,8 @@
 import Header from "../components/Header"
 import Sidebar from "../components/Sidebar"
+import SimpleBarChart from "../components/charts/BarChart"
+import SimpleLineChart from "../components/charts/SimpleLineChart"
+import SimplePiechart from "../components/charts/MultiAixisLine"
 
 const Home = () => {
     return (
@@ -67,8 +70,16 @@ const Home = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div>
-                                <h1 className="text-4xl text-gray-400 font-bold">Charts goes here</h1>
+                            <div className="w-full grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-3 items-center">
+                                <div className="p-1 rounded-md shadow-xl">
+                                    <SimpleBarChart />
+                                </div>
+                                <div className="p-1 rounded-md shadow-xl h-500">
+                                    <SimpleLineChart />
+                                </div>
+                                <div className="p-1 rounded-md shadow-xl h-500">
+                                    <SimplePiechart />
+                                </div>
                             </div>
                         </div>
                     </main>
