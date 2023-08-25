@@ -4,6 +4,7 @@ import users from "../assets/icons/users.svg"
 import premium from "../assets/icons/king.svg"
 import ranking from "../assets/icons/ranking.svg"
 import analytics from "../assets/icons/analytics.svg"
+import regFlow from "../assets/icons/widgets.svg"
 import settings from "../assets/icons/settings.svg"
 import help from "../assets/icons/help.svg"
 import feedback from "../assets/icons/feedback.svg"
@@ -40,6 +41,11 @@ const sideBarItems = [
         menuTitle: "Analytics",
         icon: analytics,
         url: ""
+    },
+    {
+        menuTitle: "Registration Flow",
+        icon: regFlow,
+        url: "/reg_flow"
     },
     {
         menuTitle: "Settings",

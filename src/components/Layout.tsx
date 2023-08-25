@@ -1,15 +1,22 @@
-import {ReactNode} from 'react'
+import { ReactNode } from 'react'
+import Header from './Header'
+import Sidebar from './Sidebar'
 
 type LayoutProp = {
-    children:ReactNode
+  children: ReactNode
+  title?: string
 }
-const Layout = ({children}:LayoutProp) => {
+const Layout = ({ title = "PleasureBee", children }: LayoutProp) => {
   return (
-    <main className="w-full h-4/5 flex justify-center items-center">
-    {
-        children
-    }
-  </main>
+    <div className="w-full flex h-screen">
+      <Sidebar />
+      <div className="w-full ml-16 md:ml-64">
+        <Header title={title} />
+        {
+          children
+        }
+      </div>
+    </div>
   )
 }
 

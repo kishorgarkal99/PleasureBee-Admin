@@ -1,0 +1,163 @@
+import { FaInfoCircle } from "react-icons/fa"
+import { MdOutlineEditNote, MdTitle } from "react-icons/md"
+import Layout from "../components/Layout"
+
+const screens = [
+    {
+        screenTitle: "Do you drink? ",
+        options: ["Socially", "Rarely", "Never", "Sober", "Frequently"],
+        description: "",
+        bgImg: ""
+    },
+    {
+        screenTitle: "What's your level of education?",
+        options: ["Highschool", "Vocational school", "Undergraduate degree", "In college", "In grad school", "Graduate degree"],
+        description: "",
+        bgImg: ""
+    },
+    {
+        screenTitle: "Would you like to have a child ?",
+        options: ["Want someday", "Dont't want", "Have and want more", "Have and don't want more", "Not sure yet"],
+        description: "",
+        bgImg: ""
+    },
+    {
+        screenTitle: "Your interests",
+        options: ["Yoga", "Photography", "Music", "Family dinner", "Travel", "Sports"],
+        description: "Pick up upto 5 things you love.It'll help you match with people who love them too.",
+        bgImg: ""
+    },
+    {
+        screenTitle: "Who would you like to date?",
+        options: ["Men", "Women", "Nonbinary"],
+        description: "You can choose more than one answer and change any time.",
+        bgImg: ""
+    },
+    {
+        screenTitle: "Choose a mode to get started",
+        options: ["{visible: true, title: BFF}", "{visible: true, title: Date}", "{visible: true, title: BIZZ}"],
+        description: "PleasureBee's for making all kinds of connections! You'll be able to switch modes once you're all set up.",
+        bgImg: ""
+    },
+    {
+        screenTitle: "What are your political learnings?",
+        options: ["Apolitical", "Moderate", "Communist", "Left", "Right", "Socialist", "Nationalise"],
+        description: "",
+        bgImg: ""
+    },
+    {
+        screenTitle: "Add a profile prompt",
+        options: ["A fun fact I'm obsessed with...", "Something I learnt way later than I should have...", "If I could have superpower it'd be..."],
+        description: "Help potential matches understand more about your personality by finishing the sentence.",
+        bgImg: ""
+    },
+    {
+        screenTitle: "Do you identify with a religion?",
+        options: ["Agnostic", "Atheist", "Buddhist", "Catholic", "Christian", "Hindu", "Jain"],
+        description: "",
+        bgImg: ""
+    },
+    {
+        screenTitle: "Do you smoke?",
+        options: ["Socially", "Never", "Regularly"],
+        description: "",
+        bgImg: ""
+    },
+    {
+        screenTitle: "AVV",
+        options: ["true", "false", "false"],
+        description: "AVV",
+        bgImg: ""
+    },
+    {
+        screenTitle: "What are you hoping to find?",
+        options: ["A relationship", "Something causual", "I'm not sure yet", "Prefer not to say"],
+        description: "Honestly helps you and not to say on PleasureBee find what you're looking for.",
+        bgImg: ""
+    },
+    {
+        screenTitle: "Do you work out?",
+        options: ["Active", "Sometimes", "Almost never"],
+        description: "",
+        bgImg: ""
+    },
+    {
+        screenTitle: "What's your zodiac sign?",
+        options: ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"],
+        description: "",
+        bgImg: ""
+    },
+]
+const UserRegFlow = () => {
+    return (
+        <Layout title="PleasureBee/User Resgistration Flow">
+            <div className="p-4 min-h-screen rounded-lg dark:border-gray-700">
+                <div className="bg-white  sm:py-10">
+                    <div className="mx-auto max-w-7xl lg:px-8 ">
+                        <ul className="grid gap-x-4 gap-y-4 md:grid-cols-2 lg:grid-cols-3 xl:col-span-2">
+                            {screens.map((screen, index) => (
+                                <li key={index}>
+                                    <div className="flex items-center gap-x-6 shadow-xl rounded-xl p-5">
+                                        {
+                                            screen.bgImg.length > 0 && <img
+                                                className="h-16 w-16 rounded-full"
+                                                src={screen.bgImg}
+                                                alt=""
+                                            />
+                                        }
+                                        <div className="w-full">
+                                            <div className="flex justify-between">
+                                                <div className="flex items-center mb-2">
+                                                    <MdTitle className="text-gray-400 text-xl shadow-xl font-bold mr-2" />
+                                                    <h3 className="text-xl font-semibold leading-7 tracking-tight text-gray-600">
+                                                        {screen.screenTitle}
+                                                    </h3>
+                                                </div>
+
+                                                <div>
+                                                    <button className="">
+                                                        <h1 className="text-xl shadow-xl font-bold text-pink-700 px-4 bg-transparent border border-pink-600 rounded-full transitions duration-2 hover:bg-pink-700 hover:text-white hover:border-transparent focus:outline-none" >
+                                                            <MdOutlineEditNote />
+                                                        </h1>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            {
+                                                screen.description.length > 0 && <div className="flex items-center ml-2">
+                                                    <FaInfoCircle className="text-gray-400 text-base shadow-xl font-bold mr-2" />
+                                                    <p className="text-sm font-semibold leading-6 text-gray-500">
+                                                        {screen.description}
+                                                    </p>
+                                                </div>
+                                            }
+                                            <hr />
+                                            <h3 className="mt-1 text-base font-semibold leading-7 tracking-tight text-gray-500">
+                                                Options
+                                            </h3>
+                                            <ol className="w-full">
+                                                {
+                                                    screen.options.map((option, index) => (
+                                                        <li key={index} className="flex items-center ml-2 hover:scale-105">
+                                                            <h1 className="text-gray-400 text-base shadow-xl font-bold mr-2">
+                                                                {index + 1}
+                                                            </h1>
+                                                            <p className="text-sm font-semibold leading-6 text-gray-500">
+                                                                {option}
+                                                            </p>
+                                                        </li>
+                                                    ))
+                                                }
+                                            </ol>
+                                        </div>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </Layout>
+    )
+}
+
+export default UserRegFlow

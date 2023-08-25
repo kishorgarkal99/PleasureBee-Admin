@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import Layout from "./components/Layout";
 import Auth from "./pages/Auth";
 import Users from "./pages/Users";
+import UserRegFlow from "./pages/UserRegFlow";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         } />
         <Route path="/" element={<Home />} />
         <Route path="/users" element={<Users />} />
+        <Route path="/reg_flow" element={<UserRegFlow />} />
       </Routes>
     </Router>
   )
