@@ -1,16 +1,24 @@
 import { Fragment, useRef } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { FaRegEdit } from 'react-icons/fa'
+import { FaMinus, FaPlus, FaRegEdit } from 'react-icons/fa'
+import { IconButton } from './Widgets'
+
+type DataType = {
+    screenTitle: string,
+    options: string[],
+    description: string,
+    bgImg: string
+}
 
 type ModalProp = {
     open: boolean,
     setOpen: React.Dispatch<React.SetStateAction<boolean>>,
-    data: string
+    data: DataType,
 }
 const Modal = ({ open, setOpen, data }: ModalProp) => {
 
     const cancelButtonRef = useRef(null)
-
+    
     return (
         <Transition.Root show={open} as={Fragment}>
             <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setOpen}>
@@ -43,31 +51,62 @@ const Modal = ({ open, setOpen, data }: ModalProp) => {
                                         <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
                                             <FaRegEdit className="h-6 w-6 text-red-600" aria-hidden="true" />
                                         </div>
-                                        <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                                        <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
                                             <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
-                                                {data}
+                                                {data.screenTitle}
                                             </Dialog.Title>
                                             <div className="mt-2">
                                                 <form>
-                                                    <div className="space-y-12">
-                                                        <div className="border-b border-gray-900/10 pb-12">
-                                                            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 w-full">
-                                                                <div className="col-span-full">
-                                                                    <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
-                                                                        About
-                                                                    </label>
-                                                                    <div className="mt-2">
-                                                                        <textarea
-                                                                            id="about"
-                                                                            name="about"
-                                                                            rows={3}
-                                                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                                                            defaultValue={''}
-                                                                        />
+                                                    <div className="space-y-6">
+                                                        <div className="col-span-full">
+                                                            <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
+                                                                description
+                                                            </label>
+                                                            <div className="mt-2">
+                                                                <textarea
+                                                                    id="about"
+                                                                    name="about"
+                                                                    rows={3}
+                                                                    className="block w-full p-2 rounded-md border-0 text-gray-600 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-300 focus:ring-2 focus:ring-inset focus:ring-pink-600 focus:outline-0 sm:text-md sm:leading-6"
+                                                                    defaultValue={data.description}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                        <div className="w-full ml-2 flex gap-2 flex-wrap">
+                                                            {
+                                                                data.options?.map((option, index) => (
+                                                                    <span key={index} className="flex items-center pl-4 bg-gray-200 text-gray-700 rounded-full">
+
+                                                                        <p className="text-sm font-semibold">
+                                                                            {option}
+                                                                        </p>
+                                                                        <button className="font-bold ml-2 text-red-500 bg-gray-100 p-1 rounded-full transitions duration-200 hover:bg-pink-700 hover:text-white hover:scale-105">
+                                                                            <FaMinus />
+                                                                        </button>
+                                                                    </span>
+                                                                ))
+                                                            }
+                                                        </div>
+                                                        <div className="col-span-full">
+                                                            <div>
+                                                                <label htmlFor="option" className="block text-sm font-medium leading-6 text-gray-900">
+                                                                    Option
+                                                                </label>
+                                                                <div className="mt-2 grid grid-cols-12 items-center min-w-full">
+                                                                    <input
+                                                                        type="text"
+                                                                        name="option"
+                                                                        id="option"
+                                                                        autoComplete="option"
+                                                                        className="col-span-10 rounded-md border-0 p-2 text-gray-600 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-300 focus:ring-2 focus:ring-inset focus:ring-pink-600 focus:outline-0 text-md sm:leading-6" />
+                                                                    <div className="ml-2 col-span-2">
+                                                                        <IconButton onclick={() => { }}>
+                                                                            <FaPlus className="w-4 h-4" />
+                                                                        </IconButton>
                                                                     </div>
-                                                                    <p className="mt-3 text-sm leading-6 text-gray-600">Write a few sentences about yourself.</p>
                                                                 </div>
                                                             </div>
+
                                                         </div>
                                                     </div>
                                                 </form>

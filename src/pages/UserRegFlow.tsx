@@ -81,7 +81,7 @@ const UserRegFlow = () => {
                     </div>
                 </div>
             </div>
-            <Modal open={edit} setOpen={setEdit} data={screens[5].screenTitle}/>
+            <Modal open={edit} setOpen={setEdit} data={screens[5]}/>
         </Layout>
     )
 }
