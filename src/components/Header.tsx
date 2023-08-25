@@ -4,7 +4,7 @@ type HeaderProp = {
 }
 const Header = ({ title }: HeaderProp) => {
     return (
-        <div className="mt-2 mx-4 bg-gradient-to-r from-pink-700 to-blue-400 px-16 py-4 rounded-md shadow-xl flex justify-between items-center">
+        <div className="fixed mt-2 left-16 md:left-64 right-0 mx-4 bg-gradient-to-r from-pink-700 to-blue-400 px-16 py-3 rounded-md shadow-xl flex justify-between items-center z-30">
             <span className="text-xl font-bold text-white">{title}</span>
             <img
                 className="inline-block h-10 w-10 rounded-full ring-2 ring-white"
