@@ -13,7 +13,7 @@ const UserRegFlow = () => {
                 <div className="mx-auto max-w-7xl">
                     <div className="fixed right-4 bottom-16 flex justify-between">
                         <button
-                        onClick={()=>setEdit(true)}
+                            onClick={() => setEdit(true)}
                             className="flex justify-center items-center px-4 py-4 bg-white text-md  text-pink-700 outline-0 transition-colors duration-200 bg-pink-700 border-2 border-pink-300 rounded-full hover:bg-gradient-to-r from-pink-700 to-blue-400 hover:text-white hover:border-0 shadow-xl">
                             <FaPlus className="w-6 h-6" />
                         </button>
@@ -81,7 +81,7 @@ const UserRegFlow = () => {
                     </div>
                 </div>
             </div>
-            <Modal open={edit} setOpen={setEdit} data={screens[5]}/>
+            <Modal open={edit} setOpen={setEdit} data={screens[5]} />
         </Layout>
     )
 }
