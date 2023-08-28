@@ -3,12 +3,13 @@ import heartlock from '../assets/hearlock.svg';
 import Login from './Auth/Login';
 import Register from './Auth/Register';
 
+
 export default function Auth() {
 
   const [userIsNew, setUserIsNew] = useState<boolean>(false)
 
   return (
-    <>
+    <div className="w-full h-screen flex justify-center items-center bg-gray-100">
       <div className="max-w-sm max-h-fit p-6 bg-white border hover:shadow-xl border-pink-400 rounded-lg shadow-lg flex flex-1 flex-col justify-center p-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
@@ -27,6 +28,6 @@ export default function Auth() {
           <Login callback={setUserIsNew} />
         }
       </div>
-    </>
+    </div>
   )
 }

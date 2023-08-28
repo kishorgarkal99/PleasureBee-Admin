@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { admin } from '../../controllers/controllers'
+import { getDocs } from 'firebase/firestore';
 // import { useNavigate } from 'react-router-dom';
 
 type LoginProp = {
@@ -6,6 +8,8 @@ type LoginProp = {
 }
 
 const Login = ({ callback }: LoginProp) => {
+
+    const [admins, setAdmins] = useState([{}])
 
     const [formData, setFormData] = useState({
         email: "",
@@ -37,7 +41,14 @@ const Login = ({ callback }: LoginProp) => {
         //   navigate("/home");
     }
 
-
+    useEffect(() => {
+        const getAdmins = async () => {
+            const data = await getDocs(admin)
+            setAdmins(data.docs.map((doc) => ({ ...doc.data, id:doc.id })))
+        }
+        getAdmins
+    }, [])
+console.log(admins)
     return (
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
             <form onSubmit={() => onSubmit} className="space-y-4" action="#" method="POST">
