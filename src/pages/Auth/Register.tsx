@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import google from "../../assets/icons/google.svg"
 import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from '../../config/firebase';
+import { auth, db } from '../../config/firebase';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 
 type RegProp = {
   callback: React.Dispatch<React.SetStateAction<boolean>>
@@ -19,15 +21,17 @@ const Register = ({ callback }: RegProp) => {
     email: "",
     password: "",
   });
-const [errorMessage, setError]=useState<string>()
-  const { username, email, password } = formData;
+  const [errorMessage, setError] = useState<string>()
+  const { username, email, password } = formData
+
+  const navigate = useNavigate()
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prevState) => ({
       ...prevState,
       [e.target?.name]: e.target.value,
-    }));
-  };
+    }))
+  }
 
   const onSubmit = () => {
 
@@ -36,21 +40,24 @@ const [errorMessage, setError]=useState<string>()
       email,
       password,
     };
-
     handleReg(admin)
   };
 
   const handleReg = async (newAdmin: Admin) => {
-
-    const q = query(collection(db, "admin"), where("email", "==", newAdmin.email));
-
-    const querySnapshot = await getDocs(q);
-
+    const q = query(collection(db, "admin"), where("email", "==", newAdmin.email))
+    const querySnapshot = await getDocs(q)
 
     if (!querySnapshot.docs.length) {
       try {
-        const docRef = await addDoc(collection(db, "admin"), newAdmin);
-        console.log("Registered with ID: ", docRef.id);
+        await createUserWithEmailAndPassword(auth, email, password)
+          .then(async () => {
+            const docRef = await addDoc(collection(db, "admin"), newAdmin)
+            console.log("Registered with ID: ", docRef.id)
+            navigate("/")
+          })
+          .catch((error) => {
+            console.log(error.code, error.message)
+          })
       } catch (e) {
         console.error("Error: ", e);
       }
@@ -63,7 +70,7 @@ const [errorMessage, setError]=useState<string>()
     <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-sm">
       <div className="space-y-4">
         {
-          errorMessage&&<p className="text-sm text-red-500 overflow-elispsis">{errorMessage}</p>
+          errorMessage && <p className="text-sm text-red-500 overflow-elispsis">{errorMessage}</p>
         }
         <div className="mt-2">
           <input

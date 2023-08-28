@@ -10,6 +10,7 @@ import help from "../assets/icons/help.svg"
 import feedback from "../assets/icons/feedback.svg"
 import logout from "../assets/icons/logout.svg"
 import heartlock from '../assets/hearlock.svg';
+import { logOut } from "../controllers/authController"
 // type SideBarProp = {
 //     menuItems: [{
 //         title: string,
@@ -138,6 +139,7 @@ const Sidebar = () => {
                             ))
                         }
                         <button
+                            onClick={logOut}
                             className="mt-8 w-full flex justify-center items-center px-4 py-2 text-white transition-colors duration-150 bg-pink-700 border border-transparent rounded-lg active:bg-pink-600 hover:bg-orange-700 focus:outline-none focus:shadow-outline-purple">
                             <img
                                 className="w-6 h-6 mr-4"
