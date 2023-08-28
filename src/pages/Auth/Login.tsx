@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../../config/firebase';
 
@@ -7,9 +7,14 @@ type LoginProp = {
     callback: React.Dispatch<React.SetStateAction<boolean>>
 }
 
+interface Admin {
+    email: string,
+    password: string
+}
+
 const Login = ({ callback }: LoginProp) => {
 
-    const [admins, setAdmins] = useState([{}])
+    const [errorMessage, setError] = useState<string>()
 
     const [formData, setFormData] = useState({
         email: "",
@@ -28,36 +33,56 @@ const Login = ({ callback }: LoginProp) => {
         }));
     };
 
-    const onSubmit = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.preventDefault();
-
+    const onSubmit = () => {
         const admin = {
             email,
             password,
         };
-        console.log(admin)
+        handleLogin(admin)
         /*
         login dispacher will be implemented and called here
         */
-        navigate("/");
+        // navigate("/");
     }
-    const getAdmins = async () => {
 
-        await getDocs(collection(db, "admin"))
-            .then((querySnapshot) => {
-                const newData = querySnapshot.docs
-                    .map((doc) => ({ ...doc.data(), id: doc.id }));
-                setAdmins(newData);
-                console.log("Admins", newData);
-            })
 
+    const handleLogin = async (newAdmin: Admin) => {
+
+        const q = query(collection(db, "admin"), where("email", "==", newAdmin.email));
+
+        const querySnapshot = await getDocs(q);
+
+
+        if (querySnapshot.docs.length) {
+            try {
+                // auth goes here
+                console.log("Login successful: ", querySnapshot.docs.at(0)?.data(), querySnapshot.docs.at(0)?.id)
+            } catch (e) {
+                console.error("Error: ", e);
+            }
+        } else {
+            setError("Error: No account found with this email")
+        }
     }
-    useEffect(() => {
-        getAdmins()
-    }, [])
+
+    // const getAdmins = async () => {
+    //     await getDocs(collection(db, "admin"))
+    //         .then((querySnapshot) => {
+    //             const newData = querySnapshot.docs
+    //                 .map((doc) => ({ ...doc.data(), id: doc.id }));
+    //             setAdmins(newData);
+    //             console.log("Admins", newData);
+    //         })
+    // }
+    // useEffect(() => {
+    //     getAdmins()
+    // }, [])
     return (
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form onSubmit={() => onSubmit} className="space-y-4">
+            <div className="space-y-4">
+                {
+                    errorMessage && <p className="text-sm text-red-500 overflow-elispsis">{errorMessage}</p>
+                }
                 <div className="mt-2">
                     <input
                         id="email"
@@ -65,7 +90,6 @@ const Login = ({ callback }: LoginProp) => {
                         type="email"
                         placeholder="Enter email address"
                         autoComplete="email"
-                        value={email}
                         onChange={onChange}
                         required
                         className="block w-full rounded-md border-0 p-2 text-md text-gray-900 shadow-sm ring-1 ring-inset ring-gray-500 outline-0 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-pink-700 sm:text-sm sm:leading-6"
@@ -79,7 +103,6 @@ const Login = ({ callback }: LoginProp) => {
                             type="password"
                             placeholder="Enter password"
                             autoComplete="current-password"
-                            value={password}
                             onChange={onChange}
                             required
                             className="block w-full rounded-md border-0 p-2 text-md text-gray-900 outline-0 shadow-sm ring-1 ring-inset ring-gray-500 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-pink-700 sm:text-sm sm:leading-6"
@@ -94,7 +117,7 @@ const Login = ({ callback }: LoginProp) => {
 
                 <div>
                     <button
-                        type="submit"
+                        onClick={onSubmit}
                         className="flex w-full justify-center rounded-md bg-pink-700 px-3 py-1.5 text-md font-semibold leading-6 text-white shadow-md hover:pink-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink-700"
                     >
                         Sign In
@@ -102,7 +125,7 @@ const Login = ({ callback }: LoginProp) => {
                 </div>
                 <hr />
 
-            </form>
+            </div>
 
             <a href="#"
                 className="my-4 flex w-full justify-center rounded-md bg-gray-100 px-3 py-1.5 text-md font-semibold leading-6 text-pink-700 shadow-md hover:pink-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink-700"

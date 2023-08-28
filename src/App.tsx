@@ -9,7 +9,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={
+        <Route path="/auth" element={
           <Layout>
             <Auth />
           </Layout>

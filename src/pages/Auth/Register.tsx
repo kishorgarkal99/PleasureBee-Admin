@@ -1,20 +1,26 @@
 import React, { useState } from 'react'
 import google from "../../assets/icons/google.svg"
-import { toast } from 'react-toastify';
+import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '../../config/firebase';
 
 type RegProp = {
   callback: React.Dispatch<React.SetStateAction<boolean>>
+}
+interface Admin {
+  username: string,
+  email: string,
+  password: string
 }
 
 const Register = ({ callback }: RegProp) => {
 
   const [formData, setFormData] = useState({
-    uname: "",
+    username: "",
     email: "",
     password: "",
   });
-
-  const { uname, email, password } = formData;
+const [errorMessage, setError]=useState<string>()
+  const { username, email, password } = formData;
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prevState) => ({
@@ -23,30 +29,48 @@ const Register = ({ callback }: RegProp) => {
     }));
   };
 
-  const onSubmit = (e:InputEvent) => {
-    e.preventDefault();
+  const onSubmit = () => {
 
     const admin = {
-      uname,
+      username,
       email,
       password,
     };
 
-    console.log(admin)
-    
+    handleReg(admin)
   };
 
+  const handleReg = async (newAdmin: Admin) => {
+
+    const q = query(collection(db, "admin"), where("email", "==", newAdmin.email));
+
+    const querySnapshot = await getDocs(q);
+
+
+    if (!querySnapshot.docs.length) {
+      try {
+        const docRef = await addDoc(collection(db, "admin"), newAdmin);
+        console.log("Registered with ID: ", docRef.id);
+      } catch (e) {
+        console.error("Error: ", e);
+      }
+    } else {
+      setError("This email is already used in another account")
+    }
+  }
 
   return (
     <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-sm">
-      <form onSubmit={() => onSubmit} className="space-y-4">
+      <div className="space-y-4">
+        {
+          errorMessage&&<p className="text-sm text-red-500 overflow-elispsis">{errorMessage}</p>
+        }
         <div className="mt-2">
           <input
-            id="uname"
-            name="uname"
+            id="username"
+            name="username"
             type="text"
             placeholder="Enter username"
-            value={uname}
             onChange={onChange}
             required
             className="block w-full rounded-md border-0 p-2 text-md text-gray-900 shadow-sm ring-1 ring-inset ring-gray-500 outline-0 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-pink-700 sm:text-sm sm:leading-6"
@@ -58,7 +82,6 @@ const Register = ({ callback }: RegProp) => {
             name="email"
             type="email"
             placeholder="Enter email address"
-            value={email}
             onChange={onChange}
             required
             className="block w-full rounded-md border-0 p-2 text-md text-gray-900 shadow-sm ring-1 ring-inset ring-gray-500 outline-0 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-pink-700 sm:text-sm sm:leading-6"
@@ -71,7 +94,6 @@ const Register = ({ callback }: RegProp) => {
             name="password"
             type="password"
             placeholder="Enter password"
-            value={password}
             onChange={onChange}
             required
             className="block w-full rounded-md border-0 p-2 text-md text-gray-900 shadow-sm ring-1 ring-inset ring-gray-500 outline-0 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-pink-700 sm:text-sm sm:leading-6"
@@ -91,7 +113,7 @@ const Register = ({ callback }: RegProp) => {
 
         <div>
           <button
-            type="submit"
+            onClick={onSubmit}
             className="flex w-full justify-center rounded-md bg-pink-700 px-3 py-1.5 text-md font-semibold leading-6 text-white shadow-sm hover:pink-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink-700"
           >
             Sign Up
@@ -105,7 +127,7 @@ const Register = ({ callback }: RegProp) => {
           <img src={google} alt="google" className="w-6 h-6" />
           <span className="ml-1">Sign up using Google</span>
         </a>
-      </form>
+      </div>
 
       <p className="mt-10 text-center text-sm text-gray-500">
         Already have an account?{' '}
