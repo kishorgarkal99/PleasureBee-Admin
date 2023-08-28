@@ -6,7 +6,7 @@ import Register from './Auth/Register';
 
 export default function Auth() {
 
-  const [userIsNew, setUserIsNew] = useState<boolean>(false)
+  const [userIsNew, setUserIsNew] = useState<boolean>(true)
 
   return (
     <div className="w-full h-screen flex justify-center items-center bg-gray-100">
