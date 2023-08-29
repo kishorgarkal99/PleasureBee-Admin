@@ -50,7 +50,7 @@ const Modal = ({ open, setOpen, dataId = "" }: ModalProp) => {
                 try {
                     const docSnap = await getDoc(docRef);
                     if (docSnap.exists()) {
-                        console.log(docSnap.data());
+                        console.log(docSnap.data().content);
                         setData({
                             id: dataId,
                             title: docSnap.data()?.title,
@@ -58,6 +58,7 @@ const Modal = ({ open, setOpen, dataId = "" }: ModalProp) => {
                             content: docSnap.data()?.content,
                             contentVissible: docSnap.data()?.contentVissible
                         })
+                        list.concat(docSnap.data()?.content)
                     } else {
                         console.log("Document does not exist")
                     }
@@ -68,7 +69,7 @@ const Modal = ({ open, setOpen, dataId = "" }: ModalProp) => {
         }
 
         getDocument()
-    }, [dataId])
+    }, [dataId,list])
 
     return (
         <Transition.Root show={open} as={Fragment}>
@@ -125,7 +126,7 @@ const Modal = ({ open, setOpen, dataId = "" }: ModalProp) => {
                                                         </div>
                                                         <div className="w-full ml-2 flex gap-2 flex-wrap">
                                                             {
-                                                                data?.content?.map((option, index) => (
+                                                                list?.map((option, index) => (
                                                                     <span key={index} className="flex items-center pl-4 bg-gray-200 text-gray-700 rounded-full">
 
                                                                         <p className="text-sm text-ellipsis">

@@ -1,9 +1,8 @@
-import { FaPlus } from "react-icons/fa"
+import { FaInfoCircle, FaMinus, FaPlus, FaRegEdit } from "react-icons/fa"
 import { MdOutlineEditNote, MdTitle } from "react-icons/md"
 import Layout from "../components/Layout"
 import { useEffect, useState } from "react"
-import Modal from "../components/Modal"
-import { collection, getDocs } from "firebase/firestore"
+import { collection, doc, getDoc, getDocs } from "firebase/firestore"
 import { db } from "../config/firebase"
 import Loader from "../components/Loader"
 
@@ -14,14 +13,41 @@ import Loader from "../components/Loader"
 // }
 
 const UserRegFlow = () => {
-    const [edit, setEdit] = useState(false)
     const [dataId, setDataId] = useState<string>("")
 
     const [uIs, setUIs] = useState([{
         id: "",
         title: "",
-        content: [""] || [{}]
+        content: [""] || [{}],
+        description: "",
     }])
+
+    const [showModal, setShowModal] = useState(false);
+    const [inputValue, setInputValue] = useState('');
+    const [contentList, setList] = useState<string[]>([]);
+    const [errorMessage, setErrorMessage] = useState('')
+    const [newTitle, setTitle] = useState('')
+    const [description, setDesc] = useState('')
+    const [content, setContent] = useState([])
+    const [contentVissible, setContentVissible] = useState([])
+
+
+    const handleAddItem = () => {
+        if (inputValue === "") {
+            setErrorMessage("Please enter a value");
+        } else if (dataTobeEdited.content?.includes(inputValue)) {
+            setErrorMessage("This value already exists in the list");
+        } else {
+            setList([...contentList, inputValue]);
+            setInputValue('');
+            setErrorMessage('');
+        }
+    };
+
+    const handleDeleteItem = (optn: string) => {
+        const updatedList = contentList.filter((item) => item !== optn);
+        setList(updatedList)
+    }
 
     const getUIs = async () => {
         await getDocs(collection(db, "UI"))
@@ -32,6 +58,7 @@ const UserRegFlow = () => {
                             id: doc.id,
                             title: doc.data().title,
                             content: doc.data().content,
+                            description: doc.data().description,
                         }));
                     setUIs(newData)
                 } catch (error) {
@@ -39,22 +66,31 @@ const UserRegFlow = () => {
                 }
             })
     }
+
+    const setEditMood = (id: string) => {
+        setDataId(id)
+        setShowModal(true)
+       
+    }
+
     useEffect(() => {
         getUIs()
     }, [])
-    console.log(uIs[1])
+
+    const dataTobeEdited = uIs.filter((ui) => ui.id === dataId)[0]
     return (
         <Layout title="PleasureBee/User Resgistration Flow">
             {uIs.length === 0 ?
                 <div className="w-full bg-gray-100 h-4/5 flex items-center justify-center">
                     <Loader openloader={true} />
                 </div>
-                : <>
+                :
+                <>
                     <div className="min-h-screen rounded-lg bg-gray-100">
                         <div className="mx-auto max-w-7xl">
                             <div className="fixed right-4 bottom-16 flex justify-between">
                                 <button
-                                    onClick={() => setEdit(true)}
+                                    onClick={() => setShowModal(true)}
                                     className="flex justify-center items-center px-4 py-4 bg-white text-md  text-pink-700 outline-0 transition-colors duration-200 bg-pink-700 border-2 border-pink-300 rounded-full hover:bg-gradient-to-r from-pink-700 to-blue-400 hover:text-white hover:border-0 shadow-xl">
                                     <FaPlus className="w-6 h-6" />
                                 </button>
@@ -63,13 +99,6 @@ const UserRegFlow = () => {
                                 {uIs.map((ui) => (
                                     <div key={ui.id} className="col-span-1 min-h-full bg-white shadow-xl rounded-xl ">
                                         <div className="flex items-center gap-x-6 p-5">
-                                            {/* {
-                                        screen.bgImg.length > 0 && <img
-                                            className="h-16 w-16 rounded-full"
-                                            src={screen.bgImg}
-                                            alt=""
-                                        />
-                                    } */}
                                             <div className="w-full select-none">
                                                 <div className="flex justify-between">
                                                     <div className="flex items-center mb-2">
@@ -81,7 +110,7 @@ const UserRegFlow = () => {
 
                                                     <div>
                                                         <button
-                                                            onClick={() => setEdit(true)}
+                                                            onClick={() => setEditMood(ui.id)}
                                                             className="text-xl shadow-xl font-bold text-pink-700 px-4 bg-transparent border border-pink-600 rounded-full transitions duration-200 hover:bg-pink-700 hover:text-white hover:border-transparent focus:outline-none" >
                                                             <h1>
                                                                 <MdOutlineEditNote />
@@ -89,14 +118,14 @@ const UserRegFlow = () => {
                                                         </button>
                                                     </div>
                                                 </div>
-                                                {/* {
-                                                    ui.description?.length > 0 && <div className="flex items-center ml-2">
+                                                {
+                                                    ui?.description && <div className="flex items-center ml-2">
                                                         <FaInfoCircle className="text-gray-400 text-base shadow-xl font-bold mr-2" />
                                                         <p className="text-sm font-semibold leading-6 text-gray-500">
                                                             {ui.description}
                                                         </p>
                                                     </div>
-                                                } */}
+                                                }
                                                 <hr />
                                                 <h3 className="mt-1 text-base font-semibold leading-7 tracking-tight text-gray-500">
                                                     Options
@@ -104,10 +133,10 @@ const UserRegFlow = () => {
                                                 <div className="w-full ml-2 flex gap-2 flex-wrap">
                                                     {
                                                         ui.content?.map((option, index: number) => (
-                                                            <>
+                                                            <span key={index}>
                                                                 {
                                                                     typeof option === "string"
-                                                                        ? <span key={index} className="flex items-center px-4 bg-gray-100 text-gray-500 transitions duration-200 hover:scale-105 hover:text-white hover:bg-pink-700 rounded-full">
+                                                                        ? <span className="flex items-center px-4 bg-gray-100 text-gray-500 transitions duration-200 hover:scale-105 hover:text-white hover:bg-pink-700 rounded-full">
 
                                                                             <p className="text-sm font-semibold">
                                                                                 {option}
@@ -127,7 +156,7 @@ const UserRegFlow = () => {
                                                                         </span>
                                                                 }
 
-                                                            </>
+                                                            </span>
                                                         ))
                                                     }
                                                 </div>
@@ -138,7 +167,132 @@ const UserRegFlow = () => {
                             </div>
                         </div>
                     </div>
-                    <Modal open={edit} setOpen={setEdit} dataId="educationScreen" />
+                    {showModal ? (
+                        <>
+                            <div
+                                className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+                            >
+                                <div className="relative w-auto my-6 mx-auto max-w-3xl">
+                                    {/*content*/}
+                                    <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                                        {/*header*/}
+                                        <div className="flex items-center justify-between p-5 border-b border-solid border-slate-200 rounded-t">
+                                            <FaRegEdit className="h-6 w-6 text-pink-700 mr-2" aria-hidden="true" />
+                                            <input
+                                                type="text"
+                                                name="option"
+                                                id="option"
+                                                autoComplete="option"
+                                                defaultValue={dataTobeEdited.title || ""}
+                                                onChange={e => setTitle(e.target.value)}
+                                                className="w-full border-b-1 border-pink-700 p-2 font-semibold text-gray-600 shadow-sm text-xl rounded-md focus:ring-2 focus:ring-inset focus:ring-pink-600 focus:outline-0" />
+                                        </div>
+                                        {/*body*/}
+                                        <div className="relative p-6 flex-auto">
+                                            <div className="mt-2">
+                                                <div>
+                                                    <div className="space-y-6">
+                                                        <div className="col-span-full">
+                                                            <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
+                                                                description
+                                                            </label>
+                                                            <div className="mt-2">
+                                                                <textarea
+                                                                    id="about"
+                                                                    name="about"
+                                                                    rows={3}
+                                                                    placeholder={"write screen description"}
+                                                                    onChange={e => setDesc(e.target.value)}
+                                                                    className="block w-full p-2 rounded-md border-0 text-gray-600 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-300 focus:ring-2 focus:ring-inset focus:ring-pink-600 focus:outline-0 sm:text-md sm:leading-6"
+                                                                    defaultValue={dataTobeEdited.description || ""}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                        <div className="w-full ml-2 flex gap-2 flex-wrap">
+                                                            {
+                                                                dataTobeEdited?.content?.map((option: string, index: number) => (
+                                                                    <span key={index} className="flex items-center pl-4 bg-gray-200 text-gray-700 rounded-full">
+
+                                                                        <p className="text-sm text-ellipsis">
+                                                                            {option}
+                                                                        </p>
+                                                                        <button onClick={() => handleDeleteItem(option)}
+                                                                            className="font-bold ml-2 text-red-500 bg-gray-100 p-1 rounded-full transitions duration-200 hover:bg-pink-700 hover:text-white hover:scale-105">
+                                                                            <FaMinus />
+                                                                        </button>
+                                                                    </span>
+                                                                ))
+                                                            }
+                                                            {
+                                                                contentList.map((c, index)=>(
+                                                                    <span key={index} className="flex items-center pl-4 bg-gray-200 text-gray-700 rounded-full">
+
+                                                                        <p className="text-sm text-ellipsis">
+                                                                            {c}
+                                                                        </p>
+                                                                        <button onClick={() => handleDeleteItem(c)}
+                                                                            className="font-bold ml-2 text-red-500 bg-gray-100 p-1 rounded-full transitions duration-200 hover:bg-pink-700 hover:text-white hover:scale-105">
+                                                                            <FaMinus />
+                                                                        </button>
+                                                                    </span>
+                                                                ))
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="col-span-full">
+                                                    <div>
+                                                        <label htmlFor="option" className="block text-sm font-medium leading-6 text-gray-900">
+                                                            Option
+                                                        </label>
+
+                                                        {errorMessage && <p className="text-sm overflow-elipsis text-red-500">{errorMessage}
+                                                        </p>}
+                                                        <div className="mt-2 grid grid-cols-12 items-center min-w-full">
+                                                            <input
+                                                                type="text"
+                                                                name="option"
+                                                                id="option"
+                                                                autoComplete="option"
+                                                                value={inputValue}
+                                                                onChange={e => setInputValue(e.target.value)}
+                                                                className="col-span-10 rounded-md border-0 p-2 text-gray-600 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-300 focus:ring-2 focus:ring-inset focus:ring-pink-600 focus:outline-0 text-md sm:leading-6" />
+                                                            <div className="ml-2 col-span-2">
+                                                                <button
+                                                                    onClick={handleAddItem}
+                                                                    className="rounded-full p-3 text-white bg-pink-700 hover:bg-pink-500">
+                                                                    <FaPlus className="w-4 h-4" />
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {/*footer*/}
+                                        <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
+                                            <button
+                                                className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-6 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                                                type="button"
+                                                onClick={() => setShowModal(false)}
+                                            >
+                                                Close
+                                            </button>
+                                            <button
+                                                className="inline-flex w-full justify-center rounded-lg bg-pink-700 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-pink-500 sm:ml-3 sm:w-auto"
+                                                type="button"
+                                                onClick={() => setShowModal(false)}
+                                            >
+                                                Save Changes
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+                        </>
+                    ) : null}
                 </>
             }
         </Layout>
