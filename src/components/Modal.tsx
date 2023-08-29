@@ -1,27 +1,23 @@
-import { Fragment, useRef, useState } from 'react'
+import { Fragment, useRef, useState, useEffect } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { FaMinus, FaPlus, FaRegEdit } from 'react-icons/fa'
-import { IconButton } from './Widgets'
-
-type DataType = {
-    screenTitle: string,
-    options: string[],
-    description: string,
-    bgImg: string
-}
+import { db } from '../config/firebase'
+import { doc, getDoc } from "firebase/firestore"
 
 type ModalProp = {
     open: boolean,
     setOpen: React.Dispatch<React.SetStateAction<boolean>>,
-    data: DataType,
+    dataId?: string
 }
-const Modal = ({ open, setOpen, data }: ModalProp) => {
+const Modal = ({ open, setOpen, dataId = "" }: ModalProp) => {
 
     const cancelButtonRef = useRef(null)
 
     const [inputValue, setInputValue] = useState('');
     const [list, setList] = useState<string[]>([]);
     const [errorMessage, setErrorMessage] = useState('')
+    const [data, setData] = useState({})
+
 
     const handleAddItem = () => {
         if (inputValue === "") {
@@ -39,6 +35,34 @@ const Modal = ({ open, setOpen, data }: ModalProp) => {
         const updatedList = list.filter((item) => item !== optn);
         setList(updatedList)
     }
+
+
+    useEffect(() => {
+        const getDocument = async () => {
+            if (dataId?.length > 0) {
+                const docRef = doc(db, "UI", dataId);
+                try {
+                    const docSnap = await getDoc(docRef);
+                    if (docSnap.exists()) {
+                        console.log(docSnap.data());
+                        setData({
+                            id: dataId,
+                            title: docSnap.data()?.title,
+                            description: docSnap.data().description,
+                            content: docSnap.data()?.content,
+                            contentVissible: docSnap.data()?.contentVissible
+                        })
+                    } else {
+                        console.log("Document does not exist")
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+        }
+
+        getDocument()
+    }, [dataId])
 
     return (
         <Transition.Root show={open} as={Fragment}>
@@ -74,7 +98,7 @@ const Modal = ({ open, setOpen, data }: ModalProp) => {
                                         </div>
                                         <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
                                             <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
-                                                {data.screenTitle}
+                                                {data?.screenTitle}
                                             </Dialog.Title>
                                             <div className="mt-2">
                                                 <form>
@@ -89,13 +113,13 @@ const Modal = ({ open, setOpen, data }: ModalProp) => {
                                                                     name="about"
                                                                     rows={3}
                                                                     className="block w-full p-2 rounded-md border-0 text-gray-600 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-300 focus:ring-2 focus:ring-inset focus:ring-pink-600 focus:outline-0 sm:text-md sm:leading-6"
-                                                                    defaultValue={data.description}
+                                                                    defaultValue={""}
                                                                 />
                                                             </div>
                                                         </div>
                                                         <div className="w-full ml-2 flex gap-2 flex-wrap">
                                                             {
-                                                                list?.map((option, index) => (
+                                                                data?.options?.map((option, index) => (
                                                                     <span key={index} className="flex items-center pl-4 bg-gray-200 text-gray-700 rounded-full">
 
                                                                         <p className="text-sm text-ellipsis">
@@ -117,7 +141,8 @@ const Modal = ({ open, setOpen, data }: ModalProp) => {
                                                             Option
                                                         </label>
 
-                                                        {errorMessage && <p>{errorMessage}</p>}
+                                                        {errorMessage && <p className="text-sm overflow-elipsis text-red-500">{errorMessage}
+                                                        </p>}
                                                         <div className="mt-2 grid grid-cols-12 items-center min-w-full">
                                                             <input
                                                                 type="text"
@@ -128,9 +153,9 @@ const Modal = ({ open, setOpen, data }: ModalProp) => {
                                                                 onChange={e => setInputValue(e.target.value)}
                                                                 className="col-span-10 rounded-md border-0 p-2 text-gray-600 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-300 focus:ring-2 focus:ring-inset focus:ring-pink-600 focus:outline-0 text-md sm:leading-6" />
                                                             <div className="ml-2 col-span-2">
-                                                                <button 
-                                                                onClick={handleAddItem}
-                                                                className="rounded-full p-3 text-white bg-pink-700 hover:bg-pink-500">
+                                                                <button
+                                                                    onClick={handleAddItem}
+                                                                    className="rounded-full p-3 text-white bg-pink-700 hover:bg-pink-500">
                                                                     <FaPlus className="w-4 h-4" />
                                                                 </button>
                                                             </div>
