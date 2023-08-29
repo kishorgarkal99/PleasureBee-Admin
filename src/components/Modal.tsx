@@ -16,7 +16,13 @@ const Modal = ({ open, setOpen, dataId = "" }: ModalProp) => {
     const [inputValue, setInputValue] = useState('');
     const [list, setList] = useState<string[]>([]);
     const [errorMessage, setErrorMessage] = useState('')
-    const [data, setData] = useState({})
+    const [data, setData] = useState({
+        id: "",
+        title: "",
+        description: "",
+        content: [],
+        contentVissible: []
+    })
 
 
     const handleAddItem = () => {
@@ -98,7 +104,7 @@ const Modal = ({ open, setOpen, dataId = "" }: ModalProp) => {
                                         </div>
                                         <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
                                             <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
-                                                {data?.screenTitle}
+                                                {data?.title}
                                             </Dialog.Title>
                                             <div className="mt-2">
                                                 <form>
@@ -113,13 +119,13 @@ const Modal = ({ open, setOpen, dataId = "" }: ModalProp) => {
                                                                     name="about"
                                                                     rows={3}
                                                                     className="block w-full p-2 rounded-md border-0 text-gray-600 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-300 focus:ring-2 focus:ring-inset focus:ring-pink-600 focus:outline-0 sm:text-md sm:leading-6"
-                                                                    defaultValue={""}
+                                                                    defaultValue={data?.description}
                                                                 />
                                                             </div>
                                                         </div>
                                                         <div className="w-full ml-2 flex gap-2 flex-wrap">
                                                             {
-                                                                data?.options?.map((option, index) => (
+                                                                data?.content?.map((option, index) => (
                                                                     <span key={index} className="flex items-center pl-4 bg-gray-200 text-gray-700 rounded-full">
 
                                                                         <p className="text-sm text-ellipsis">

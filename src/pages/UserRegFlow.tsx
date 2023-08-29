@@ -12,8 +12,11 @@ import Loader from "../components/Loader"
 //     title:string,
 //     content:string[]
 // }
+
 const UserRegFlow = () => {
     const [edit, setEdit] = useState(false)
+    const [dataId, setDataId] = useState<string>("")
+
     const [uIs, setUIs] = useState([{
         id: "",
         title: "",
@@ -24,7 +27,6 @@ const UserRegFlow = () => {
         await getDocs(collection(db, "UI"))
             .then((querySnapshot) => {
                 try {
-                    console.log(querySnapshot.docs.at(4)?.data())
                     const newData = querySnapshot.docs
                         .map((doc) => ({
                             id: doc.id,
@@ -40,7 +42,7 @@ const UserRegFlow = () => {
     useEffect(() => {
         getUIs()
     }, [])
-    // console.log(uIs)
+    console.log(uIs[1])
     return (
         <Layout title="PleasureBee/User Resgistration Flow">
             {uIs.length === 0 ?
@@ -58,8 +60,8 @@ const UserRegFlow = () => {
                                 </button>
                             </div>
                             <div className="grid grid-flow-row grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4 lg:px-8 ">
-                                {uIs.map((ui, index) => (
-                                    <div key={index} className="col-span-1 min-h-full bg-white shadow-xl rounded-xl ">
+                                {uIs.map((ui) => (
+                                    <div key={ui.id} className="col-span-1 min-h-full bg-white shadow-xl rounded-xl ">
                                         <div className="flex items-center gap-x-6 p-5">
                                             {/* {
                                         screen.bgImg.length > 0 && <img
@@ -116,7 +118,7 @@ const UserRegFlow = () => {
                                                                                 {option?.title?.toString()}
                                                                             </p>
                                                                             <span>
-                                                                                {option?.options?.toString().split(",").map((opt:string) =>
+                                                                                {option?.options?.toString().split(",").map((opt: string) =>
                                                                                     <span className="text-sm font-semibold px-2 bg-gray-100 text-gray-500 transitions duration-200 hover:scale-105 hover:text-white hover:bg-pink-700 rounded-full">
                                                                                         {opt}
                                                                                     </span>
@@ -136,7 +138,7 @@ const UserRegFlow = () => {
                             </div>
                         </div>
                     </div>
-                    <Modal open={edit} setOpen={setEdit} data={uIs[0]} />
+                    <Modal open={edit} setOpen={setEdit} dataId="educationScreen" />
                 </>
             }
         </Layout>
