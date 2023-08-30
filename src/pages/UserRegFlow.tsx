@@ -13,7 +13,6 @@ import Loader from "../components/Loader"
 // }
 
 const UserRegFlow = () => {
-    const [dataId, setDataId] = useState<string>("")
 
     const [uIs, setUIs] = useState([{
         id: "",
@@ -23,8 +22,15 @@ const UserRegFlow = () => {
     }])
 
     const [showModal, setShowModal] = useState(false);
+    const [dataToEdit, setDataToEdit] = useState({
+        id: "",
+        title: "",
+        content: [""] || [{}],
+        description: "",
+    });
     const [inputValue, setInputValue] = useState('');
     const [contentList, setList] = useState<string[]>([]);
+
     const [errorMessage, setErrorMessage] = useState('')
     const [newTitle, setTitle] = useState('')
     const [description, setDesc] = useState('')
@@ -35,7 +41,7 @@ const UserRegFlow = () => {
     const handleAddItem = () => {
         if (inputValue === "") {
             setErrorMessage("Please enter a value");
-        } else if (dataTobeEdited.content?.includes(inputValue)) {
+        } else if (contentList.includes(inputValue)) {
             setErrorMessage("This value already exists in the list");
         } else {
             setList([...contentList, inputValue]);
@@ -47,6 +53,20 @@ const UserRegFlow = () => {
     const handleDeleteItem = (optn: string) => {
         const updatedList = contentList.filter((item) => item !== optn);
         setList(updatedList)
+        console.log(contentList)
+    }
+
+    const handleOpenModal = (id: string) => {
+        const dataTobeEdited = uIs.filter((ui) => ui.id === id)[0]
+        setDataToEdit(dataTobeEdited)
+        setList([...dataToEdit.content])
+        setShowModal(true)
+
+    }
+
+    const handleCloseModal = () => {
+        setShowModal(false)
+        setList([])
     }
 
     const getUIs = async () => {
@@ -67,17 +87,11 @@ const UserRegFlow = () => {
             })
     }
 
-    const setEditMood = (id: string) => {
-        setDataId(id)
-        setShowModal(true)
-       
-    }
-
     useEffect(() => {
         getUIs()
     }, [])
 
-    const dataTobeEdited = uIs.filter((ui) => ui.id === dataId)[0]
+
     return (
         <Layout title="PleasureBee/User Resgistration Flow">
             {uIs.length === 0 ?
@@ -110,7 +124,7 @@ const UserRegFlow = () => {
 
                                                     <div>
                                                         <button
-                                                            onClick={() => setEditMood(ui.id)}
+                                                            onClick={() => handleOpenModal(ui.id)}
                                                             className="text-xl shadow-xl font-bold text-pink-700 px-4 bg-transparent border border-pink-600 rounded-full transitions duration-200 hover:bg-pink-700 hover:text-white hover:border-transparent focus:outline-none" >
                                                             <h1>
                                                                 <MdOutlineEditNote />
@@ -183,7 +197,7 @@ const UserRegFlow = () => {
                                                 name="option"
                                                 id="option"
                                                 autoComplete="option"
-                                                defaultValue={dataTobeEdited.title || ""}
+                                                defaultValue={dataToEdit.title || ""}
                                                 onChange={e => setTitle(e.target.value)}
                                                 className="w-full border-b-1 border-pink-700 p-2 font-semibold text-gray-600 shadow-sm text-xl rounded-md focus:ring-2 focus:ring-inset focus:ring-pink-600 focus:outline-0" />
                                         </div>
@@ -204,13 +218,13 @@ const UserRegFlow = () => {
                                                                     placeholder={"write screen description"}
                                                                     onChange={e => setDesc(e.target.value)}
                                                                     className="block w-full p-2 rounded-md border-0 text-gray-600 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-300 focus:ring-2 focus:ring-inset focus:ring-pink-600 focus:outline-0 sm:text-md sm:leading-6"
-                                                                    defaultValue={dataTobeEdited.description || ""}
+                                                                    defaultValue={dataToEdit.description || ""}
                                                                 />
                                                             </div>
                                                         </div>
                                                         <div className="w-full ml-2 flex gap-2 flex-wrap">
                                                             {
-                                                                dataTobeEdited?.content?.map((option: string, index: number) => (
+                                                                contentList.map((option: string, index: number) => (
                                                                     <span key={index} className="flex items-center pl-4 bg-gray-200 text-gray-700 rounded-full">
 
                                                                         <p className="text-sm text-ellipsis">
@@ -224,7 +238,7 @@ const UserRegFlow = () => {
                                                                 ))
                                                             }
                                                             {
-                                                                contentList.map((c, index)=>(
+                                                                contentList.map((c, index) => (
                                                                     <span key={index} className="flex items-center pl-4 bg-gray-200 text-gray-700 rounded-full">
 
                                                                         <p className="text-sm text-ellipsis">
@@ -275,14 +289,14 @@ const UserRegFlow = () => {
                                             <button
                                                 className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-6 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
                                                 type="button"
-                                                onClick={() => setShowModal(false)}
+                                                onClick={handleCloseModal}
                                             >
                                                 Close
                                             </button>
                                             <button
                                                 className="inline-flex w-full justify-center rounded-lg bg-pink-700 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-pink-500 sm:ml-3 sm:w-auto"
                                                 type="button"
-                                                onClick={() => setShowModal(false)}
+                                                onClick={handleCloseModal}
                                             >
                                                 Save Changes
                                             </button>
