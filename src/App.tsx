@@ -11,15 +11,38 @@ function App() {
   const plans = [
     {
       name: 'Freemium',
-      features: ['Free Unlimited swipe', '1 super like per day', '2 minute audio/video call'],
+      features: [
+        'Free Unlimited swipe',
+        '1 new nearby talk is initiated everyday',
+        '1 super like per day',
+        'Daily one boost for 15 min',
+        'Buy and sel NFT',
+        'Send NFT as gift',
+        '2 minute audio/video call with any one user every day',
+        'One AI match in a week'
+      ],
     },
     {
       name: 'Pro',
-      features: ['Swipe unlimited time on international profiles', 'Daily SuperLike', 'Audio/video call for 15 min per day'],
+      features: [
+        'Swipe unlimited time on international profiles',
+        'Unlimited chat initiallisation',
+        'Daily SuperLike',
+        'Daily 3 boost with 15 min',
+        'Change location',
+        'Profile custom privacy',
+        'Audio/video call for 15 min per day',
+        'Buy and sell NFT',
+        'Send NFT as gift',
+        '5 AI match in a week'
+      ],
     },
     {
       name: 'Premium',
-      features: ['Multi Language support in conversation', 'Unlimited Audio/video call', 'Send NFT as gift'],
+      features: [
+        'Multi Language support in conversation', 
+        'Unlimited Audio/video call', 
+        'Unlimited AI match'],
     },
   ];
 
