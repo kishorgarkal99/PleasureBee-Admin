@@ -31,7 +31,7 @@ const sideBarItems = [
     {
         menuTitle: "Subscriptions",
         icon: premium,
-        url: ""
+        url: "/plans"
     },
     {
         menuTitle: "Custom plans",
