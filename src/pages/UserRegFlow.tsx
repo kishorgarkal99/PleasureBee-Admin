@@ -2,7 +2,7 @@ import { FaInfoCircle, FaMinus, FaPlus, FaRegEdit } from "react-icons/fa"
 import { MdOutlineEditNote, MdTitle } from "react-icons/md"
 import Layout from "../components/Layout"
 import { useEffect, useState } from "react"
-import { collection, doc, getDoc, getDocs } from "firebase/firestore"
+import { collection, getDocs } from "firebase/firestore"
 import { db } from "../config/firebase"
 import Loader from "../components/Loader"
 
@@ -21,6 +21,7 @@ const UserRegFlow = () => {
         description: "",
     }])
 
+    const [dataId, setDataId] = useState<string>("")
     const [showModal, setShowModal] = useState(false);
     const [dataToEdit, setDataToEdit] = useState({
         id: "",
@@ -28,17 +29,19 @@ const UserRegFlow = () => {
         content: [""] || [{}],
         description: "",
     });
-    const [inputValue, setInputValue] = useState('');
+    const [inputValue, setInputValue] = useState("");
     const [contentList, setList] = useState<string[]>([]);
 
-    const [errorMessage, setErrorMessage] = useState('')
-    const [newTitle, setTitle] = useState('')
-    const [description, setDesc] = useState('')
-    const [content, setContent] = useState([])
-    const [contentVissible, setContentVissible] = useState([])
+    const [errorMessage, setErrorMessage] = useState("")
+    const [newTitle, setTitle] = useState("")
+    const [description, setDesc] = useState("")
+    const [content, setContent] = useState<string[]>([])
+    // const [contentVissible, setContentVissible] = useState([])
+    const [showOrientation, setShowOrientation] = useState<boolean>(true)
 
 
     const handleAddItem = () => {
+
         if (inputValue === "") {
             setErrorMessage("Please enter a value");
         } else if (contentList.includes(inputValue)) {
@@ -57,11 +60,78 @@ const UserRegFlow = () => {
     }
 
     const handleOpenModal = (id: string) => {
-
+        setDataId(id)
         const dataTobeEdited = uIs.filter((ui) => ui.id === id)[0]
         setDataToEdit(dataTobeEdited)
 
         setShowModal(true)
+
+    }
+
+    const handleSubmit = () => {
+        //screens without description
+        if ((
+            dataId.trim() === "drinkScreen")
+            || (dataId.trim() === "educationScreen")
+            || (dataId.trim() === "haveChildrenScreen")
+            || (dataId.trim() === "politicalScreen")
+            || (dataId.trim() === "religion")
+            || (dataId.trim() === "smokeScreen")
+            || (dataId.trim() === "workout")
+            || (dataId.trim() === "zodiacSign")
+        ) {
+            setContent([...contentList])
+            if (newTitle?.length < 3) {
+                setTitle(dataToEdit.title)
+            }
+            const ui = {
+                id: dataId,
+                title: newTitle,
+                content: content
+            }
+
+            console.log(ui)
+        }
+        // screens with description
+        else if (
+            (dataId.trim() === "genderScreen")
+            || (dataId.trim() === "liketoDate")
+            || (dataId.trim() === "profilePrompt")
+            || (dataId.trim() === "toFind")
+        ) {
+            setContent([...contentList])
+            if (newTitle?.length < 3) {
+                setTitle(dataToEdit.title)
+            }
+            if (description?.length < 3) {
+                setTitle(dataToEdit.description)
+            }
+            if ((dataId.trim() === "genderScreen")) {
+                const ui = {
+                    id: dataId,
+                    title: newTitle,
+                    content: content,
+                    showOrientation: showOrientation,
+                    description: description
+                }
+                console.log(ui)
+            } else {
+                const ui = {
+                    id: dataId,
+                    title: newTitle,
+                    content: content,
+                    description: description
+                }
+                console.log(ui)
+            }
+
+
+        } else if ((dataId.trim() === "intrestScreen")) {
+            // 
+        }
+
+
+        handleCloseModal()
 
     }
 
@@ -100,7 +170,7 @@ const UserRegFlow = () => {
 
     useEffect(() => {
         showModal ? setList([...dataToEdit.content]) : setList([])
-    }, [showModal])
+    }, [showModal, dataToEdit.content])
 
 
     return (
@@ -213,6 +283,7 @@ const UserRegFlow = () => {
                                                 className="w-full border-b-1 border-pink-700 p-2 font-semibold text-gray-600 shadow-sm text-xl rounded-md focus:ring-2 focus:ring-inset focus:ring-pink-600 focus:outline-0" />
                                         </div>
                                         {/*body*/}
+
                                         <div className="relative p-6 flex-auto">
                                             <div className="mt-2">
                                                 <div>
@@ -253,7 +324,7 @@ const UserRegFlow = () => {
                                                 </div>
                                                 <div className="col-span-full">
                                                     <div>
-                                                        <label htmlFor="option" className="block text-sm font-medium leading-6 text-gray-900">
+                                                        <label htmlFor="option" className="block text-sm text-gray-900">
                                                             Option
                                                         </label>
 
@@ -293,7 +364,7 @@ const UserRegFlow = () => {
                                             <button
                                                 className="inline-flex w-full justify-center rounded-lg bg-pink-700 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-pink-500 sm:ml-3 sm:w-auto"
                                                 type="button"
-                                                onClick={handleCloseModal}
+                                                onClick={handleSubmit}
                                             >
                                                 Save Changes
                                             </button>
