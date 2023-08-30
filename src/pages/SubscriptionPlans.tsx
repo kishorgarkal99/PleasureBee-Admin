@@ -26,9 +26,11 @@ const SubscriptionPlans: React.FC<SubscriptionPlansProps> = ({ plans }) => {
                                     {plan.name}
                                 </h2>
                             </div>
-                            <ul className="list-disc list-inside text-sm p-4 ">
+                            <ul className="list-disc list-inside list-image-[url(assets/icons/listIcon.svg)] text-sm p-4 ">
                                 {plan.features.map((feature, index) => (
-                                    <li key={index}>{feature}</li>
+                                    <li key={index} >
+                                        {feature}
+                                    </li>
                                 ))}
                             </ul>
                         </div>
