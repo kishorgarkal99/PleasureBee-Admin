@@ -57,15 +57,22 @@ const UserRegFlow = () => {
     }
 
     const handleOpenModal = (id: string) => {
+
         const dataTobeEdited = uIs.filter((ui) => ui.id === id)[0]
         setDataToEdit(dataTobeEdited)
-        setList([...dataToEdit.content])
+
         setShowModal(true)
 
     }
 
     const handleCloseModal = () => {
         setShowModal(false)
+        setDataToEdit({
+            id: "",
+            title: "",
+            content: [""] || [{}],
+            description: "",
+        })
         setList([])
     }
 
@@ -90,6 +97,10 @@ const UserRegFlow = () => {
     useEffect(() => {
         getUIs()
     }, [])
+
+    useEffect(() => {
+        showModal ? setList([...dataToEdit.content]) : setList([])
+    }, [showModal])
 
 
     return (
@@ -231,20 +242,6 @@ const UserRegFlow = () => {
                                                                             {option}
                                                                         </p>
                                                                         <button onClick={() => handleDeleteItem(option)}
-                                                                            className="font-bold ml-2 text-red-500 bg-gray-100 p-1 rounded-full transitions duration-200 hover:bg-pink-700 hover:text-white hover:scale-105">
-                                                                            <FaMinus />
-                                                                        </button>
-                                                                    </span>
-                                                                ))
-                                                            }
-                                                            {
-                                                                contentList.map((c, index) => (
-                                                                    <span key={index} className="flex items-center pl-4 bg-gray-200 text-gray-700 rounded-full">
-
-                                                                        <p className="text-sm text-ellipsis">
-                                                                            {c}
-                                                                        </p>
-                                                                        <button onClick={() => handleDeleteItem(c)}
                                                                             className="font-bold ml-2 text-red-500 bg-gray-100 p-1 rounded-full transitions duration-200 hover:bg-pink-700 hover:text-white hover:scale-105">
                                                                             <FaMinus />
                                                                         </button>
