@@ -1,5 +1,7 @@
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { useState } from "react";
 import { FaCrown, FaInfo, FaPenAlt, FaTrashAlt } from "react-icons/fa";
+import { db } from "../../config/firebase";
 interface Plan {
     name: string
     features: string
@@ -25,37 +27,55 @@ export default function SubModal({ plan, showModal, setShowModal }: ModalProp) {
     }
 
     const handleSubmit = () => {
+        let newPlan = {
+            name: "",
+            features: [""]
+        }
         if ((name.length < 3) && (features.length < 3)) {
-            const newPlan = {
+            newPlan = {
                 name: plan.name,
                 features: plan.features.split(",")
             }
 
             console.log(newPlan)
         } else if ((name.length >= 3) && (features.length < 3)) {
-            const newPlan = {
+            newPlan = {
                 name: name,
                 features: plan.features.split(",")
             }
             console.log(newPlan)
         } else if ((name.length < 3) && (features.length >= 3)) {
-            const newPlan = {
+            newPlan = {
                 name: plan.name,
                 features: features.split(",")
             }
             console.log(newPlan)
         } else {
-            const newPlan = {
+            newPlan = {
                 name: name,
                 features: features.split(",")
             }
             console.log(newPlan)
         }
-
+        handleAddPlan(newPlan)
         setName("")
         setFeatures("")
         setEditName(false)
         setShowModal(false)
+    }
+
+    const handleAddPlan = async (newPlan:{name:string,features:string[]}) => {
+        const q = query(collection(db, "SubscriptionPlan"), where("name", "==", name))
+        const querySnapshot = await getDocs(q)
+
+        if (!querySnapshot.docs.length) {
+            try {
+                const docRef = await addDoc(collection(db, "SubscriptionPlan"), newPlan)
+                console.log("Registered with ID: ", docRef.id)
+            } catch (e) {
+                console.error("Error: ", e);
+            }
+        }
     }
 
 

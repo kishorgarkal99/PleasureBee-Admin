@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Layout from '../../components/Layout';
 import { FaPen, FaPlus } from 'react-icons/fa';
 import { IconButton } from '../../components/Widgets';
@@ -12,8 +12,7 @@ interface Plan {
     features: string;
 }
 
-
-const SubscriptionPlans = () => {
+const CustomPlan = () => {
     const [openModal, setOpenModal] = useState<boolean>(false)
     const [plans, setPlans] = useState<Plan[]>([{
         id: "",
@@ -32,8 +31,8 @@ const SubscriptionPlans = () => {
     }
 
 
-    const getPlans = async () => {
-        await getDocs(collection(db, "SubscriptionPlan"))
+    const getCustomPlans = async () => {
+        await getDocs(collection(db, "CustomSubPlan"))
             .then((querySnapshot) => {
                 try {
                     const newData = querySnapshot.docs
@@ -50,7 +49,7 @@ const SubscriptionPlans = () => {
     }
 
     useEffect(() => {
-        getPlans()
+        getCustomPlans()
     }, [])
 
     console.log(plans)
@@ -79,15 +78,14 @@ const SubscriptionPlans = () => {
                                         </IconButton>
                                     </div>
                                 </div>
-                                <div className="p-4">
-                                    <ul className="list-disc list-image-[url(assets/icons/listIcon.svg)] text-sm px-4">
-                                        {plan.features.split(",").map((feature, index) => (
-                                            <li key={index} >
-                                                {feature.trim()}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
+
+                                <ul className="list-disc list-inside list-image-[url(assets/icons/listIcon.svg)] text-sm p-4 ">
+                                    {plan.features.split(",").map((feature, index) => (
+                                        <li key={index} >
+                                            {feature.trim()}
+                                        </li>
+                                    ))}
+                                </ul>
                             </div>
                         ))}
                     </div>
@@ -105,4 +103,4 @@ const SubscriptionPlans = () => {
     );
 };
 
-export default SubscriptionPlans;
+export default CustomPlan;

@@ -36,7 +36,7 @@ const sideBarItems = [
     {
         menuTitle: "Custom plans",
         icon: ranking,
-        url: ""
+        url: "/plans_custom"
     },
     {
         menuTitle: "Analytics",
