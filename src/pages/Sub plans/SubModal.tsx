@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { useState } from "react";
 import { FaCrown, FaInfo, FaPen, FaTrashAlt } from "react-icons/fa";
 import { db } from "../../config/firebase";
@@ -88,12 +88,20 @@ export default function SubModal({ model, plan, showModal, setShowModal }: Modal
             await updateDoc(doc(db, model, plan?.id), {
                 name: newPlan.name,
                 features: newPlan.features
-            });
+            })
         } catch (e) {
-            console.error("Document not found: ", e);
+            console.error("Document not found: ", e)
         }
     }
 
+    const handleDeletePlan=async()=>{
+        try {
+            await deleteDoc(doc(db, model, plan?.id))
+            console.log("Documente deleted")
+        } catch (e) {
+            console.error("Error: ", e);
+        }
+    }
 
     return (
         <>
@@ -131,7 +139,7 @@ export default function SubModal({ model, plan, showModal, setShowModal }: Modal
                                             </button>
                                         }
                                     </div>
-                                    <button onClick={() => alert("Are you sure ?")} className="rounded-full p-2 outline-0 ring-0 border-2 text-pink-500 border-pink-500 hover:text-white hover:bg-pink-500">
+                                    <button onClick={handleDeletePlan} className="rounded-full p-2 outline-0 ring-0 border-2 text-pink-500 border-pink-500 hover:text-white hover:bg-pink-500">
                                         <FaTrashAlt className="w-4 h-4" />
                                     </button>
                                 </div>

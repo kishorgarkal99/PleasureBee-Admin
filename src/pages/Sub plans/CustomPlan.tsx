@@ -78,14 +78,15 @@ const CustomPlan = () => {
                                         </IconButton>
                                     </div>
                                 </div>
-
-                                <ul className="list-disc list-inside list-image-[url(assets/icons/listIcon.svg)] text-sm p-4 ">
-                                    {plan.features.split(",").map((feature, index) => (
-                                        <li key={index} >
-                                            {feature.trim()}
-                                        </li>
-                                    ))}
-                                </ul>
+                                <div className="p-4">
+                                    <ul className="list-disc list-image-[url(assets/icons/listIcon.svg)] text-base px-4">
+                                        {plan.features.split(",").map((feature, index) => (
+                                            <li key={index} >
+                                                {feature.trim()}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
                             </div>
                         ))}
                     </div>
