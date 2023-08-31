@@ -1,19 +1,21 @@
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { useState } from "react";
-import { FaCrown, FaInfo, FaPenAlt, FaTrashAlt } from "react-icons/fa";
+import { FaCrown, FaInfo, FaPen, FaTrashAlt } from "react-icons/fa";
 import { db } from "../../config/firebase";
 interface Plan {
+    id: string
     name: string
     features: string
 }
 
 type ModalProp = {
+    model: string,
     plan: Plan
     showModal: boolean
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function SubModal({ plan, showModal, setShowModal }: ModalProp) {
+export default function SubModal({ model, plan, showModal, setShowModal }: ModalProp) {
     const [features, setFeatures] = useState<string>("")
     const [name, setName] = useState<string>("")
     const [editName, setEditName] = useState<boolean>(false)
@@ -57,24 +59,38 @@ export default function SubModal({ plan, showModal, setShowModal }: ModalProp) {
             }
             console.log(newPlan)
         }
-        handleAddPlan(newPlan)
+        plan?.id
+            ? handleUpdatePlan(newPlan)
+            : handleAddPlan(newPlan)
         setName("")
         setFeatures("")
         setEditName(false)
         setShowModal(false)
     }
 
-    const handleAddPlan = async (newPlan:{name:string,features:string[]}) => {
-        const q = query(collection(db, "SubscriptionPlan"), where("name", "==", name))
+    const handleAddPlan = async (newPlan: { name: string, features: string[] }) => {
+        const q = query(collection(db, model), where("name", "==", newPlan.name))
         const querySnapshot = await getDocs(q)
 
-        if (!querySnapshot.docs.length) {
+        if (querySnapshot.docs.length === 0) {
             try {
-                const docRef = await addDoc(collection(db, "SubscriptionPlan"), newPlan)
+                const docRef = await addDoc(collection(db, model), newPlan)
                 console.log("Registered with ID: ", docRef.id)
             } catch (e) {
                 console.error("Error: ", e);
             }
+        } else {
+            console.error("Plan already exists")
+        }
+    }
+    const handleUpdatePlan = async (newPlan: { name: string, features: string[] }) => {
+        try {
+            await updateDoc(doc(db, model, plan?.id), {
+                name: newPlan.name,
+                features: newPlan.features
+            });
+        } catch (e) {
+            console.error("Document not found: ", e);
         }
     }
 
@@ -98,7 +114,7 @@ export default function SubModal({ plan, showModal, setShowModal }: ModalProp) {
                                                 {plan?.name}
                                             </h3>
                                             :
-                                            <div className="mt-2">
+                                            <div className="ml-2">
                                                 <input
                                                     name="name"
                                                     type="text"
@@ -111,7 +127,7 @@ export default function SubModal({ plan, showModal, setShowModal }: ModalProp) {
                                             </div>}
                                         {
                                             !editName && <button onClick={() => setEditName(true)} className="ml-2 rounded-full p-1 translate-y-1 outline-0 ring-0 border-0 text-pink-500 hover:text-white hover:bg-pink-500">
-                                                <FaPenAlt className="w-4 h-4" />
+                                                <FaPen className="w-4 h-4" />
                                             </button>
                                         }
                                     </div>

@@ -56,11 +56,11 @@ const CustomPlan = () => {
 
     return (
         <>
-            <SubModal plan={plan} showModal={openModal} setShowModal={setOpenModal} />
+            <SubModal model="CustomSubPlan" plan={plan} showModal={openModal} setShowModal={setOpenModal} />
             <Layout title="PleasureBee/Supscription plans">
                 <div className="bg-gray rounded-lg p-8 xl:px-16">
                     <h1 className="text-2xl font-bold text-center text-gray-500 mb-4">
-                        BUSINESS MODEL
+                        CUSTOM PLANS
                     </h1>
                     <div className="grid grid-cos-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {plans.map((plan, index) => (
@@ -92,9 +92,10 @@ const CustomPlan = () => {
                     <div className="flex justify-between">
                         <div />
                         <button
+                            onClick={() => setOpenModal(true)}
                             className="mt-4 flex right-0 justify-center items-center px-4 py-2 text-white transition-colors duration-150 bg-pink-500 border border-transparent rounded-lg active:bg-pink-600 hover:bg-pink-700 focus:outline-none focus:shadow-outline-purple">
-                            <FaPlus className="w-6 h-6 mr-4" />
-                            <span className="ml-0.5 text-xl">Add custom plan</span>
+                            <FaPlus className="w-4 h-4 mr-2" />
+                            <span className="ml-0.5 text-xl">Create New Plan</span>
                         </button>
                     </div>
                 </div>
