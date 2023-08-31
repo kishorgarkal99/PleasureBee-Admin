@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import heartlock from '../assets/hearlock.svg';
-import Login from './Auth/Login';
-import Register from './Auth/Register';
+import heartlock from '../../assets/hearlock.svg';
+import Login from './Login';
+import Register from './Register';
 
 
 export default function Auth() {

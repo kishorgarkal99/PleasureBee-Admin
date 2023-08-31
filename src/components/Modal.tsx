@@ -1,5 +1,4 @@
 import { FaCrown, FaInfo, FaTrashAlt } from "react-icons/fa";
-import { IconButton } from "./Widgets";
 
 type ModalProp = {
     showModal: boolean

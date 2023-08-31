@@ -1,10 +1,10 @@
 import { FaInfoCircle, FaMinus, FaPlus, FaRegEdit } from "react-icons/fa"
 import { MdOutlineEditNote, MdTitle } from "react-icons/md"
-import Layout from "../components/Layout"
+import Layout from "../../components/Layout"
 import { useEffect, useState } from "react"
 import { collection, getDocs } from "firebase/firestore"
-import { db } from "../config/firebase"
-import Loader from "../components/Loader"
+import { db } from "../../config/firebase"
+import Loader from "../../components/Loader"
 
 // interface UI{
 //     id:string,
