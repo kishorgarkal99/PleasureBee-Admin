@@ -5,7 +5,6 @@ import { IconButton } from '../../components/Widgets';
 import SubModal from './SubModal';
 import { db } from '../../config/firebase';
 import { collection, getDocs } from 'firebase/firestore';
-
 interface Plan {
     id: string,
     name: string,
@@ -20,14 +19,14 @@ const CustomPlan = () => {
         id: "",
         name: "",
         features: "",
-        price: {monthly:0,yearly:0},
+        price: { monthly: 0, yearly: 0 },
         users: [""]
     }])
     const [plan, setPlan] = useState<Plan>({
         id: "",
         name: "",
         features: "",
-        price: {monthly:0,yearly:0},
+        price: { monthly: 0, yearly: 0 },
         users: [""]
     })
 
@@ -59,9 +58,9 @@ const CustomPlan = () => {
     useEffect(() => {
         getCustomPlans()
     }, [])
-
-    console.log(plans)
-
+    useEffect(() => {
+        getCustomPlans()
+    }, [openModal])
     return (
         <>
             <SubModal model="CustomSubPlan" plan={plan} showModal={openModal} setShowModal={setOpenModal} />
@@ -72,7 +71,7 @@ const CustomPlan = () => {
                     </h1>
                     <div className="grid grid-cos-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {plans.reverse().map((plan, index) => (
-                            <div key={index} className="w-full rounded-lg shadow-xl bg-white flex flex-col justify-between items-center">
+                            <div key={index} className="w-full rounded-lg shadow-xl bg-white flex flex-col justify-between">
                                 <div>
                                     <div className="w-full flex items-center justify-center bg-pink-500 text-white p-2">
                                         <div className="w-1/2">
@@ -102,13 +101,13 @@ const CustomPlan = () => {
                                 </div>
                                 {plan.name !== "Freemium" && <div className="py-4 px-8 flex justify-center items-center gap-1">
                                     <div className="bg-gray-200 text-2xl text-purple-500 font-bold p-2 rounded-md">
-                                        <span>${plan.price.monthly}</span>
+                                        <span>${plan.price?.monthly}</span>
                                         <span className="text-base font-semibold text-gray-600">
                                             /Monthly
                                         </span>
                                     </div>
                                     <div className="bg-gray-200 text-2xl text-pink-500 font-bold p-2 rounded-md">
-                                        <span>${plan.price.yearly}</span>
+                                        <span>${plan.price?.yearly}</span>
                                         <span className="text-base font-semibold text-gray-600">
                                             /Yearly
                                         </span>

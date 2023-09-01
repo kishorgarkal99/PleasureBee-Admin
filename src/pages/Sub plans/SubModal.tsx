@@ -42,51 +42,11 @@ export default function SubModal({ model, plan, showModal, setShowModal }: Modal
 
 
     const handleSubmit = () => {
-        let newPlan = {
-            name: "",
-            features: [""],
-            price: { monthly: 0, yearly: 0 },
-            users: [""]
-        }
-        console.log(name, features, newPrice)
-        name.length < 3 ? newPlan.name = plan.name : name;
-        features.length < 3 ? newPlan.features = plan.features.split(",") : features.split(",");
-        (newPrice.monthly < 0 || newPrice.yearly < 0) ? newPlan.price = plan.price : newPrice;
-        // if ((name.length < 3) && (features.length < 3)) {
-        //     newPlan = {
-        //         name: plan.name,
-        //         features: plan.features.split(",")
-        //     }
-
-        //     console.log(newPlan)
-        // } else if ((name.length >= 3) && (features.length < 3)) {
-        //     newPlan = {
-        //         name: name,
-        //         features: plan.features.split(",")
-        //     }
-        //     console.log(newPlan)
-        // } else if ((name.length < 3) && (features.length >= 3)) {
-        //     newPlan = {
-        //         name: plan.name,
-        //         features: features.split(",")
-        //     }
-        //     console.log(newPlan)
-        // } else {
-        //     newPlan = {
-        //         name: name,
-        //         features: features.split(",")
-        //     }
-        //     console.log(newPlan)
-        // }
         if (plan?.id) {
-            handleUpdatePlan(newPlan)
+            handleUpdatePlan()
         } else {
             handleAddPlan()
         }
-        setName("")
-        setFeatures("")
-        setEditName(false)
-        setShowModal(false)
     }
 
     const handleAddPlan = async () => {
@@ -103,25 +63,44 @@ export default function SubModal({ model, plan, showModal, setShowModal }: Modal
                     price: newPrice,
                     users: []
                 }
-                console.log(newPlan)
                 try {
                     const docRef = await addDoc(collection(db, model), newPlan)
                     console.log("Registered with ID: ", docRef.id)
                 } catch (e) {
                     console.error("Error: ", e);
                 }
+                setName("")
+                setFeatures("")
+                setEditName(false)
+                setShowModal(false)
             } else {
                 console.error("Plan already exists")
             }
         }
 
     }
-    const handleUpdatePlan = async (newPlan: { name: string, features: string[] }) => {
+    const handleUpdatePlan = async () => {
+        if (name.length < 3) {
+            setName(plan.name)
+        }
+        if (features.length < 3) {
+            setFeatures(plan.features)
+        }
+        if ((newPrice.monthly < 0) || (newPrice.yearly < 0)) {
+            setPrice(plan.price)
+        }
+        console.log(name, features, newPrice)
         try {
             await updateDoc(doc(db, model, plan?.id), {
-                name: newPlan.name,
-                features: newPlan.features
+                name: name,
+                features: features.split(","),
+                price: newPrice,
             })
+            console.log("Document upadated")
+            setName("")
+            setFeatures("")
+            setEditName(false)
+            setShowModal(false)
         } catch (e) {
             console.error("Document not found: ", e)
         }
@@ -131,6 +110,7 @@ export default function SubModal({ model, plan, showModal, setShowModal }: Modal
         try {
             await deleteDoc(doc(db, model, plan?.id))
             console.log("Documente deleted")
+            setShowModal(false)
         } catch (e) {
             console.error("Error: ", e);
         }
@@ -242,7 +222,7 @@ export default function SubModal({ model, plan, showModal, setShowModal }: Modal
                             </div>
                         </div>
                     </div>
-                    <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+                    <div className="opacity-75 fixed inset-0 z-40 bg-black"></div>
                 </>
             ) : null}
         </>

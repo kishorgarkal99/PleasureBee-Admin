@@ -59,7 +59,9 @@ const SubscriptionPlans = () => {
         getPlans()
     }, [])
 
-    console.log(plans)
+    useEffect(() => {
+        getPlans()
+    }, [openModal])
 
     return (
         <>
@@ -71,7 +73,7 @@ const SubscriptionPlans = () => {
                     </h1>
                     <div className="grid grid-cos-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {plans.reverse().map((plan, index) => (
-                            <div key={index} className="w-full rounded-lg shadow-xl bg-white flex flex-col justify-between items-center">
+                            <div key={index} className="w-full rounded-lg shadow-xl bg-white flex flex-col justify-between">
                                 <div>
                                     <div className="w-full flex items-center justify-center bg-pink-500 text-white p-2">
                                         <div className="w-1/2">
