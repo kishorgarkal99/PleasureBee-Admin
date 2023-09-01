@@ -24,10 +24,10 @@ dist-ssr
 *.sw?
 
 #environment variable
-.env
+**/.env
 
 #firebase
-.firebase/*
+.firebase
 
 #build
 dist/
