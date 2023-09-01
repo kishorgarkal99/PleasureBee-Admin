@@ -6,12 +6,13 @@ import { collection, getDocs } from "firebase/firestore"
 import { db } from "../../config/firebase"
 import Loader from "../../components/Loader"
 import RegFlowModal from "./RegFlowModal"
+import Interests from "./components/Interests"
 
 interface UI {
     id: string,
     title: string,
     description: string,
-    content: string[]
+    content: []
 }
 
 const UserRegFlow = () => {
@@ -19,7 +20,7 @@ const UserRegFlow = () => {
     const [uIs, setUIs] = useState<UI[]>([{
         id: "",
         title: "",
-        content: [""],
+        content: [],
         description: "",
     }])
 
@@ -27,7 +28,7 @@ const UserRegFlow = () => {
     const [dataToEdit, setDataToEdit] = useState<UI>({
         id: "",
         title: "",
-        content: [""] || [{}],
+        content: [] || [{}],
         description: "",
     });
 
@@ -124,25 +125,27 @@ const UserRegFlow = () => {
                                                     {
                                                         ui.content?.map((option, index) => (
                                                             <span key={index}>
-                                                                {ui.id.trim()==="intrestScreen"
+                                                                {typeof option === "string"
                                                                     ? <span className="flex items-center px-4 bg-gray-100 text-gray-500 transitions duration-200 hover:scale-105 hover:text-white hover:bg-pink-700 rounded-full">
 
                                                                         <p className="text-sm font-semibold">
                                                                             {option}
                                                                         </p>
                                                                     </span>
-                                                                    : <span key={index} className="flex items-center">
-                                                                        <p className="text-gray-400 text-base font-bold mr-2">
-                                                                            {option?.title?.toString()}
-                                                                        </p>
-                                                                        <span>
-                                                                            {option?.options?.toString().split(",").map((opt: string) =>
-                                                                                <span className="text-sm font-semibold px-2 bg-gray-100 text-gray-500 transitions duration-200 hover:scale-105 hover:text-white hover:bg-pink-700 rounded-full">
-                                                                                    {opt}
-                                                                                </span>
-                                                                            )}
-                                                                        </span>
-                                                                    </span>
+                                                                    :
+                                                                    <Interests interest={option} />
+                                                                    // <span key={index} className="flex items-center">
+                                                                    //     <p className="text-gray-400 text-base font-bold mr-2">
+                                                                    //         {option?.title?.toString()}
+                                                                    //     </p>
+                                                                    //     <span>
+                                                                    //         {option?.options?.toString().split(",").map((opt: string) =>
+                                                                    //             <span className="text-sm font-semibold px-2 bg-gray-100 text-gray-500 transitions duration-200 hover:scale-105 hover:text-white hover:bg-pink-700 rounded-full">
+                                                                    //                 {opt}
+                                                                    //             </span>
+                                                                    //         )}
+                                                                    //     </span>
+                                                                    // </span>
                                                                 }
 
                                                             </span>

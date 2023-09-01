@@ -3,7 +3,7 @@ import Home from "./pages/Home";
 import Layout from "./components/Layout";
 import Auth from "./pages/Auth/Auth";
 import Users from "./pages/Users";
-import UserRegFlow from "./pages/UserRegFlow/UserRegFlow";
+import UserRegFlow from "./pages/UserRegFlow/RegFlow";
 import SubscriptionPlans from "./pages/Sub plans/SubscriptionPlans";
 import CustomPlan from "./pages/Sub plans/CustomPlan";
 
