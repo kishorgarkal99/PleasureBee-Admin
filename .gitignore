@@ -23,11 +23,11 @@ dist-ssr
 *.sln
 *.sw?
 
-#environment variable
+# environment variable
 .env
 
-#firebase
-.firebase/
+# firebase
+.firebase
 
-#build
+# build
 dist/
