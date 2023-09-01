@@ -8,8 +8,10 @@ import { collection, getDocs } from 'firebase/firestore';
 
 interface Plan {
     id: string,
-    name: string;
-    features: string;
+    name: string,
+    features: string,
+    price: { monthly: number, yearly: number },
+    users: string[]
 }
 
 const CustomPlan = () => {
@@ -17,12 +19,16 @@ const CustomPlan = () => {
     const [plans, setPlans] = useState<Plan[]>([{
         id: "",
         name: "",
-        features: ""
+        features: "",
+        price: {monthly:0,yearly:0},
+        users: [""]
     }])
     const [plan, setPlan] = useState<Plan>({
         id: "",
         name: "",
-        features: ""
+        features: "",
+        price: {monthly:0,yearly:0},
+        users: [""]
     })
 
     const handleOpen = (i: number) => {
@@ -40,6 +46,8 @@ const CustomPlan = () => {
                             id: doc.id.toString(),
                             name: doc.data().name.toString(),
                             features: doc.data().features.toString(),
+                            price: doc.data().price,
+                            users: doc.data().users,
                         }));
                     setPlans(newData)
                 } catch (error) {
@@ -63,30 +71,49 @@ const CustomPlan = () => {
                         CUSTOM PLANS
                     </h1>
                     <div className="grid grid-cos-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {plans.map((plan, index) => (
-                            <div key={index} className="w-full rounded-lg shadow-xl bg-white">
-                                <div className="w-full flex items-center justify-center bg-pink-500 text-white p-2">
-                                    <div className="w-1/2">
-                                        <h2 className="text-2xl font-semibold text-right">
-                                            {plan.name}
-                                        </h2>
+                        {plans.reverse().map((plan, index) => (
+                            <div key={index} className="w-full rounded-lg shadow-xl bg-white flex flex-col justify-between items-center">
+                                <div>
+                                    <div className="w-full flex items-center justify-center bg-pink-500 text-white p-2">
+                                        <div className="w-1/2">
+                                            <h2 className="text-2xl font-semibold text-right">
+                                                {plan.name}
+                                            </h2>
+                                        </div>
+                                        <div className="w-1/2 flex justify-between items-center">
+                                            <div />
+                                            <IconButton onclick={() => handleOpen(index)}>
+                                                <FaPen className="w-4 h-4" />
+                                            </IconButton>
+                                        </div>
                                     </div>
-                                    <div className="w-1/2 flex justify-between items-center">
-                                        <div />
-                                        <IconButton onclick={() => handleOpen(index)}>
-                                            <FaPen className="w-4 h-4" />
-                                        </IconButton>
+                                    <div className="py-4 px-8">
+                                        <ul className="list-disc list-image-[url(assets/icons/listIcon.svg)] text-base px-4 space-y-2">
+                                            {plan.features.split(",").map((feature, index) => (
+                                                <>
+                                                    <li key={index} className="hover:bg-gray-100">
+                                                        {feature.trim()}
+                                                    </li>
+                                                    <hr className="w-4/5" />
+                                                </>
+                                            ))}
+                                        </ul>
                                     </div>
                                 </div>
-                                <div className="p-4">
-                                    <ul className="list-disc list-image-[url(assets/icons/listIcon.svg)] text-base px-4">
-                                        {plan.features.split(",").map((feature, index) => (
-                                            <li key={index} >
-                                                {feature.trim()}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
+                                {plan.name !== "Freemium" && <div className="py-4 px-8 flex justify-center items-center gap-1">
+                                    <div className="bg-gray-200 text-2xl text-purple-500 font-bold p-2 rounded-md">
+                                        <span>${plan.price.monthly}</span>
+                                        <span className="text-base font-semibold text-gray-600">
+                                            /Monthly
+                                        </span>
+                                    </div>
+                                    <div className="bg-gray-200 text-2xl text-pink-500 font-bold p-2 rounded-md">
+                                        <span>${plan.price.yearly}</span>
+                                        <span className="text-base font-semibold text-gray-600">
+                                            /Yearly
+                                        </span>
+                                    </div>
+                                </div>}
                             </div>
                         ))}
                     </div>

@@ -1,11 +1,13 @@
 import { addDoc, collection, deleteDoc, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { useState } from "react";
-import { FaCrown, FaInfo, FaPen, FaTrashAlt } from "react-icons/fa";
+import { FaCrown, FaDollarSign, FaInfo, FaPen, FaTrashAlt } from "react-icons/fa";
 import { db } from "../../config/firebase";
 interface Plan {
-    id: string
-    name: string
-    features: string
+    id: string,
+    name: string,
+    features: string,
+    price: { monthly: number, yearly: number },
+    users: string[]
 }
 
 type ModalProp = {
@@ -18,6 +20,10 @@ type ModalProp = {
 export default function SubModal({ model, plan, showModal, setShowModal }: ModalProp) {
     const [features, setFeatures] = useState<string>("")
     const [name, setName] = useState<string>("")
+    const [newPrice, setPrice] = useState<{ monthly: number, yearly: number }>({
+        monthly: 0,
+        yearly: 0
+    })
     const [editName, setEditName] = useState<boolean>(false)
 
     const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,61 +33,88 @@ export default function SubModal({ model, plan, showModal, setShowModal }: Modal
     const handleFeatureChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setFeatures(event.target.value)
     }
+    const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setPrice((prevState) => ({
+            ...prevState,
+            [event.target?.name]: event.target.value,
+        }))
+    }
+
 
     const handleSubmit = () => {
         let newPlan = {
             name: "",
-            features: [""]
+            features: [""],
+            price: { monthly: 0, yearly: 0 },
+            users: [""]
         }
-        if ((name.length < 3) && (features.length < 3)) {
-            newPlan = {
-                name: plan.name,
-                features: plan.features.split(",")
-            }
+        console.log(name, features, newPrice)
+        name.length < 3 ? newPlan.name = plan.name : name;
+        features.length < 3 ? newPlan.features = plan.features.split(",") : features.split(",");
+        (newPrice.monthly < 0 || newPrice.yearly < 0) ? newPlan.price = plan.price : newPrice;
+        // if ((name.length < 3) && (features.length < 3)) {
+        //     newPlan = {
+        //         name: plan.name,
+        //         features: plan.features.split(",")
+        //     }
 
-            console.log(newPlan)
-        } else if ((name.length >= 3) && (features.length < 3)) {
-            newPlan = {
-                name: name,
-                features: plan.features.split(",")
-            }
-            console.log(newPlan)
-        } else if ((name.length < 3) && (features.length >= 3)) {
-            newPlan = {
-                name: plan.name,
-                features: features.split(",")
-            }
-            console.log(newPlan)
+        //     console.log(newPlan)
+        // } else if ((name.length >= 3) && (features.length < 3)) {
+        //     newPlan = {
+        //         name: name,
+        //         features: plan.features.split(",")
+        //     }
+        //     console.log(newPlan)
+        // } else if ((name.length < 3) && (features.length >= 3)) {
+        //     newPlan = {
+        //         name: plan.name,
+        //         features: features.split(",")
+        //     }
+        //     console.log(newPlan)
+        // } else {
+        //     newPlan = {
+        //         name: name,
+        //         features: features.split(",")
+        //     }
+        //     console.log(newPlan)
+        // }
+        if (plan?.id) {
+            handleUpdatePlan(newPlan)
         } else {
-            newPlan = {
-                name: name,
-                features: features.split(",")
-            }
-            console.log(newPlan)
+            handleAddPlan()
         }
-        plan?.id
-            ? handleUpdatePlan(newPlan)
-            : handleAddPlan(newPlan)
         setName("")
         setFeatures("")
         setEditName(false)
         setShowModal(false)
     }
 
-    const handleAddPlan = async (newPlan: { name: string, features: string[] }) => {
-        const q = query(collection(db, model), where("name", "==", newPlan.name))
-        const querySnapshot = await getDocs(q)
-
-        if (querySnapshot.docs.length === 0) {
-            try {
-                const docRef = await addDoc(collection(db, model), newPlan)
-                console.log("Registered with ID: ", docRef.id)
-            } catch (e) {
-                console.error("Error: ", e);
-            }
+    const handleAddPlan = async () => {
+        if (name.length < 3 || features.length < 3 || newPrice.monthly < 0 || newPrice.yearly < 0) {
+            console.log("Please enter a valid value")
         } else {
-            console.error("Plan already exists")
+            const q = query(collection(db, model), where("name", "==", name))
+            const querySnapshot = await getDocs(q)
+
+            if (querySnapshot.docs.length === 0) {
+                const newPlan = {
+                    name: name,
+                    features: features.split(","),
+                    price: newPrice,
+                    users: []
+                }
+                console.log(newPlan)
+                try {
+                    const docRef = await addDoc(collection(db, model), newPlan)
+                    console.log("Registered with ID: ", docRef.id)
+                } catch (e) {
+                    console.error("Error: ", e);
+                }
+            } else {
+                console.error("Plan already exists")
+            }
         }
+
     }
     const handleUpdatePlan = async (newPlan: { name: string, features: string[] }) => {
         try {
@@ -94,7 +127,7 @@ export default function SubModal({ model, plan, showModal, setShowModal }: Modal
         }
     }
 
-    const handleDeletePlan=async()=>{
+    const handleDeletePlan = async () => {
         try {
             await deleteDoc(doc(db, model, plan?.id))
             console.log("Documente deleted")
@@ -139,9 +172,9 @@ export default function SubModal({ model, plan, showModal, setShowModal }: Modal
                                             </button>
                                         }
                                     </div>
-                                    <button onClick={handleDeletePlan} className="rounded-full p-2 outline-0 ring-0 border-2 text-pink-500 border-pink-500 hover:text-white hover:bg-pink-500">
+                                    {model === "CustomSubPlan" && <button onClick={handleDeletePlan} className="rounded-full p-2 outline-0 ring-0 border-2 text-pink-500 border-pink-500 hover:text-white hover:bg-pink-500">
                                         <FaTrashAlt className="w-4 h-4" />
-                                    </button>
+                                    </button>}
                                 </div>
                                 {/*body*/}
                                 <div className="relative p-4 flex-col">
@@ -158,6 +191,35 @@ export default function SubModal({ model, plan, showModal, setShowModal }: Modal
                                             placeholder="write you features here "
                                             defaultValue={plan?.features || ""}
                                             className="mt-2 px-3 py-4 placeholder-gray-400 text-gray-600 relative bg-white bg-white rounded-md text-base border-2 border-gray-300 shadow outline-none focus:outline-none focus:ring-0 w-full" />
+                                    </div>
+
+                                    <div className="flex flex-col">
+                                        <p className="text-gray-400 text-lg leading-relaxed">
+                                            <FaDollarSign className="mr-1 text-gray-300 inline text-sm" />
+                                            <span>
+                                                Price
+                                            </span>
+                                        </p>
+                                        <div className="flex items-center gap-2">
+                                            <input
+                                                name="monthly"
+                                                type="number"
+                                                placeholder="Price per month"
+                                                defaultValue={plan?.name}
+                                                onChange={handlePriceChange}
+                                                required
+                                                className="mt-2 px-3 py-4 placeholder-gray-400 text-gray-600 relative bg-white bg-white rounded-md text-base border-2 border-gray-300 shadow outline-none focus:outline-none focus:ring-0 w-full"
+                                            />
+                                            <input
+                                                name="yearly"
+                                                type="number"
+                                                placeholder="price per month"
+                                                defaultValue={plan?.name}
+                                                onChange={handlePriceChange}
+                                                required
+                                                className="mt-2 px-3 py-4 placeholder-gray-400 text-gray-600 relative bg-white bg-white rounded-md text-base border-2 border-gray-300 shadow outline-none focus:outline-none focus:ring-0 w-full"
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                                 {/*footer*/}

@@ -6,24 +6,25 @@ import { collection, getDocs } from "firebase/firestore"
 import { db } from "../../config/firebase"
 import Loader from "../../components/Loader"
 
-// interface UI{
-//     id:string,
-//     title:string,
-//     content:string[]
-// }
+interface UI {
+    id: string,
+    title: string,
+    description: string,
+    content: string[]
+}
 
 const UserRegFlow = () => {
 
-    const [uIs, setUIs] = useState([{
+    const [uIs, setUIs] = useState<UI[]>([{
         id: "",
         title: "",
-        content: [""] || [{}],
+        content: [""],
         description: "",
     }])
 
     const [dataId, setDataId] = useState<string>("")
     const [showModal, setShowModal] = useState(false);
-    const [dataToEdit, setDataToEdit] = useState({
+    const [dataToEdit, setDataToEdit] = useState<UI>({
         id: "",
         title: "",
         content: [""] || [{}],
@@ -34,10 +35,10 @@ const UserRegFlow = () => {
 
     const [errorMessage, setErrorMessage] = useState("")
     const [newTitle, setTitle] = useState("")
-    const [description, setDesc] = useState("")
+    const [description, setDesc] = useState<string>("")
     const [content, setContent] = useState<string[]>([])
     // const [contentVissible, setContentVissible] = useState([])
-    const [showOrientation, setShowOrientation] = useState<boolean>(true)
+    // const [showOrientation, setShowOrientation] = useState<boolean>(true)
 
 
     const handleAddItem = () => {
@@ -111,7 +112,7 @@ const UserRegFlow = () => {
                     id: dataId,
                     title: newTitle,
                     content: content,
-                    showOrientation: showOrientation,
+                    // showOrientation: showOrientation,
                     description: description
                 }
                 console.log(ui)
@@ -227,28 +228,35 @@ const UserRegFlow = () => {
                                                 </h3>
                                                 <div className="w-full ml-2 flex gap-2 flex-wrap">
                                                     {
-                                                        ui.content?.map((option, index: number) => (
+                                                        ui.content?.map((option: string, index: number) => (
                                                             <span key={index}>
                                                                 {
-                                                                    typeof option === "string"
-                                                                        ? <span className="flex items-center px-4 bg-gray-100 text-gray-500 transitions duration-200 hover:scale-105 hover:text-white hover:bg-pink-700 rounded-full">
+                                                                    <span className="flex items-center px-4 bg-gray-100 text-gray-500 transitions duration-200 hover:scale-105 hover:text-white hover:bg-pink-700 rounded-full">
 
-                                                                            <p className="text-sm font-semibold">
-                                                                                {option}
-                                                                            </p>
-                                                                        </span>
-                                                                        : <span key={index} className="flex items-center">
-                                                                            <p className="text-gray-400 text-base font-bold mr-2">
-                                                                                {option?.title?.toString()}
-                                                                            </p>
-                                                                            <span>
-                                                                                {option?.options?.toString().split(",").map((opt: string) =>
-                                                                                    <span className="text-sm font-semibold px-2 bg-gray-100 text-gray-500 transitions duration-200 hover:scale-105 hover:text-white hover:bg-pink-700 rounded-full">
-                                                                                        {opt}
-                                                                                    </span>
-                                                                                )}
-                                                                            </span>
-                                                                        </span>
+                                                                        <p className="text-sm font-semibold">
+                                                                            {option}
+                                                                        </p>
+                                                                    </span>
+
+                                                                    // typeof option === "string"
+                                                                    //     ? <span className="flex items-center px-4 bg-gray-100 text-gray-500 transitions duration-200 hover:scale-105 hover:text-white hover:bg-pink-700 rounded-full">
+
+                                                                    //         <p className="text-sm font-semibold">
+                                                                    //             {option}
+                                                                    //         </p>
+                                                                    //     </span>
+                                                                    //     : <span key={index} className="flex items-center">
+                                                                    //         <p className="text-gray-400 text-base font-bold mr-2">
+                                                                    //             {option?.title?.toString()}
+                                                                    //         </p>
+                                                                    //         <span>
+                                                                    //             {option?.options?.toString().split(",").map((opt: string) =>
+                                                                    //                 <span className="text-sm font-semibold px-2 bg-gray-100 text-gray-500 transitions duration-200 hover:scale-105 hover:text-white hover:bg-pink-700 rounded-full">
+                                                                    //                     {opt}
+                                                                    //                 </span>
+                                                                    //             )}
+                                                                    //         </span>
+                                                                    //     </span>
                                                                 }
 
                                                             </span>
