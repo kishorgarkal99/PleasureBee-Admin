@@ -101,20 +101,22 @@ const SubscriptionPlans = () => {
                                         </ul>
                                     </div>
                                 </div>
-                                {plan.name !== "Freemium" && <div className="py-4 px-8 flex justify-center items-center gap-1">
-                                    <div className="bg-gray-200 text-2xl text-purple-500 font-bold p-2 rounded-md">
-                                        <span>${plan.price.monthly}</span>
-                                        <span className="text-base font-semibold text-gray-600">
-                                            /Monthly
-                                        </span>
+                                {
+                                    plan.name !== "Freemium" && <div className="py-4 px-8 flex justify-center items-center gap-1">
+                                        <div className="bg-slate-300 text-2xl text-purple-500 font-bold p-2 rounded-md">
+                                            <span>${plan.price.monthly}</span>
+                                            <span className="text-base font-normal text-gray-600">
+                                                /monthly
+                                            </span>
+                                        </div>
+                                        <div className="bg-slate-700 text-2xl text-pink-500 font-bold p-2 rounded-md">
+                                            <span>${plan.price.yearly}</span>
+                                            <span className="text-base font-normal text-gray-200">
+                                                /yearly
+                                            </span>
+                                        </div>
                                     </div>
-                                    <div className="bg-gray-200 text-2xl text-pink-500 font-bold p-2 rounded-md">
-                                        <span>${plan.price.yearly}</span>
-                                        <span className="text-base font-semibold text-gray-600">
-                                            /Yearly
-                                        </span>
-                                    </div>
-                                </div>}
+                                }
                             </div>
                         ))}
                     </div>

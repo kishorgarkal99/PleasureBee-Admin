@@ -25,3 +25,9 @@ dist-ssr
 
 #environment variable
 .env
+
+#firebase
+.firebase/*
+
+#build
+dist/
