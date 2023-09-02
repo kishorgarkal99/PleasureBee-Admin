@@ -1,134 +1,151 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { FaMinus, FaPlus, FaRegEdit } from "react-icons/fa"
+import { db } from "../../../config/firebase"
 
 interface UI {
     id: string,
     title: string,
     description: string,
-    showOrientation?: boolean
-    content: []
+    showOrientation?: boolean,
+    content: string[] | [],
     contentVisible?: boolean[]
 }
 
 type RegFlowModalProp = {
     ui: UI,
-    showModal: boolean
-    setShowModal: React.Dispatch<React.SetStateAction<boolean>>
+    showModal: boolean,
+    setShowModal: React.Dispatch<React.SetStateAction<boolean>>,
+    closeModal: () => void,
 }
+
 const RegFlowModal = ({ ui, showModal, setShowModal }: RegFlowModalProp) => {
 
     const [inputValue, setInputValue] = useState("");
-    const [contentList, setList] = useState<string[]>([]);
-
     const [errorMessage, setErrorMessage] = useState("")
-    const [newTitle, setTitle] = useState("")
+
+    const [newTitle, setTitle] = useState<string>("")
     const [description, setDesc] = useState<string>("")
-    const [content, setContent] = useState<string[]>([])
-    // const [contentVissible, setContentVissible] = useState([])
+    const [content, setContent] = useState<string[]>([""])
+    // const [contentVissible, setContentVissible] = useState<boolean>()
     // const [showOrientation, setShowOrientation] = useState<boolean>(true)
+
+    // const [ui, setUI] = useState<UI>({
+    //     id: "",
+    //     title: "",
+    //     description: "",
+    //     showOrientation: true,
+    //     content: [""] || [],
+    //     contentVisible: []
+    // })
 
     const handleAddItem = () => {
 
         if (inputValue === "") {
             setErrorMessage("Please enter a value");
-        } else if (contentList.includes(inputValue)) {
+        } else if (content?.includes(inputValue)) {
             setErrorMessage("This value already exists in the list");
         } else {
-            setList([...contentList, inputValue]);
-            setInputValue('');
-            setErrorMessage('');
+            setContent([...content, inputValue]);
+            setInputValue("");
+            setErrorMessage("");
+            console.log(content)
         }
-    };
+    }
 
     const handleDeleteItem = (optn: string) => {
-        const updatedList = contentList.filter((item) => item !== optn);
-        setList(updatedList)
-        console.log(contentList)
+        const updatedList = content.filter((item) => item !== optn);
+        setContent(updatedList)
+        console.log(content)
     }
 
 
-    const handleSubmit = () => {
-        //screens without description
-        if ((
-            ui.id.trim() === "drinkScreen")
-            || (ui.id.trim() === "educationScreen")
-            || (ui.id.trim() === "haveChildrenScreen")
-            || (ui.id.trim() === "politicalScreen")
-            || (ui.id.trim() === "religion")
-            || (ui.id.trim() === "smokeScreen")
-            || (ui.id.trim() === "workout")
-            || (ui.id.trim() === "zodiacSign")
-        ) {
-            setContent([...contentList])
-            if (newTitle?.length < 3) {
-                setTitle(ui.title)
-            }
-            const newUI = {
-                id: ui.id,
-                title: newTitle,
-                content: content
-            }
+    // const handleSubmit = () => {
+    //     //screens without description
+    //     if ((
+    //         ui.id.trim() === "drinkScreen")
+    //         || (ui.id.trim() === "educationScreen")
+    //         || (ui.id.trim() === "haveChildrenScreen")
+    //         || (ui.id.trim() === "politicalScreen")
+    //         || (ui.id.trim() === "religion")
+    //         || (ui.id.trim() === "smokeScreen")
+    //         || (ui.id.trim() === "workout")
+    //         || (ui.id.trim() === "zodiacSign")
+    //         || (ui.id.trim() === "mode")
+    //     ) {
+    //         if (ui.id.trim() === "mode") {
+    //             const newUI = {
+    //                 id: ui.id,
+    //                 title: newTitle,
+    //                 content: content,
+    //                 contentVissible: contentVissible
+    //             }
+    //             console.log(newUI)
+    //         }
+    //         const updatedUI = {
+    //             id: ui.id,
+    //             title: newTitle,
+    //             content: content
+    //         }
 
-            console.log(newUI)
-        }
-        // screens with description
-        else if (
-            (ui.id.trim() === "genderScreen")
-            || (ui.id.trim() === "liketoDate")
-            || (ui.id.trim() === "profilePrompt")
-            || (ui.id.trim() === "toFind")
-        ) {
-            setContent([...contentList])
-            if (newTitle?.length < 3) {
-                setTitle(ui.title)
-            }
-            if (description?.length < 3) {
-                setTitle(ui.description)
-            }
-            if ((ui.id.trim() === "genderScreen")) {
-                const newUI = {
-                    id: ui.id,
-                    title: newTitle,
-                    content: content,
-                    // showOrientation: showOrientation,
-                    description: description
-                }
-                console.log(newUI)
-            } else {
-                const newUI = {
-                    id: ui.id,
-                    title: newTitle,
-                    content: content,
-                    description: description
-                }
-                console.log(newUI)
-            }
-
-
-        } else if ((ui.id.trim() === "intrestScreen")) {
-            // 
-        }
+    //         console.log(updatedUI)
+    //     }
+    //     // screens with description
+    //     else if (
+    //         (ui.id.trim() === "genderScreen")
+    //         || (ui.id.trim() === "liketoDate")
+    //         || (ui.id.trim() === "profilePrompt")
+    //         || (ui.id.trim() === "toFind")
+    //     ) {
+    //         if (ui.id.trim() === "genderScreen") {
+    //             const newUI = {
+    //                 id: ui.id,
+    //                 title: newTitle,
+    //                 content: content,
+    //                 showOrientation: showOrientation,
+    //                 description: description
+    //             }
+    //             console.log(newUI)
+    //         }
+    //         else if (ui.id.trim() === "intrestScreen") {
+    //             // 
+    //         }
+    //         else {
+    //             const newUI = {
+    //                 id: ui.id,
+    //                 title: newTitle,
+    //                 content: content,
+    //                 description: description
+    //             }
+    //             console.log(newUI)
+    //         }
 
 
-        handleCloseModal()
+    //     }
 
-    }
+
+    //     handleCloseModal()
+
+    // }
 
     const handleCloseModal = () => {
         setShowModal(false)
-        setList([])
+        setContent([])
     }
+    
+
+
+    useEffect(() => {
+
+    }, [])
+
     return (
         <>
             {showModal ? (
                 <>
                     <div
-                        className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
-                    >
+                        className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
                         <div className="relative w-auto my-6 mx-auto max-w-3xl">
-                            {/*content*/}
                             <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                                {/*header*/}
                                 <div className="flex items-center justify-between p-5 border-b border-solid border-slate-200 rounded-t">
                                     <FaRegEdit className="h-6 w-6 text-pink-700 mr-2" aria-hidden="true" />
                                     <input
@@ -136,35 +153,37 @@ const RegFlowModal = ({ ui, showModal, setShowModal }: RegFlowModalProp) => {
                                         name="option"
                                         id="option"
                                         autoComplete="option"
-                                        defaultValue={ui.title || ""}
+                                        defaultValue={ui?.title || ""}
                                         onChange={e => setTitle(e.target.value)}
                                         className="w-full border-b-1 border-pink-700 p-2 font-semibold text-gray-600 shadow-sm text-xl rounded-md focus:ring-2 focus:ring-inset focus:ring-pink-600 focus:outline-0" />
                                 </div>
-                                {/*body*/}
 
                                 <div className="relative p-6 flex-auto">
                                     <div className="mt-2">
                                         <div>
                                             <div className="space-y-6">
-                                                <div className="col-span-full">
-                                                    <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
-                                                        description
-                                                    </label>
-                                                    <div className="mt-2">
-                                                        <textarea
-                                                            id="about"
-                                                            name="about"
-                                                            rows={3}
-                                                            placeholder={"write screen description"}
-                                                            onChange={e => setDesc(e.target.value)}
-                                                            className="block w-full p-2 rounded-md border-0 text-gray-600 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-300 focus:ring-2 focus:ring-inset focus:ring-pink-600 focus:outline-0 sm:text-md sm:leading-6"
-                                                            defaultValue={ui.description || ""}
-                                                        />
+                                                {
+                                                    ui.description
+                                                    && <div className="col-span-full">
+                                                        <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
+                                                            description
+                                                        </label>
+                                                        <div className="mt-2">
+                                                            <textarea
+                                                                id="about"
+                                                                name="about"
+                                                                rows={3}
+                                                                placeholder={"write screen description"}
+                                                                onChange={e => setDesc(e.target.value)}
+                                                                className="block w-full p-2 rounded-md border-0 text-gray-600 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-300 focus:ring-2 focus:ring-inset focus:ring-pink-600 focus:outline-0 sm:text-md sm:leading-6"
+                                                                defaultValue={ui?.description || ""}
+                                                            />
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                }
                                                 <div className="w-full ml-2 flex gap-2 flex-wrap">
                                                     {
-                                                        contentList.map((option: string, index: number) => (
+                                                        content.map((option: string, index: number) => (
                                                             <span key={index} className="flex items-center pl-4 bg-gray-200 text-gray-700 rounded-full">
 
                                                                 <p className="text-sm text-ellipsis">
@@ -206,11 +225,10 @@ const RegFlowModal = ({ ui, showModal, setShowModal }: RegFlowModalProp) => {
                                                     </div>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
-                                {/*footer*/}
+
                                 <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
                                     <button
                                         className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-6 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
@@ -222,9 +240,8 @@ const RegFlowModal = ({ ui, showModal, setShowModal }: RegFlowModalProp) => {
                                     <button
                                         className="inline-flex w-full justify-center rounded-lg bg-pink-700 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-pink-500 sm:ml-3 sm:w-auto"
                                         type="button"
-                                        onClick={handleSubmit}
-                                    >
-                                        Save Changes
+                                        onClick={() => { }}>
+                                        Save
                                     </button>
                                 </div>
                             </div>

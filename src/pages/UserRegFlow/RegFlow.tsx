@@ -14,40 +14,33 @@ interface UI {
     title: string,
     description: string,
     showOrientation?: boolean
-    content: []
+    content: string[] | []
     contentVisible?: boolean[]
 }
 
 const UserRegFlow = () => {
 
-    const [uIs, setUIs] = useState<UI[]>([{
+    const [uIs, setUIs] = useState<UI[]>([])
+    const [ui, setUI] = useState<UI>({
         id: "",
         title: "",
+        description: "",
+        showOrientation: true,
         content: [],
-        description: "",
-        showOrientation: true,
         contentVisible: []
-    }])
+    })
 
-    const [showModal, setShowModal] = useState(false);
-    const [dataToEdit, setDataToEdit] = useState<UI>({
-        id: "",
-        title: "",
-        content: [] || [{}],
-        description: "",
-        showOrientation: true,
-        contentVisible: [],
-    });
+    const [dataIndex, setIndex] = useState<number>()
+    const [showModal, setShowModal] = useState(false)
 
-
-    const handleModalState = (i: number) => {
-        // const dataTobeEdited = uIs.filter((ui) => ui.id === id)[0]
-        setDataToEdit(uIs[i])
-        console.log(dataToEdit)
-        setShowModal(true)
+    const handleOpenModal = (i: number) => {
+        setIndex(i)
     }
-
-
+    const handleCloseModal = () => {
+        setIndex(undefined)
+        getUIs()
+        setShowModal(false)
+    }
 
     const getUIs = async () => {
         await getDocs(collection(db, "UI"))
@@ -72,10 +65,13 @@ const UserRegFlow = () => {
     useEffect(() => {
         getUIs()
     }, [])
-
     useEffect(() => {
-        getUIs()
-    }, [showModal])
+        if (dataIndex !== undefined) {
+            setUI(uIs[dataIndex])
+            setShowModal(true)
+            console.log(dataIndex)
+        }
+    }, [dataIndex])
 
     return (
         <Layout title="PleasureBee/User Resgistration Flow">
@@ -85,7 +81,7 @@ const UserRegFlow = () => {
                 </div>
                 :
                 <>
-                    <RegFlowModal ui={dataToEdit} showModal={showModal} setShowModal={setShowModal} />
+                    <RegFlowModal ui={ui} showModal={showModal} setShowModal={setShowModal} closeModal={handleCloseModal} />
                     <div className="min-h-screen rounded-lg bg-gray-100">
                         <div className="mx-auto max-w-7xl">
                             <div className="fixed right-4 bottom-16 flex justify-between">
@@ -110,7 +106,7 @@ const UserRegFlow = () => {
 
                                                     <div>
                                                         <button
-                                                            onClick={() => handleModalState(index)}
+                                                            onClick={() => handleOpenModal(index)}
                                                             className="text-xl shadow-xl font-bold text-pink-700 px-4 bg-transparent border border-pink-600 rounded-full transitions duration-200 hover:bg-pink-700 hover:text-white hover:border-transparent focus:outline-none" >
                                                             <h1>
                                                                 <MdOutlineEditNote />
