@@ -150,7 +150,7 @@ const UserRegFlow = () => {
 
                                                                             <span className="text-sm font-semibold">
 
-                                                                                {ui?.id.toString().trim() === "test"
+                                                                                {ui.id.toString().trim() === "test"
                                                                                     ? <>
                                                                                         option: {option},
                                                                                     </>
