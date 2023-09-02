@@ -5,22 +5,18 @@ interface UI {
     id: string,
     title: string,
     description: string,
-    content: string[]
+    showOrientation?: boolean
+    content: []
+    contentVisible?: boolean[]
 }
 
 type RegFlowModalProp = {
-    ui:UI,
+    ui: UI,
     showModal: boolean
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>
 }
-const RegFlowModal = ({ui, showModal,setShowModal }: RegFlowModalProp) => {
+const RegFlowModal = ({ ui, showModal, setShowModal }: RegFlowModalProp) => {
 
-    const [dataToEdit, setDataToEdit] = useState<UI>({
-        id: "",
-        title: "",
-        content: [""] || [{}],
-        description: "",
-    });
     const [inputValue, setInputValue] = useState("");
     const [contentList, setList] = useState<string[]>([]);
 
@@ -30,7 +26,7 @@ const RegFlowModal = ({ui, showModal,setShowModal }: RegFlowModalProp) => {
     const [content, setContent] = useState<string[]>([])
     // const [contentVissible, setContentVissible] = useState([])
     // const [showOrientation, setShowOrientation] = useState<boolean>(true)
-    
+
     const handleAddItem = () => {
 
         if (inputValue === "") {
@@ -65,7 +61,7 @@ const RegFlowModal = ({ui, showModal,setShowModal }: RegFlowModalProp) => {
         ) {
             setContent([...contentList])
             if (newTitle?.length < 3) {
-                setTitle(dataToEdit.title)
+                setTitle(ui.title)
             }
             const newUI = {
                 id: ui.id,
@@ -84,10 +80,10 @@ const RegFlowModal = ({ui, showModal,setShowModal }: RegFlowModalProp) => {
         ) {
             setContent([...contentList])
             if (newTitle?.length < 3) {
-                setTitle(dataToEdit.title)
+                setTitle(ui.title)
             }
             if (description?.length < 3) {
-                setTitle(dataToEdit.description)
+                setTitle(ui.description)
             }
             if ((ui.id.trim() === "genderScreen")) {
                 const newUI = {
@@ -120,12 +116,6 @@ const RegFlowModal = ({ui, showModal,setShowModal }: RegFlowModalProp) => {
 
     const handleCloseModal = () => {
         setShowModal(false)
-        setDataToEdit({
-            id: "",
-            title: "",
-            content: [""] || [{}],
-            description: "",
-        })
         setList([])
     }
     return (
@@ -146,7 +136,7 @@ const RegFlowModal = ({ui, showModal,setShowModal }: RegFlowModalProp) => {
                                         name="option"
                                         id="option"
                                         autoComplete="option"
-                                        defaultValue={dataToEdit.title || ""}
+                                        defaultValue={ui.title || ""}
                                         onChange={e => setTitle(e.target.value)}
                                         className="w-full border-b-1 border-pink-700 p-2 font-semibold text-gray-600 shadow-sm text-xl rounded-md focus:ring-2 focus:ring-inset focus:ring-pink-600 focus:outline-0" />
                                 </div>
@@ -168,7 +158,7 @@ const RegFlowModal = ({ui, showModal,setShowModal }: RegFlowModalProp) => {
                                                             placeholder={"write screen description"}
                                                             onChange={e => setDesc(e.target.value)}
                                                             className="block w-full p-2 rounded-md border-0 text-gray-600 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-300 focus:ring-2 focus:ring-inset focus:ring-pink-600 focus:outline-0 sm:text-md sm:leading-6"
-                                                            defaultValue={dataToEdit.description || ""}
+                                                            defaultValue={ui.description || ""}
                                                         />
                                                     </div>
                                                 </div>

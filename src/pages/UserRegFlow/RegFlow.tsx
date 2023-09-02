@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 import { collection, getDocs } from "firebase/firestore"
 import { db } from "../../config/firebase"
 import Loader from "../../components/Loader"
-import RegFlowModal from "./RegFlowModal"
+import RegFlowModal from "./components/RegFlowModal"
 import Interests from "./components/Interests"
 import Modes from "./components/Mode"
 
