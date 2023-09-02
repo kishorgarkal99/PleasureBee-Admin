@@ -7,12 +7,15 @@ import { db } from "../../config/firebase"
 import Loader from "../../components/Loader"
 import RegFlowModal from "./RegFlowModal"
 import Interests from "./components/Interests"
+import Modes from "./components/Mode"
 
 interface UI {
     id: string,
     title: string,
     description: string,
+    showOrientation?: boolean
     content: []
+    contentVisible?: boolean[]
 }
 
 const UserRegFlow = () => {
@@ -22,6 +25,8 @@ const UserRegFlow = () => {
         title: "",
         content: [],
         description: "",
+        showOrientation: true,
+        contentVisible: []
     }])
 
     const [showModal, setShowModal] = useState(false);
@@ -30,6 +35,8 @@ const UserRegFlow = () => {
         title: "",
         content: [] || [{}],
         description: "",
+        showOrientation: true,
+        contentVisible: [],
     });
 
 
@@ -37,7 +44,7 @@ const UserRegFlow = () => {
         // const dataTobeEdited = uIs.filter((ui) => ui.id === id)[0]
         setDataToEdit(uIs[i])
         console.log(dataToEdit)
-        setShowModal(!showModal)
+        setShowModal(true)
     }
 
 
@@ -52,6 +59,8 @@ const UserRegFlow = () => {
                             title: doc.data().title.toString(),
                             description: doc.data().description?.toString(),
                             content: doc.data().content,
+                            showOrientation: doc.data()?.showOrientation,
+                            contentVisible: doc.data()?.contentVisible
                         }));
                     setUIs(newData)
                 } catch (error) {
@@ -118,6 +127,16 @@ const UserRegFlow = () => {
                                                     </div>
                                                 }
                                                 <hr />
+                                                {
+                                                    ui?.id.toString().trim() === "genderScreen" && <div className="p-2">
+                                                        <span className="text-gray-500 text-base mr-2">
+                                                            show orientation:
+                                                        </span>
+                                                        <span className="text-sm font-semibold px-2 bg-gray-200 text-gray-500 transitions duration-200 hover:scale-105 hover:text-white hover:bg-pink-700 rounded-full">
+                                                            {ui.showOrientation?.toString()}
+                                                        </span>
+                                                    </div>
+                                                }
                                                 <h3 className="mt-1 text-base font-semibold leading-7 tracking-tight text-gray-500">
                                                     Options
                                                 </h3>
@@ -126,26 +145,34 @@ const UserRegFlow = () => {
                                                         ui.content?.map((option, index) => (
                                                             <span key={index}>
                                                                 {typeof option === "string"
-                                                                    ? <span className="flex items-center px-4 bg-gray-100 text-gray-500 transitions duration-200 hover:scale-105 hover:text-white hover:bg-pink-700 rounded-full">
+                                                                    ? <>
+                                                                        <span className="flex items-center px-4 bg-gray-200 text-gray-500 transitions duration-200 hover:scale-105 hover:text-white hover:bg-pink-700 rounded-full">
 
-                                                                        <p className="text-sm font-semibold">
-                                                                            {option}
-                                                                        </p>
-                                                                    </span>
-                                                                    :
-                                                                    <Interests interest={option} />
-                                                                    // <span key={index} className="flex items-center">
-                                                                    //     <p className="text-gray-400 text-base font-bold mr-2">
-                                                                    //         {option?.title?.toString()}
-                                                                    //     </p>
-                                                                    //     <span>
-                                                                    //         {option?.options?.toString().split(",").map((opt: string) =>
-                                                                    //             <span className="text-sm font-semibold px-2 bg-gray-100 text-gray-500 transitions duration-200 hover:scale-105 hover:text-white hover:bg-pink-700 rounded-full">
-                                                                    //                 {opt}
-                                                                    //             </span>
-                                                                    //         )}
-                                                                    //     </span>
-                                                                    // </span>
+                                                                            <span className="text-sm font-semibold">
+
+                                                                                {ui?.id.toString().trim() === "test"
+                                                                                    ? <>
+                                                                                        option: {option},
+                                                                                    </>
+                                                                                    : <>
+                                                                                        {option}
+                                                                                    </>
+                                                                                }
+                                                                            </span>
+                                                                            {
+                                                                                ui?.id.toString().trim() === "test"
+                                                                                && <span className="pl-2">
+                                                                                    {"visible: "}{ui.contentVisible?.at(index)?.toString()}
+                                                                                </span>
+                                                                            }
+                                                                        </span>
+
+                                                                    </>
+                                                                    : ui?.id.toString().trim() === "mode" ?
+                                                                        <Modes mode={option} />
+                                                                        : ui?.id.toString().trim() === "intrestScreen" ?
+                                                                            <Interests interest={option} />
+                                                                            : ""
                                                                 }
 
                                                             </span>
