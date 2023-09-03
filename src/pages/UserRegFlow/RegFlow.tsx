@@ -37,7 +37,7 @@ const UserRegFlow = () => {
         setIndex(i)
     }
     const handleCloseModal = () => {
-        setIndex(undefined)
+        // setIndex(undefined)
         getUIs()
         setShowModal(false)
     }

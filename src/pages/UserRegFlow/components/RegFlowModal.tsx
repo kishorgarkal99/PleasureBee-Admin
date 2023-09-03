@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react"
 import { FaMinus, FaPlus, FaRegEdit } from "react-icons/fa"
-import { db } from "../../../config/firebase"
 
 interface UI {
     id: string,
     title: string,
-    description: string,
+    description?: string,
     showOrientation?: boolean,
     content: string[] | [],
     contentVisible?: boolean[]
@@ -23,41 +22,40 @@ const RegFlowModal = ({ ui, showModal, setShowModal }: RegFlowModalProp) => {
     const [inputValue, setInputValue] = useState("");
     const [errorMessage, setErrorMessage] = useState("")
 
-    const [newTitle, setTitle] = useState<string>("")
-    const [description, setDesc] = useState<string>("")
-    const [content, setContent] = useState<string[]>([""])
+    // const [newTitle, setTitle] = useState<string>("")
+    // const [description, setDesc] = useState<string>("")
+    // const [content, setContent] = useState<string[]>([])
     // const [contentVissible, setContentVissible] = useState<boolean>()
     // const [showOrientation, setShowOrientation] = useState<boolean>(true)
 
-    // const [ui, setUI] = useState<UI>({
-    //     id: "",
-    //     title: "",
-    //     description: "",
-    //     showOrientation: true,
-    //     content: [""] || [],
-    //     contentVisible: []
-    // })
+    const [newUI, setUI] = useState<UI>({
+        id: "",
+        title: "",
+        description: "",
+        showOrientation: true,
+        content: [""] || [],
+        contentVisible: []
+    })
 
     const handleAddItem = () => {
 
         if (inputValue === "") {
             setErrorMessage("Please enter a value");
-        } else if (content?.includes(inputValue)) {
-            setErrorMessage("This value already exists in the list");
         } else {
-            setContent([...content, inputValue]);
+            setUI(prevState => ({ ...prevState, content: [...prevState.content, inputValue], }));
             setInputValue("");
             setErrorMessage("");
-            console.log(content)
         }
     }
 
-    const handleDeleteItem = (optn: string) => {
-        const updatedList = content.filter((item) => item !== optn);
-        setContent(updatedList)
-        console.log(content)
+    const handleDeleteItem = (index: number) => {
+        setUI(prevState => ({ ...prevState, content: prevState.content.filter((_, i) => i !== index), }));
     }
 
+    const onSubmit = () => {
+        console.log(newUI)
+        setShowModal(false)
+    }
 
     // const handleSubmit = () => {
     //     //screens without description
@@ -129,14 +127,13 @@ const RegFlowModal = ({ ui, showModal, setShowModal }: RegFlowModalProp) => {
 
     const handleCloseModal = () => {
         setShowModal(false)
-        setContent([])
     }
-    
+
 
 
     useEffect(() => {
-
-    }, [])
+        setUI(ui)
+    }, [ui])
 
     return (
         <>
@@ -153,8 +150,8 @@ const RegFlowModal = ({ ui, showModal, setShowModal }: RegFlowModalProp) => {
                                         name="option"
                                         id="option"
                                         autoComplete="option"
-                                        defaultValue={ui?.title || ""}
-                                        onChange={e => setTitle(e.target.value)}
+                                        defaultValue={newUI?.title || ""}
+                                        onChange={() => {}}
                                         className="w-full border-b-1 border-pink-700 p-2 font-semibold text-gray-600 shadow-sm text-xl rounded-md focus:ring-2 focus:ring-inset focus:ring-pink-600 focus:outline-0" />
                                 </div>
 
@@ -163,7 +160,7 @@ const RegFlowModal = ({ ui, showModal, setShowModal }: RegFlowModalProp) => {
                                         <div>
                                             <div className="space-y-6">
                                                 {
-                                                    ui.description
+                                                    newUI.description
                                                     && <div className="col-span-full">
                                                         <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
                                                             description
@@ -174,22 +171,22 @@ const RegFlowModal = ({ ui, showModal, setShowModal }: RegFlowModalProp) => {
                                                                 name="about"
                                                                 rows={3}
                                                                 placeholder={"write screen description"}
-                                                                onChange={e => setDesc(e.target.value)}
+                                                                onChange={() => {}}
                                                                 className="block w-full p-2 rounded-md border-0 text-gray-600 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-300 focus:ring-2 focus:ring-inset focus:ring-pink-600 focus:outline-0 sm:text-md sm:leading-6"
-                                                                defaultValue={ui?.description || ""}
+                                                                defaultValue={newUI?.description || ""}
                                                             />
                                                         </div>
                                                     </div>
                                                 }
                                                 <div className="w-full ml-2 flex gap-2 flex-wrap">
                                                     {
-                                                        content.map((option: string, index: number) => (
+                                                        newUI.content.map((option: string, index: number) => (
                                                             <span key={index} className="flex items-center pl-4 bg-gray-200 text-gray-700 rounded-full">
 
                                                                 <p className="text-sm text-ellipsis">
                                                                     {option}
                                                                 </p>
-                                                                <button onClick={() => handleDeleteItem(option)}
+                                                                <button onClick={() => handleDeleteItem(index)}
                                                                     className="font-bold ml-2 text-red-500 bg-gray-100 p-1 rounded-full transitions duration-200 hover:bg-pink-700 hover:text-white hover:scale-105">
                                                                     <FaMinus />
                                                                 </button>
@@ -213,7 +210,7 @@ const RegFlowModal = ({ ui, showModal, setShowModal }: RegFlowModalProp) => {
                                                         name="option"
                                                         id="option"
                                                         autoComplete="option"
-                                                        value={inputValue}
+                                                        placeholder="Enter an option"
                                                         onChange={e => setInputValue(e.target.value)}
                                                         className="col-span-10 rounded-md border-0 p-2 text-gray-600 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-300 focus:ring-2 focus:ring-inset focus:ring-pink-600 focus:outline-0 text-md sm:leading-6" />
                                                     <div className="ml-2 col-span-2">
@@ -240,7 +237,7 @@ const RegFlowModal = ({ ui, showModal, setShowModal }: RegFlowModalProp) => {
                                     <button
                                         className="inline-flex w-full justify-center rounded-lg bg-pink-700 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-pink-500 sm:ml-3 sm:w-auto"
                                         type="button"
-                                        onClick={() => { }}>
+                                        onClick={onSubmit}>
                                         Save
                                     </button>
                                 </div>
