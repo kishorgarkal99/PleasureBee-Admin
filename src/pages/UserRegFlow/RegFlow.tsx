@@ -6,13 +6,13 @@ import { collection, getDocs } from "firebase/firestore"
 import { db } from "../../config/firebase"
 import Loader from "../../components/Loader"
 import RegFlowModal from "./components/RegFlowModal"
-import Interests from "./components/Interests"
-import Modes from "./components/Mode"
+import Interests from "./components/InterestOptions"
+import Modes from "./components/ModeOptions"
 
 interface UI {
     id: string,
     title: string,
-    description: string,
+    description?: string,
     showOrientation?: boolean
     content: string[] | []
     contentVisible?: boolean[]
@@ -69,7 +69,6 @@ const UserRegFlow = () => {
         if (dataIndex !== undefined) {
             setUI(uIs[dataIndex])
             setShowModal(true)
-            console.log(dataIndex)
         }
     }, [dataIndex])
 

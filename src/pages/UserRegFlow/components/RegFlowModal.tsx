@@ -6,7 +6,7 @@ interface UI {
     title: string,
     description?: string,
     showOrientation?: boolean,
-    content: string[] | [],
+    content: string[],
     contentVisible?: boolean[]
 }
 
@@ -33,7 +33,7 @@ const RegFlowModal = ({ ui, showModal, setShowModal }: RegFlowModalProp) => {
         title: "",
         description: "",
         showOrientation: true,
-        content: [""] || [],
+        content: [],
         contentVisible: []
     })
 
@@ -127,14 +127,24 @@ const RegFlowModal = ({ ui, showModal, setShowModal }: RegFlowModalProp) => {
 
     const handleCloseModal = () => {
         setShowModal(false)
+        setUI({
+            id: "",
+            title: "",
+            description: "",
+            showOrientation: true,
+            content: [],
+            contentVisible: []
+        })
     }
 
-
+    useEffect(() => {
+        setUI(ui)
+    }, [])
 
     useEffect(() => {
         setUI(ui)
     }, [ui])
-
+    const toBedone = ["intrestScreen", "mode", "test"]
     return (
         <>
             {showModal ? (
@@ -147,12 +157,11 @@ const RegFlowModal = ({ ui, showModal, setShowModal }: RegFlowModalProp) => {
                                     <FaRegEdit className="h-6 w-6 text-pink-700 mr-2" aria-hidden="true" />
                                     <input
                                         type="text"
-                                        name="option"
-                                        id="option"
-                                        autoComplete="option"
+                                        name="title"
                                         defaultValue={newUI?.title || ""}
-                                        onChange={() => {}}
-                                        className="w-full border-b-1 border-pink-700 p-2 font-semibold text-gray-600 shadow-sm text-xl rounded-md focus:ring-2 focus:ring-inset focus:ring-pink-600 focus:outline-0" />
+                                        onChange={() => { }}
+                                        placeholder="Enter title for the screen"
+                                        className="w-full rounded-md border-0 p-2 text-gray-600 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-300 focus:ring-2 focus:ring-inset focus:ring-pink-600 focus:outline-0 text-md sm:leading-6" />
                                 </div>
 
                                 <div className="relative p-6 flex-auto">
@@ -160,7 +169,7 @@ const RegFlowModal = ({ ui, showModal, setShowModal }: RegFlowModalProp) => {
                                         <div>
                                             <div className="space-y-6">
                                                 {
-                                                    newUI.description
+                                                    (newUI.description || newUI.id==="")
                                                     && <div className="col-span-full">
                                                         <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
                                                             description
@@ -170,8 +179,8 @@ const RegFlowModal = ({ ui, showModal, setShowModal }: RegFlowModalProp) => {
                                                                 id="about"
                                                                 name="about"
                                                                 rows={3}
-                                                                placeholder={"write screen description"}
-                                                                onChange={() => {}}
+                                                                placeholder="write a description you want to show for the screen."
+                                                                onChange={() => { }}
                                                                 className="block w-full p-2 rounded-md border-0 text-gray-600 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-300 focus:ring-2 focus:ring-inset focus:ring-pink-600 focus:outline-0 sm:text-md sm:leading-6"
                                                                 defaultValue={newUI?.description || ""}
                                                             />
@@ -180,18 +189,22 @@ const RegFlowModal = ({ ui, showModal, setShowModal }: RegFlowModalProp) => {
                                                 }
                                                 <div className="w-full ml-2 flex gap-2 flex-wrap">
                                                     {
-                                                        newUI.content.map((option: string, index: number) => (
-                                                            <span key={index} className="flex items-center pl-4 bg-gray-200 text-gray-700 rounded-full">
+                                                        toBedone.includes(newUI.id.trim())
+                                                            ? <h2 className="text-2xl text-gray-300">
+                                                                Not available yet
+                                                            </h2>
+                                                            : newUI.content.map((option, index) => (
+                                                                <span key={index} className="flex items-center pl-4 bg-gray-200 text-gray-700 rounded-full">
+                                                                    <span className="text-sm text-ellipsis">
+                                                                        {option}
+                                                                    </span>
+                                                                    <button onClick={() => handleDeleteItem(index)}
+                                                                        className="font-bold ml-2 text-red-500 bg-gray-100 p-1 rounded-full transitions duration-200 hover:bg-pink-700 hover:text-white hover:scale-105">
+                                                                        <FaMinus />
+                                                                    </button>
+                                                                </span>
+                                                            ))
 
-                                                                <p className="text-sm text-ellipsis">
-                                                                    {option}
-                                                                </p>
-                                                                <button onClick={() => handleDeleteItem(index)}
-                                                                    className="font-bold ml-2 text-red-500 bg-gray-100 p-1 rounded-full transitions duration-200 hover:bg-pink-700 hover:text-white hover:scale-105">
-                                                                    <FaMinus />
-                                                                </button>
-                                                            </span>
-                                                        ))
                                                     }
                                                 </div>
                                             </div>
