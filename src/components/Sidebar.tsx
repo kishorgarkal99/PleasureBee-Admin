@@ -41,7 +41,7 @@ const sideBarItems = [
     {
         menuTitle: "Analytics",
         icon: analytics,
-        url: ""
+        url: "/analytics"
     },
     {
         menuTitle: "Registration Flow",
