@@ -1,11 +1,17 @@
 interface Interest {
-    title: string;
-    options: string[];
+    title: string,
+    options: Map<string,string>
 }
 type InterestProp = {
     interest: Interest
 }
 const Interests = ({ interest }: InterestProp) => {
+
+const newMap = new Map<string, string>(Object.entries(interest.options));
+    
+    const entries = Array.from(newMap.entries());
+    // console.log(interest.options)
+    console.log(entries)
     return (
         <div className="flex items-center">
             <div>
@@ -13,9 +19,9 @@ const Interests = ({ interest }: InterestProp) => {
                     {interest?.title}{":"}
                 </span>
                 <span>
-                    {interest?.options?.toString().split(",").map((opt: string, index) =>
+                    {entries.map((opt, index) =>
                         <span key={index} className="text-sm font-semibold px-2 bg-gray-200 text-gray-500 transitions duration-200 hover:scale-105 hover:text-white hover:bg-pink-700 rounded-full">
-                            {opt}
+                            <img className="w-3 h-3 inline mr-1" src={opt[1]} alt="" />{opt[0]}
                         </span>
                     )}
                 </span>
