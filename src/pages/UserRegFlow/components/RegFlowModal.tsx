@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { FaMinus, FaPlus, FaRegEdit } from "react-icons/fa"
 import { db } from "../../../config/firebase"
 import Loader from "../../../components/Loader"
+import { Switch } from "@headlessui/react"
 
 interface UI {
     id: string,
@@ -23,6 +24,7 @@ type RegFlowModalProp = {
 const RegFlowModal = ({ ui, showModal, setShowModal }: RegFlowModalProp) => {
 
     const [inputValue, setInputValue] = useState("");
+    const [agreed, setAgreed] = useState(false)
     const [errorMessage, setErrorMessage] = useState("")
     const [loading, setLoading] = useState<boolean>(false)
 
@@ -160,6 +162,31 @@ const RegFlowModal = ({ ui, showModal, setShowModal }: RegFlowModalProp) => {
                                                                     />
                                                                 </div>
                                                             </div>
+                                                        }
+
+                                                        {
+                                                            newUI.id.trim() === "genderScreen" &&
+                                                            <Switch.Group as="div" className="flex gap-x-4 sm:col-span-2">
+                                                                <div className="flex h-6 items-center">
+                                                                    <Switch
+                                                                        checked={agreed}
+                                                                        onChange={setAgreed}
+                                                                        className={`${agreed ? "bg-pink-700" : "bg-gray-200"} flex w-8 flex-none cursor-pointer rounded-full p-px ring-1 ring-inset ring-gray-900/5 transition-colors duration-200 ease-in-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink-700`}
+                                                                    >
+                                                                        <span className="sr-only">Agree to policies</span>
+                                                                        <span
+                                                                            aria-hidden="true"
+                                                                            className={`${agreed ? 'translate-x-3.5' : 'translate-x-0'} h-4 w-4 transform rounded-full bg-white shadow-sm ring-1 ring-gray-900/5 transition duration-200 ease-in-out`} />
+                                                                    </Switch>
+                                                                </div>
+                                                                <Switch.Label className="text-sm leading-6 text-gray-600">
+                                                                    By selecting this, you agree to our{' '}
+                                                                    <a href="#" className="font-semibold text-pink-700">
+                                                                        privacy&nbsp;policy
+                                                                    </a>
+                                                                    .
+                                                                </Switch.Label>
+                                                            </Switch.Group>
                                                         }
                                                         <div className="w-full ml-2 flex gap-2 flex-wrap">
                                                             {

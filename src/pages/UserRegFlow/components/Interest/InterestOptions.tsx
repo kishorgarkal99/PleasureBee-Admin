@@ -2,16 +2,17 @@ interface Interest {
     title: string,
     options: Map<string,string>
 }
+
 type InterestProp = {
     interest: Interest
 }
+
 const Interests = ({ interest }: InterestProp) => {
 
 const newMap = new Map<string, string>(Object.entries(interest.options));
     
     const entries = Array.from(newMap.entries());
     // console.log(interest.options)
-    console.log(entries)
     return (
         <div className="flex items-center">
             <div>

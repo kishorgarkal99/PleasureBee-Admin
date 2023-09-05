@@ -85,9 +85,9 @@ const Sidebar = () => {
                         <hr />
                         <div className="mb-2" />
                         {
-                            sideBarItems.map((item, index) => (
+                            sideBarItems.map((item) => (
                                 <NavLink
-                                    key={index}
+                                    key={item.menuTitle}
                                     to={item.url}
                                     className="inline-flex items-center px-4 py-3 transition duration-200 transform hover:scale-125"
                                 >
