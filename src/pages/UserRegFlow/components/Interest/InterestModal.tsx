@@ -137,7 +137,7 @@ const IntrestModal = ({ UIid, showModal, setShowModal }: IntrestModalProp) => {
                                                 <div className="absolute inset-y-0 left-0 flex items-center">
                                                     <select
                                                         name="category"
-                                                        onChange={e=>setCategory(e.target.value)}
+                                                        onChange={e => setCategory(e.target.value)}
                                                         className=" h-full rounded-md border-0 bg-transparent bg-none py-0 px-1 text-gray-600 overflow-elipsis outline-0 focus:outline-0 focus:ring-pink-700 sm:text-sm">
                                                         <option>Creativity</option>
                                                         <option>Sports</option>
@@ -161,6 +161,7 @@ const IntrestModal = ({ UIid, showModal, setShowModal }: IntrestModalProp) => {
                                         <div />
                                         <div className="flex items-center gap-2">
                                             <button
+                                                onClick={() => setShowModal(false)}
                                                 className="block w-full rounded-md bg-transparent px-8 py-2 text-center font-semibold shadow-sm border-2 border-gray-200 hover:bg-pink-500 hover:text-white focus-visible:outline focus-visible:outline-2 hover:border-0 focus-visible:outline-offset-2 focus-visible:outline-pink-700">
                                                 Close
                                             </button>
