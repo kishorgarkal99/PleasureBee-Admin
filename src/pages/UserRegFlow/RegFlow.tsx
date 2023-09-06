@@ -4,20 +4,16 @@ import Layout from "../../components/Layout"
 import { useEffect, useState } from "react"
 import { collection, getDocs } from "firebase/firestore"
 import { db } from "../../config/firebase"
+import UI from "../../Interfaces/Interfaces"
+
 import Loader from "../../components/Loader"
 import RegFlowModal from "./components/RegFlowModal"
 import Interests from "./components/Interest/InterestOptions"
 import Modes from "./components/ModeOptions"
 import IntrestModal from "./components/Interest/InterestModal"
+import ModeModal from "./components/mode/ModeModal"
 
-interface UI {
-    id: string,
-    title: string,
-    description?: string,
-    showOrientation?: boolean
-    content: string[] | []
-    contentVisible?: boolean[]
-}
+
 
 const UserRegFlow = () => {
 
@@ -32,8 +28,10 @@ const UserRegFlow = () => {
     })
 
     const [dataIndex, setIndex] = useState<number>()
-    const [dataId, setId] = useState<string>("")
+
     const [showModal, setShowModal] = useState(false)
+    const [showInterestModal, setShowInterestModal] = useState(false)
+    const [showModestModal, setShowModesModal] = useState(false)
 
     const handleOpenModal = (i: number) => {
         setIndex(i)
@@ -68,12 +66,22 @@ const UserRegFlow = () => {
 
     useEffect(() => {
         getUIs()
-    }, [showModal])
+        setIndex(undefined)
+    }, [showModal, showInterestModal, showModestModal])
 
     useEffect(() => {
         if (dataIndex !== undefined) {
-            uIs[dataIndex].id === "intrestScreen" ? setId("intrestScreen") : setUI(uIs[dataIndex])
-            setShowModal(true)
+            if (uIs[dataIndex].id.trim() === "intrestScreen") {
+                setShowInterestModal(true)
+            } else if (uIs[dataIndex].id.trim() === "mode") {
+                console.log("mode")
+                setShowModesModal(true)
+            } else if (uIs[dataIndex].id.trim() === "test") {
+                // 
+            } else {
+                setUI(uIs[dataIndex])
+                setShowModal(true)
+            }
         }
     }, [dataIndex])
 
@@ -85,8 +93,12 @@ const UserRegFlow = () => {
                 </div>
                 :
                 <>
-                    <IntrestModal UIid={dataId} showModal={showModal} setShowModal={setShowModal} closeModal={handleCloseModal} />
-                    {/* <RegFlowModal ui={ui} showModal={showModal} setShowModal={setShowModal} closeModal={handleCloseModal} /> */}
+                    {/* Interest */}
+                    <IntrestModal UIid={"intrestScreen"} showModal={showInterestModal} setShowModal={setShowInterestModal} />
+                    {/* Modes */}
+                    <ModeModal UIid={"mode"} showModal={showModestModal} setShowModal={setShowModesModal} />
+                    {/* Default */}
+                    <RegFlowModal ui={ui} showModal={showModal} setShowModal={setShowModal} closeModal={handleCloseModal} />
                     <div className="min-h-screen rounded-lg bg-gray-100">
                         <div className="mx-auto max-w-7xl">
                             <div className="fixed right-4 bottom-16 flex justify-between">
