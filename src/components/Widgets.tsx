@@ -29,4 +29,3 @@ export const IconButton = ({ children, onclick }: BtnProp) => {
         </button>
     )
 }
-

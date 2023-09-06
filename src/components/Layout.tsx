@@ -8,7 +8,7 @@ type LayoutProp = {
 }
 const Layout = ({ title = "PleasureBee", children }: LayoutProp) => {
   return (
-    <div className="w-full h-screen flex bg-gray-100">
+    <div className="w-full flex bg-gray-100">
       <Sidebar />
       <>
         <Header title={title} />
