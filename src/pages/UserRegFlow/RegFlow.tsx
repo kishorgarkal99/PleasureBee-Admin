@@ -64,18 +64,19 @@ const UserRegFlow = () => {
 
     useEffect(() => {
         getUIs()
+        setIndex(undefined)
     }, [showModal, showModal2])
 
     useEffect(() => {
         if (dataIndex !== undefined) {
-            if (dataIndex === 4) {
+            if (uIs[dataIndex].id.trim() === "intrestScreen") {
                 setShowModal2(true)
             } else {
                 setUI(uIs[dataIndex])
                 setShowModal(true)
             }
         }
-    }, [dataIndex])
+    }, [dataIndex, showModal, showModal2])
 
     return (
         <Layout title="PleasureBee/User Resgistration Flow">
