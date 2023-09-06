@@ -1,7 +1,8 @@
-import {useState} from 'react';
+import { useState } from "react";
 import Layout from "../../components/Layout";
-import SimpleLineChart from "../../components/charts/SimpleLineChart";
-import Map from '../../components/Map';
+import SimpleBarChart from "../../components/charts/BarChart";
+import PieChart from "../../components/charts/PieChart";
+import Map from "../../components/Map";
 
 //Icons
 import { BiUserCheck } from "react-icons/bi";
@@ -9,12 +10,15 @@ import { BiUserMinus } from "react-icons/bi";
 import { MdWorkspacePremium } from "react-icons/md";
 
 const Analytics = () => {
-    const [tab, setTab] = useState(0);
+  const [tab, setTab] = useState(0);
 
   return (
     <Layout title="Analytics">
-      <section id="summary-cards" className="flex gap-10 px-10 mt-5 text-white">
-        <div className="bg-gradient-to-r from-[#BE195E] to-[#9D4993] w-[30%] h-28 rounded-xl">
+      <section
+        id="summary-cards"
+        className="flex flex-wrap flex-grow justify-center gap-10 px-10 mt-5 text-white"
+      >
+        <div className="bg-gradient-to-r from-[#BE195E] to-[#9D4993] w-[280px] h-28 rounded-xl">
           <h1 className="m-3 text-sm flex items-center gap-3">
             <BiUserCheck size={25} />
             Active Users
@@ -35,7 +39,8 @@ const Analytics = () => {
             </select>
           </div>
         </div>
-        <div className="bg-gradient-to-r from-[#9B4C97] to-[#8173C3] w-[30%] h-28 rounded-xl">
+
+        <div className="bg-gradient-to-r from-[#9B4C97] to-[#8173C3] w-[280px] h-28 rounded-xl">
           <h1 className="m-3 text-sm flex items-center gap-3">
             <MdWorkspacePremium size={25} />
             Subscriptions
@@ -55,7 +60,8 @@ const Analytics = () => {
             </select>
           </div>
         </div>
-        <div className="bg-gradient-to-r from-[#8076C6] to-[#60A4F9] w-[30%] h-28 rounded-xl">
+
+        <div className="bg-gradient-to-r from-[#8076C6] to-[#60A4F9] w-[280px] h-28 rounded-xl">
           <h1 className="m-3 text-sm flex gap-3 items-center">
             <BiUserMinus size={25} />
             Deleted Users
@@ -77,7 +83,7 @@ const Analytics = () => {
         </div>
       </section>
 
-      <section className="w-[92%] mb-10 mx-10">
+      <section className=" mb-10 mx-10">
         <ul
           className=" flex list-none flex-row flex-wrap border-b-0 pl-0"
           role="tablist"
@@ -111,7 +117,7 @@ const Analytics = () => {
               tab === 0 ? "block" : "hidden"
             }`}
           >
-            <SimpleLineChart titleText="" />
+            <SimpleBarChart titleText="" />
           </div>
           <div
             className={`transition-opacity duration-150 ease-linear ${
@@ -120,8 +126,7 @@ const Analytics = () => {
           >
             <Map
               location={{
-                address:
-                  "1600 Amphitheatre Parkway, Mountain View, california.",
+                address: "Maharashtra, India",
                 lat: 19.7047984,
                 lng: 75.7046553,
               }}
@@ -129,29 +134,122 @@ const Analytics = () => {
             />
           </div>
         </div>
+      </section>
 
-        <article className="h-[500px] w-[98%] bg-gradient-to-b from-transparent from-[5%] to-white to-50% shadow-sm rounded-xl mx-5">
-          <h1 className="my-16 text-2xl mx-10 text-sky-950 font-semibold">
+      <section className="w-[92%] mb-10 bg-gradient-to-b from-transparent from-[5%] to-white to-50% shadow-sm rounded-xl mx-5">
+        <header className="lg:flex lg:justify-between lg:mx-10">
+          <h1 className="mt-16 text-2xl mx-10 text-sky-950 font-semibold">
             Detailed Summary
           </h1>
-          total users <br />
-          new users per week, month, analysis and <br />
-          for left users,
-          <br /> Total Subscription users/age wise <br />
-          Total users region wise/age wise
-          <br /> Total users country wise/age wise Total Deactivate users -
-          Users who deleted account
-          <br /> Total Active users as per there age/age wise total income
-          generated, <br />
-          <br />
-          weekly, Monthly,Quarterly,Half yearly,Yearly <br />
-          <br />
-          Total revenue generated from subscription/ Age wise <br />
-          Total generated from NFT Marketplace/Age wise
-          <br /> Total revenue generated from advertising
-          <br /> Total generated from Partnrship with different service
-          providers
-        </article>
+
+          <div className="md:flex grid lg:mt-16 mt-5 lg:mx-0 mx-10">
+            <span className="flex">
+              <h1 className="relative top-3 text-sm">Country: </h1>
+              <select name="" id="" className="bg-transparent my-3">
+                <option value="">All</option>
+                <option value="">Canada</option>
+                <option value="">Ethiopia</option>
+                <option value="">India</option>
+                <option value="">USA</option>
+              </select>
+            </span>
+
+            <span className="flex">
+              <h1 className="relative top-3 text-sm">Region: </h1>
+              <select className="bg-transparent text-sm my-3">
+                <option value=">18" className="bg-inherit">
+                  All
+                </option>
+                <option value=">18" className="bg-inherit">
+                  Region 1
+                </option>
+                <option value=">18" className="bg-inherit">
+                  Region 2
+                </option>
+                <option value=">18" className="bg-inherit">
+                  Region 3
+                </option>
+              </select>
+            </span>
+
+            <span className="flex">
+              <h1 className="relative top-3 text-sm">Time: </h1>
+              <select name="" id="" className="bg-transparent my-3">
+                <option value="">Weekly</option>
+                <option value="">Quarterly</option>
+                <option value="">Monthly</option>
+                <option value="">Half Yearly</option>
+                <option value="">Yearly</option>
+              </select>
+            </span>
+
+            <span className="flex">
+              <h1 className="relative top-3 text-sm">Age: </h1>
+              <select className="bg-transparent text-sm my-3">
+                <option value=">18" className="bg-inherit">
+                  18 - 25
+                </option>
+                <option value=">18" className="bg-inherit">
+                  26 - 40
+                </option>
+                <option value=">18" className="bg-inherit">
+                  {"41 > "}
+                </option>
+              </select>
+            </span>
+          </div>
+        </header>
+
+        <div className="grid lg:flex lg:justify-between">
+          <div className="lg:mx-20 mx-10 mt-10 self-center lg:w-[40%] md:w-[80%]">
+            <span className="flex justify-between my-3">
+              <h1>Total Users</h1>
+              <h2>0</h2>
+            </span>
+            <span className="flex justify-between my-3">
+              <h1>New Users</h1>
+              <h2>0</h2>
+            </span>
+            <span className="flex justify-between my-3">
+              <h1>Active Users</h1>
+              <h2>0</h2>
+            </span>
+            <span className="flex justify-between my-3">
+              <h1>Deactivated Users</h1>
+              <h2>0</h2>
+            </span>
+            <span className="flex justify-between my-3">
+              <h1>Total Subscription</h1>
+              <h2>0</h2>
+            </span>
+            <hr className="bg-gray-200 rounded-full h-1" />
+            <span className="flex justify-between my-3">
+              <h1>Total Revenue Generated</h1>
+              <h2>0.00</h2>
+            </span>
+            <span className="flex justify-between my-3">
+              <h1>Total Generated from NFT Marketplace</h1>
+              <h2>0.00</h2>
+            </span>
+            <span className="flex justify-between my-3">
+              <h1>Total Revenue Generated from Advertising</h1>
+              <h2>0.00</h2>
+            </span>
+            <span className="flex justify-between my-3">
+              <h1>Total Generated from Partnership</h1>
+              <h2>0.00</h2>
+            </span>
+          </div>
+
+          <span className="sm:w-[50%] w-full p-5 relative lg:left-0 sm:left-[30%]">
+            <PieChart
+              titleText="Percentage"
+              legendOrientation={`${
+                window.innerWidth > 600 ? "right" : "bottom"
+              }`}
+            />
+          </span>
+        </div>
       </section>
     </Layout>
   );
