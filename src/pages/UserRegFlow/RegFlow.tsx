@@ -4,20 +4,15 @@ import Layout from "../../components/Layout"
 import { useEffect, useState } from "react"
 import { collection, getDocs } from "firebase/firestore"
 import { db } from "../../config/firebase"
+import UI from "../../Interfaces/Interfaces"
+
 import Loader from "../../components/Loader"
 import RegFlowModal from "./components/RegFlowModal"
 import Interests from "./components/Interest/InterestOptions"
 import Modes from "./components/ModeOptions"
 import IntrestModal from "./components/Interest/InterestModal"
 
-interface UI {
-    id: string,
-    title: string,
-    description?: string,
-    showOrientation?: boolean
-    content: string[] | []
-    contentVisible?: boolean[]
-}
+
 
 const UserRegFlow = () => {
 
@@ -32,8 +27,9 @@ const UserRegFlow = () => {
     })
 
     const [dataIndex, setIndex] = useState<number>()
-    const [dataId, setId] = useState<string>("")
+    // const [dataId, setId] = useState<string>("")
     const [showModal, setShowModal] = useState(false)
+    const [showModal2, setShowModal2] = useState(false)
 
     const handleOpenModal = (i: number) => {
         setIndex(i)
@@ -72,8 +68,12 @@ const UserRegFlow = () => {
 
     useEffect(() => {
         if (dataIndex !== undefined) {
-            uIs[dataIndex].id === "intrestScreen" ? setId("intrestScreen") : setUI(uIs[dataIndex])
-            setShowModal(true)
+            if (dataIndex === 4) {
+                setShowModal2(true)
+            } else {
+                setUI(uIs[dataIndex])
+                setShowModal(true)
+            }
         }
     }, [dataIndex])
 
@@ -85,8 +85,8 @@ const UserRegFlow = () => {
                 </div>
                 :
                 <>
-                    <IntrestModal UIid={dataId} showModal={showModal} setShowModal={setShowModal} closeModal={handleCloseModal} />
-                    {/* <RegFlowModal ui={ui} showModal={showModal} setShowModal={setShowModal} closeModal={handleCloseModal} /> */}
+                    <IntrestModal UIid={"intrestScreen"} showModal={showModal2} setShowModal={setShowModal2} closeModal={handleCloseModal} />
+                    <RegFlowModal ui={ui} showModal={showModal} setShowModal={setShowModal} closeModal={handleCloseModal} />
                     <div className="min-h-screen rounded-lg bg-gray-100">
                         <div className="mx-auto max-w-7xl">
                             <div className="fixed right-4 bottom-16 flex justify-between">
