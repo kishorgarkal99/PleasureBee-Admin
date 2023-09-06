@@ -17,8 +17,7 @@ interface InterestUI {
 type IntrestModalProp = {
     UIid: string,
     showModal: boolean,
-    setShowModal: React.Dispatch<React.SetStateAction<boolean>>,
-    closeModal: () => void,
+    setShowModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const IntrestModal: React.FC<IntrestModalProp> = ({ UIid, showModal, setShowModal }) => {

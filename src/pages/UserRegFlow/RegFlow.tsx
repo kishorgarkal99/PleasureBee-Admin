@@ -11,6 +11,7 @@ import RegFlowModal from "./components/RegFlowModal"
 import Interests from "./components/Interest/InterestOptions"
 import Modes from "./components/ModeOptions"
 import IntrestModal from "./components/Interest/InterestModal"
+import ModeModal from "./components/mode/ModeModal"
 
 
 
@@ -27,9 +28,10 @@ const UserRegFlow = () => {
     })
 
     const [dataIndex, setIndex] = useState<number>()
-    // const [dataId, setId] = useState<string>("")
+
     const [showModal, setShowModal] = useState(false)
-    const [showModal2, setShowModal2] = useState(false)
+    const [showInterestModal, setShowInterestModal] = useState(false)
+    const [showModestModal, setShowModesModal] = useState(false)
 
     const handleOpenModal = (i: number) => {
         setIndex(i)
@@ -65,18 +67,23 @@ const UserRegFlow = () => {
     useEffect(() => {
         getUIs()
         setIndex(undefined)
-    }, [showModal, showModal2])
+    }, [showModal, showInterestModal, showModestModal])
 
     useEffect(() => {
         if (dataIndex !== undefined) {
             if (uIs[dataIndex].id.trim() === "intrestScreen") {
-                setShowModal2(true)
+                setShowInterestModal(true)
+            } else if (uIs[dataIndex].id.trim() === "mode") {
+                console.log("mode")
+                setShowModesModal(true)
+            } else if (uIs[dataIndex].id.trim() === "test") {
+                // 
             } else {
                 setUI(uIs[dataIndex])
                 setShowModal(true)
             }
         }
-    }, [dataIndex, showModal, showModal2])
+    }, [dataIndex])
 
     return (
         <Layout title="PleasureBee/User Resgistration Flow">
@@ -86,7 +93,11 @@ const UserRegFlow = () => {
                 </div>
                 :
                 <>
-                    <IntrestModal UIid={"intrestScreen"} showModal={showModal2} setShowModal={setShowModal2} closeModal={handleCloseModal} />
+                    {/* Interest */}
+                    <IntrestModal UIid={"intrestScreen"} showModal={showInterestModal} setShowModal={setShowInterestModal} />
+                    {/* Modes */}
+                    <ModeModal UIid={"mode"} showModal={showModestModal} setShowModal={setShowModesModal} />
+                    {/* Default */}
                     <RegFlowModal ui={ui} showModal={showModal} setShowModal={setShowModal} closeModal={handleCloseModal} />
                     <div className="min-h-screen rounded-lg bg-gray-100">
                         <div className="mx-auto max-w-7xl">
