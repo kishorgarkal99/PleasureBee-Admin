@@ -11,13 +11,14 @@ import Interests from "./components/Interest/InterestOptions"
 import Modes from "./components/ModeOptions"
 import IntrestModal from "./components/Interest/InterestModal"
 import ModeModal from "./components/mode/ModeModal"
+import RegFlowModal from "./components/RegFlowModal"
 
 
 
 const UserRegFlow = () => {
 
     const [uIs, setUIs] = useState<UI[]>([])
-    const [_, setUI] = useState<UI>({
+    const [ui, setUI] = useState<UI>({
         id: "",
         title: "",
         description: "",
