@@ -5,7 +5,6 @@ import { useEffect, useState } from "react"
 import { collection, getDocs } from "firebase/firestore"
 import { db } from "../../config/firebase"
 import Loader from "../../components/Loader"
-import RegFlowModal from "./components/RegFlowModal"
 import Interests from "./components/Interest/InterestOptions"
 import Modes from "./components/ModeOptions"
 import IntrestModal from "./components/Interest/InterestModal"
@@ -22,7 +21,7 @@ interface UI {
 const UserRegFlow = () => {
 
     const [uIs, setUIs] = useState<UI[]>([])
-    const [ui, setUI] = useState<UI>({
+    const [_, setUI] = useState<UI>({
         id: "",
         title: "",
         description: "",

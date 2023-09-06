@@ -1,4 +1,4 @@
-import { doc, getDoc, updateDoc } from "firebase/firestore"
+import { doc, getDoc } from "firebase/firestore"
 import { useEffect, useState } from "react"
 import { db } from "../../../../config/firebase"
 import { FaMinus, FaPlus, FaRegEdit } from "react-icons/fa"
@@ -20,11 +20,11 @@ type IntrestModalProp = {
     closeModal: () => void,
 }
 
-const IntrestModal = ({ UIid, showModal, setShowModal }: IntrestModalProp) => {
+const IntrestModal = ({ UIid, showModal }: IntrestModalProp) => {
 
     const [loading, setLoading] = useState<boolean>(true)
     const [inputValue, setInputValue] = useState("");
-    const [category, setCategory] = useState("");
+    const [_, setCategory] = useState("");
     const [errorMessage, setErrorMessage] = useState("")
 
     const [ui, setUI] = useState<UI>({
