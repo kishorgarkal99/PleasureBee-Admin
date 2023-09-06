@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Layout from '../../components/Layout';
-import { FaPen } from 'react-icons/fa';
+import { FaPen, FaPlus } from 'react-icons/fa';
 import { IconButton } from '../../components/Widgets';
 import SubModal from './SubModal';
 import { db } from '../../config/firebase';
@@ -119,6 +119,15 @@ const SubscriptionPlans = () => {
                                 }
                             </div>
                         ))}
+                    </div>
+                    <div className="flex justify-between">
+                        <div />
+                        <button
+                            onClick={() => setOpenModal(true)}
+                            className="mt-4 flex right-0 justify-center items-center px-4 py-2 text-white transition-colors duration-150 bg-pink-500 border border-transparent rounded-lg active:bg-pink-600 hover:bg-pink-700 focus:outline-none focus:shadow-outline-purple">
+                            <FaPlus className="w-4 h-4 mr-2" />
+                            <span className="ml-0.5 text-xl">Add Plan</span>
+                        </button>
                     </div>
                 </div>
             </Layout>

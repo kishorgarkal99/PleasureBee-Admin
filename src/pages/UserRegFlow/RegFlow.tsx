@@ -5,42 +5,42 @@ import { useEffect, useState } from "react"
 import { collection, getDocs } from "firebase/firestore"
 import { db } from "../../config/firebase"
 import Loader from "../../components/Loader"
-import RegFlowModal from "./RegFlowModal"
-import Interests from "./components/Interests"
+import RegFlowModal from "./components/RegFlowModal"
+import Interests from "./components/Interest/InterestOptions"
+import Modes from "./components/ModeOptions"
+import IntrestModal from "./components/Interest/InterestModal"
 
 interface UI {
     id: string,
     title: string,
-    description: string,
-    content: []
+    description?: string,
+    showOrientation?: boolean
+    content: string[] | []
+    contentVisible?: boolean[]
 }
 
 const UserRegFlow = () => {
 
-    const [uIs, setUIs] = useState<UI[]>([{
+    const [uIs, setUIs] = useState<UI[]>([])
+    const [ui, setUI] = useState<UI>({
         id: "",
         title: "",
+        description: "",
+        showOrientation: true,
         content: [],
-        description: "",
-    }])
+        contentVisible: []
+    })
 
-    const [showModal, setShowModal] = useState(false);
-    const [dataToEdit, setDataToEdit] = useState<UI>({
-        id: "",
-        title: "",
-        content: [] || [{}],
-        description: "",
-    });
+    const [dataIndex, setIndex] = useState<number>()
+    const [dataId, setId] = useState<string>("")
+    const [showModal, setShowModal] = useState(false)
 
-
-    const handleModalState = (i: number) => {
-        // const dataTobeEdited = uIs.filter((ui) => ui.id === id)[0]
-        setDataToEdit(uIs[i])
-        console.log(dataToEdit)
-        setShowModal(!showModal)
+    const handleOpenModal = (i: number) => {
+        setIndex(i)
     }
-
-
+    const handleCloseModal = () => {
+        setShowModal(false)
+    }
 
     const getUIs = async () => {
         await getDocs(collection(db, "UI"))
@@ -52,6 +52,8 @@ const UserRegFlow = () => {
                             title: doc.data().title.toString(),
                             description: doc.data().description?.toString(),
                             content: doc.data().content,
+                            showOrientation: doc.data()?.showOrientation,
+                            contentVisible: doc.data()?.contentVisible
                         }));
                     setUIs(newData)
                 } catch (error) {
@@ -68,15 +70,23 @@ const UserRegFlow = () => {
         getUIs()
     }, [showModal])
 
+    useEffect(() => {
+        if (dataIndex !== undefined) {
+            uIs[dataIndex].id === "intrestScreen" ? setId("intrestScreen") : setUI(uIs[dataIndex])
+            setShowModal(true)
+        }
+    }, [dataIndex])
+
     return (
         <Layout title="PleasureBee/User Resgistration Flow">
             {uIs.length === 0 ?
-                <div className="w-full bg-gray-100 h-4/5 flex items-center justify-center">
+                <div className="w-full bg-gray-100 h-full flex items-center justify-center">
                     <Loader openloader={true} />
                 </div>
                 :
                 <>
-                    <RegFlowModal ui={dataToEdit} showModal={showModal} setShowModal={setShowModal} />
+                    <IntrestModal UIid={dataId} showModal={showModal} setShowModal={setShowModal} closeModal={handleCloseModal} />
+                    {/* <RegFlowModal ui={ui} showModal={showModal} setShowModal={setShowModal} closeModal={handleCloseModal} /> */}
                     <div className="min-h-screen rounded-lg bg-gray-100">
                         <div className="mx-auto max-w-7xl">
                             <div className="fixed right-4 bottom-16 flex justify-between">
@@ -101,7 +111,7 @@ const UserRegFlow = () => {
 
                                                     <div>
                                                         <button
-                                                            onClick={() => handleModalState(index)}
+                                                            onClick={() => handleOpenModal(index)}
                                                             className="text-xl shadow-xl font-bold text-pink-700 px-4 bg-transparent border border-pink-600 rounded-full transitions duration-200 hover:bg-pink-700 hover:text-white hover:border-transparent focus:outline-none" >
                                                             <h1>
                                                                 <MdOutlineEditNote />
@@ -118,6 +128,16 @@ const UserRegFlow = () => {
                                                     </div>
                                                 }
                                                 <hr />
+                                                {
+                                                    ui?.id.toString().trim() === "genderScreen" && <div className="p-2">
+                                                        <span className="text-gray-500 text-base mr-2">
+                                                            show orientation:
+                                                        </span>
+                                                        <span className="text-sm font-semibold px-2 bg-gray-200 text-gray-500 transitions duration-200 hover:scale-105 hover:text-white hover:bg-pink-700 rounded-full">
+                                                            {ui.showOrientation?.toString()}
+                                                        </span>
+                                                    </div>
+                                                }
                                                 <h3 className="mt-1 text-base font-semibold leading-7 tracking-tight text-gray-500">
                                                     Options
                                                 </h3>
@@ -126,26 +146,34 @@ const UserRegFlow = () => {
                                                         ui.content?.map((option, index) => (
                                                             <span key={index}>
                                                                 {typeof option === "string"
-                                                                    ? <span className="flex items-center px-4 bg-gray-100 text-gray-500 transitions duration-200 hover:scale-105 hover:text-white hover:bg-pink-700 rounded-full">
+                                                                    ? <>
+                                                                        <span className="flex items-center px-4 bg-gray-200 text-gray-500 transitions duration-200 hover:scale-105 hover:text-white hover:bg-pink-700 rounded-full">
 
-                                                                        <p className="text-sm font-semibold">
-                                                                            {option}
-                                                                        </p>
-                                                                    </span>
-                                                                    :
-                                                                    <Interests interest={option} />
-                                                                    // <span key={index} className="flex items-center">
-                                                                    //     <p className="text-gray-400 text-base font-bold mr-2">
-                                                                    //         {option?.title?.toString()}
-                                                                    //     </p>
-                                                                    //     <span>
-                                                                    //         {option?.options?.toString().split(",").map((opt: string) =>
-                                                                    //             <span className="text-sm font-semibold px-2 bg-gray-100 text-gray-500 transitions duration-200 hover:scale-105 hover:text-white hover:bg-pink-700 rounded-full">
-                                                                    //                 {opt}
-                                                                    //             </span>
-                                                                    //         )}
-                                                                    //     </span>
-                                                                    // </span>
+                                                                            <span className="text-sm font-semibold">
+
+                                                                                {ui.id.toString().trim() === "test"
+                                                                                    ? <>
+                                                                                        option: {option},
+                                                                                    </>
+                                                                                    : <>
+                                                                                        {option}
+                                                                                    </>
+                                                                                }
+                                                                            </span>
+                                                                            {
+                                                                                ui?.id.toString().trim() === "test"
+                                                                                && <span className="pl-2">
+                                                                                    {"visible: "}{ui.contentVisible?.at(index)?.toString()}
+                                                                                </span>
+                                                                            }
+                                                                        </span>
+
+                                                                    </>
+                                                                    : ui?.id.toString().trim() === "mode" ?
+                                                                        <Modes mode={option} />
+                                                                        : ui?.id.toString().trim() === "intrestScreen" ?
+                                                                            <Interests interest={option} />
+                                                                            : ""
                                                                 }
 
                                                             </span>
