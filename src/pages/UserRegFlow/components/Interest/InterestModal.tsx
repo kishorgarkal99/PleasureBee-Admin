@@ -82,9 +82,7 @@ const IntrestModal: React.FC<IntrestModalProp> = ({ UIid, showModal, setShowModa
         setNewCategory("")
     }
 
-    const onSubmit = () => {
-        console.log(ui)
-    }
+    
     const handleDeleteItem = (key: string, index: number) => {
         const updatedContent = [...ui.content]
         if (Object.prototype.hasOwnProperty.call(updatedContent[index].options, key)) {
@@ -93,6 +91,25 @@ const IntrestModal: React.FC<IntrestModalProp> = ({ UIid, showModal, setShowModa
         console.log(updatedContent[index])
         setUI(prevState => ({ ...prevState, content: updatedContent, }));
     }
+
+
+    const handleUpdateUi = async () => {
+        setLoading(true)
+        try {
+            await updateDoc(doc(db, "UI", UIid), {
+                title: ui.title,
+                description: ui.description,
+                content: ui.content,
+            })
+            console.log(`Document with id ${UIid} has been updated`)
+        }
+        catch (e) {
+            console.error("Document not found: ", e)
+        }
+        setLoading(false)
+    }
+
+
     useEffect(() => {
         const getUiById = async () => {
             await getDoc(doc(db, "UI", UIid)).then((querySnapshot) => {
@@ -246,7 +263,7 @@ const IntrestModal: React.FC<IntrestModalProp> = ({ UIid, showModal, setShowModa
                                                 Close
                                             </button>
                                             <button
-                                                onClick={onSubmit}
+                                                onClick={handleUpdateUi}
                                                 className="block w-full rounded-md bg-pink-700 px-8 py-2 text-center font-semibold text-white shadow-sm hover:bg-pink-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink-700">
                                                 Save
                                             </button>

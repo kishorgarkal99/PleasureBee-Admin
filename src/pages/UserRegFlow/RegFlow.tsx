@@ -64,7 +64,7 @@ const UserRegFlow = () => {
 
     useEffect(() => {
         getUIs()
-    }, [showModal])
+    }, [showModal, showModal2])
 
     useEffect(() => {
         if (dataIndex !== undefined) {
