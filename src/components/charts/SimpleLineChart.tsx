@@ -54,8 +54,8 @@ const data = {
       borderColor: "rgb(53, 162, 235)",
       backgroundColor: "rgba(53, 162, 235, 0.5)",
       lineTension: 0.2736,
-    },
-  ],
+    }
+  ]
 };
 
 const SimpleLineChart=({titleText}:{titleText:string})=> {
@@ -68,7 +68,7 @@ const SimpleLineChart=({titleText}:{titleText:string})=> {
             position: "top",
             align: "end"
           },
-          title: { display: true, text: titleText },
+          title: { display: true, text: titleText }
         }
       }}
       data={data}
