@@ -1,16 +1,109 @@
-import { useState } from "react";
+import { useState, useLayoutEffect } from "react";
 import Layout from "../../components/Layout";
 import SimpleBarChart from "../../components/charts/BarChart";
 import PieChart from "../../components/charts/PieChart";
-import Map from "../../components/Map";
+import Map from "./components/Map";
+import {
+  DocumentData,
+  QueryDocumentSnapshot,
+  collection,
+  onSnapshot,
+} from "firebase/firestore";
+import { db } from "../../config/firebase";
 
 //Icons
 import { BiUserCheck } from "react-icons/bi";
 import { BiUserMinus } from "react-icons/bi";
 import { MdWorkspacePremium } from "react-icons/md";
+import { UserData } from "../../types";
 
 const Analytics = () => {
   const [tab, setTab] = useState(0);
+  const [data, setData] = useState<UserData[]>([]);
+  const [subscriptionTotal, setSubscriptionTotal] = useState(0);
+  const [countries, setCountries] = useState<string[]>([]);
+  const [regions, setRegions] = useState<string[]>([]);
+  const [selectedRegion, setSelectedRegion] = useState("All");
+  const [selectedCountry, setSelectedCountry] = useState("All");
+  const [selectedAge, setSelectedAge] = useState([]);
+
+  const extractUserInfo = (
+    docs: QueryDocumentSnapshot<DocumentData, DocumentData>[]
+  ) => {
+    let users: UserData[] = [];
+    let tempRegions: string[] = [];
+    let tempCountries: string[] = [];
+
+    for (const index in docs) {
+      const userData = docs[index].data();
+      const region = userData["location"]["city"].split(",")[0];
+      const country = userData["location"]["country"];
+
+      if (!tempRegions.includes(region) && region.length > 0) {
+        tempRegions.push(region);
+      }
+
+      if (!tempCountries.includes(country) && country.length > 0) {
+        tempCountries.push(country);
+      }
+
+      users.push({
+        userName: userData["userName"],
+        age: userData["age"],
+        gender: userData["userGender"],
+        location: {
+          region: region,
+          country: userData["location"]["country"],
+          geoPoint: {
+            lat: userData["location"]["geopoint"]["_lat"],
+            lon: userData["location"]["geopoint"]["_long"],
+          },
+        },
+      });
+    }
+
+    setRegions(tempRegions);
+    setCountries(tempCountries);
+    setData(users);
+  };
+
+  const extractSubscriptionInfo = (
+    docs: QueryDocumentSnapshot<DocumentData, DocumentData>[]
+  ) => {
+    let subscriptionCount = 0;
+
+    for (const index in docs) {
+      subscriptionCount += docs[index].data()["users"].length;
+    }
+
+    setSubscriptionTotal(subscriptionCount);
+  };
+
+  useLayoutEffect(() => {
+    onSnapshot(
+      collection(db, "Users"),
+      (doc) => {
+        if (!doc.empty) {
+          extractUserInfo(doc.docs);
+        }
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+
+    onSnapshot(
+      collection(db, "SubscriptionPlan"),
+      (doc) => {
+        if (!doc.empty) {
+          extractSubscriptionInfo(doc.docs);
+        }
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }, []);
 
   return (
     <Layout title="Analytics">
@@ -27,6 +120,9 @@ const Analytics = () => {
 
           <div className="flex justify-end mx-5">
             <select className="bg-transparent text-sm">
+              <option value=">18" className={`bg-[#9D4993]`}>
+                All
+              </option>
               <option value=">18" className={`bg-[#9D4993]`}>
                 18 - 25
               </option>
@@ -45,9 +141,12 @@ const Analytics = () => {
             <MdWorkspacePremium size={25} />
             Subscriptions
           </h1>
-          <h1 className="text-3xl mx-5">25</h1>
+          <h1 className="text-3xl mx-5">{subscriptionTotal}</h1>
           <div className="flex justify-end mx-5">
             <select className="bg-transparent text-sm">
+              <option value=">18" className={`bg-[#8173C3]`}>
+                All
+              </option>
               <option value=">18" className={`bg-[#8173C3]`}>
                 18 - 25
               </option>
@@ -69,6 +168,9 @@ const Analytics = () => {
           <h1 className="text-3xl mx-5">25</h1>
           <div className="flex justify-end mx-5">
             <select className="bg-transparent text-sm">
+              <option value=">18" className={`bg-[#60A4F9]`}>
+                All
+              </option>
               <option value=">18" className={`bg-[#60A4F9]`}>
                 18 - 25
               </option>
@@ -130,6 +232,7 @@ const Analytics = () => {
                 lat: 19.7047984,
                 lng: 75.7046553,
               }}
+              userLocations={data}
               zoomLevel={7}
             />
           </div>
@@ -145,30 +248,37 @@ const Analytics = () => {
           <div className="md:flex grid lg:mt-16 mt-5 lg:mx-0 mx-10">
             <span className="flex">
               <h1 className="relative top-3 text-sm">Country: </h1>
-              <select name="" id="" className="bg-transparent my-3">
-                <option value="">All</option>
-                <option value="">Canada</option>
-                <option value="">Ethiopia</option>
-                <option value="">India</option>
-                <option value="">USA</option>
+              <select
+                name=""
+                id=""
+                className="bg-transparent my-3"
+                disabled={selectedRegion !== "All"}
+                onChange={(event) => {
+                  setSelectedCountry(event.target.value);
+                }}
+              >
+                <option value="All">All</option>
+                {countries.map((country) => (
+                  <option value={country}>{country}</option>
+                ))}
               </select>
             </span>
 
             <span className="flex">
               <h1 className="relative top-3 text-sm">Region: </h1>
-              <select className="bg-transparent text-sm my-3">
-                <option value=">18" className="bg-inherit">
+              <select
+                className="bg-transparent text-sm my-3"
+                disabled={selectedCountry !== "All"}
+                onChange={(event) => {
+                  setSelectedRegion(event.target.value);
+                }}
+              >
+                <option value="All" className="bg-inherit">
                   All
                 </option>
-                <option value=">18" className="bg-inherit">
-                  Region 1
-                </option>
-                <option value=">18" className="bg-inherit">
-                  Region 2
-                </option>
-                <option value=">18" className="bg-inherit">
-                  Region 3
-                </option>
+                {regions.map((region) => (
+                  <option value={region}>{region}</option>
+                ))}
               </select>
             </span>
 
@@ -186,13 +296,16 @@ const Analytics = () => {
             <span className="flex">
               <h1 className="relative top-3 text-sm">Age: </h1>
               <select className="bg-transparent text-sm my-3">
-                <option value=">18" className="bg-inherit">
+                <option value={[]} className="bg-inherit">
+                  All
+                </option>
+                <option value={["18", "25"]} className="bg-inherit">
                   18 - 25
                 </option>
-                <option value=">18" className="bg-inherit">
+                <option value={["26", "40"]} className="bg-inherit">
                   26 - 40
                 </option>
-                <option value=">18" className="bg-inherit">
+                <option value={["41", "200"]} className="bg-inherit">
                   {"41 > "}
                 </option>
               </select>
@@ -204,7 +317,29 @@ const Analytics = () => {
           <div className="lg:mx-20 mx-10 mt-10 self-center lg:w-[40%] md:w-[80%]">
             <span className="flex justify-between my-3">
               <h1>Total Users</h1>
-              <h2>0</h2>
+              <h2>
+                {
+                  //TODO: Finish filtering
+                  data.filter((user) => {
+                    if (
+                      (selectedCountry === "All" &&
+                        selectedRegion === "All" &&
+                        selectedAge.length === 0) ||
+                      (user.location.country === selectedCountry &&
+                        user.location.region === selectedRegion &&
+                        user.age >= parseInt(selectedAge[0]) &&
+                        user.age <= parseInt(selectedAge[1]))
+                    )
+                      return user;
+
+                    // if (
+                    //   (selectedRegion === "All" && selectedCountry === "All") ||
+                    //   user.location.region === selectedRegion
+                    // )
+                    //   return user;
+                  }).length
+                }
+              </h2>
             </span>
             <span className="flex justify-between my-3">
               <h1>New Users</h1>
@@ -220,7 +355,7 @@ const Analytics = () => {
             </span>
             <span className="flex justify-between my-3">
               <h1>Total Subscription</h1>
-              <h2>0</h2>
+              <h2>{subscriptionTotal}</h2>
             </span>
             <hr className="bg-gray-200 rounded-full h-1" />
             <span className="flex justify-between my-3">
