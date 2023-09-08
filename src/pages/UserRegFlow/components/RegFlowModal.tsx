@@ -260,7 +260,8 @@ const RegFlowModal: React.FC<RegFlowModalProp> = ({ ui, showModal, setShowModal 
                                             Save
                                         </button>
                                     </div>
-                                </div>}
+                                </div>
+                                }
                         </div>
                     </div>
                     <div className="opacity-50 fixed inset-0 z-40 bg-black"></div>

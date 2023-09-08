@@ -1,58 +1,24 @@
 import { FaPlus } from "react-icons/fa";
 import Layout from "../../components/Layout"
 import { useState } from "react";
+import DynamicField from "./components/DynamicUI";
 
-interface DynamicFieldProps {
-    onRemove: () => void
-    fieldType: 'title'
-    | 'description'
-    | 'content array of string'
-    | 'content array of object' | ""
-}
-interface FieldType {
-    label: string;
-    value: 'title' | 'description' | 'content array of string' | 'content array of object' | "";
-}
+
 const CreateScreen = (): JSX.Element => {
 
-    const DynamicField: React.FC<DynamicFieldProps> = ({ onRemove, fieldType }) => {
-        const renderInput = () => {
-            switch (fieldType) {
-                // case 'number':
-                //     return <input type="number" />
-                // case 'email':
-                //     return <input type="email" />
-                // case 'text':
-                default:
-                    return <input type="text" />
-            }
-        }
-
-        return (
-            <div>
-                {renderInput()}
-                <button onClick={onRemove}>Remove</button>
-            </div>
-        )
-    }
     const [fields, setFields] = useState<JSX.Element[]>([]);
-    const [selectedType, setSelectedType] = useState<FieldType>({ label: "title", value: "title" });
     const [showModal, setShowModal] = useState<boolean>(false);
 
-    const fieldTypes: FieldType[] = [
-        { label: 'title', value: 'title' },
-        { label: 'description', value: 'description' },
-        { label: 'content', value: 'content array of string' },
-        { label: 'content', value: 'content array of object' },
+    const fieldTypes: string[] = [
+        'title', 'description', 'content array of string',
     ];
 
-    const addField = (fType: FieldType) => {
+    const addField = (fType: string) => {
         if (fType) {
             const newField = (
-                <DynamicField key={fields.length} onRemove={() => removeField(fields.length)} fieldType={selectedType.value} />
+                <DynamicField key={fields.length} onRemove={() => removeField(fields.length)} fieldType={fType} />
             );
             setFields((prevFields) => [...prevFields, newField]);
-            setSelectedType({ label: "", value: "" });
         }
         setShowModal(false)
     }
@@ -66,28 +32,33 @@ const CreateScreen = (): JSX.Element => {
                 {showModal ? (
                     <>
                         <div
-                            className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
-                        >
+                            className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
                             <div className="relative w-auto my-6 mx-auto max-w-sm">
-                                {/*content*/}
+
                                 <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                                    {/*header*/}
                                     <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
                                         <h3 className="text-xl font-bold text-gray-400">
                                             Select Field
                                         </h3>
                                     </div>
-                                    {/*body*/}
                                     <div className="relative p-2 flex flex-wrap justify-center items-center">
                                         {fieldTypes.map((type) => (
                                             <button
+                                                onClick={() => addField(type)}
                                                 className="m-2 bg-pink-500 text-white hover:bg-pink-700 font-bold text-sm 
-                                                    px-6 py-2 rounded-full shadow hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150"
-                                                type="button"
-                                                onClick={() => addField(type)}>
-                                                {type.value}
+                                                    px-6 py-2 rounded-full shadow hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150">
+                                                {type}
                                             </button>
                                         ))}
+                                    </div>
+                                    <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
+                                        <div></div>
+                                        <button
+                                            className="inline-flex w-full justify-center rounded-xl bg-white px-3 py-2 text-sm font-semibold text-pink-700 shadow-sm hover:bg-pink-500 hover:text-white sm:ml-3 sm:w-auto"
+                                            type="button"
+                                            onClick={() => setShowModal(false)}>
+                                            Cancle
+                                        </button>
                                     </div>
                                 </div>
                             </div>
