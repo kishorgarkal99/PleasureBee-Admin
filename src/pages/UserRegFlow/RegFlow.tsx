@@ -8,14 +8,12 @@ import UI from "../../Interfaces/Interfaces"
 
 import Loader from "../../components/Loader"
 import Interests from "./components/Interest/InterestOptions"
-import Modes from "./components/ModeOptions"
+import Modes from "./components/mode/ModeOptions"
 import IntrestModal from "./components/Interest/InterestModal"
 import ModeModal from "./components/mode/ModeModal"
 import RegFlowModal from "./components/RegFlowModal"
 
-
-
-const UserRegFlow = () => {
+const UserRegFlow = (): JSX.Element => {
 
     const [uIs, setUIs] = useState<UI[]>([])
     const [ui, setUI] = useState<UI>({

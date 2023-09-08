@@ -1,16 +1,16 @@
 interface Interest {
     title: string,
-    options: Map<string,string>
+    options: Map<string, string>
 }
 
 type InterestProp = {
     interest: Interest
 }
 
-const Interests = ({ interest }: InterestProp) => {
+const Interests: React.FC<InterestProp> = ({ interest }): JSX.Element => {
 
-const newMap = new Map<string, string>(Object.entries(interest.options));
-    
+    const newMap = new Map<string, string>(Object.entries(interest.options));
+
     const entries = Array.from(newMap.entries());
     // console.log(interest.options)
     return (

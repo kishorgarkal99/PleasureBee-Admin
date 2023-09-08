@@ -4,7 +4,7 @@ import Login from './Login';
 import Register from './Register';
 
 
-export default function Auth() {
+export default function Auth(): JSX.Element {
 
   const [userIsNew, setUserIsNew] = useState<boolean>(false)
 

@@ -13,7 +13,7 @@ interface Plan {
     users: string[]
 }
 
-const CustomPlan = () => {
+const CustomPlan = (): JSX.Element => {
     const [openModal, setOpenModal] = useState<boolean>(false)
     const [plans, setPlans] = useState<Plan[]>([{
         id: "",

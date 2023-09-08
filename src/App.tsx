@@ -7,6 +7,7 @@ import UserRegFlow from "./pages/UserRegFlow/RegFlow";
 import SubscriptionPlans from "./pages/Sub plans/SubscriptionPlans";
 import CustomPlan from "./pages/Sub plans/CustomPlan";
 import Analytics from "./pages/Analytics";
+import CreateScreen from "./pages/UserRegFlow/CreateScreen";
 
 function App() {
   return (
@@ -22,9 +23,10 @@ function App() {
         />
         <Route path="/" element={<Home />} />
         <Route path="/users" element={<Users />} />
-        <Route path="/reg_flow" element={<UserRegFlow />} />
+        <Route path="/ui" element={<UserRegFlow />} />
+        <Route path="/ui/create" element={<CreateScreen />} />
         <Route path="/plans" element={<SubscriptionPlans />} />
-        <Route path="/plans_custom" element={<CustomPlan />} />
+        <Route path="/plans/custom" element={<CustomPlan />} />
         <Route path="/analytics" element={<Analytics />} />
       </Routes>
     </Router>

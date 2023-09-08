@@ -15,7 +15,7 @@ interface Admin {
   password: string
 }
 
-const Register = ({ callback }: RegProp) => {
+const Register: React.FC<RegProp> = ({ callback }): JSX.Element => {
 
   const [formData, setFormData] = useState({
     username: "",

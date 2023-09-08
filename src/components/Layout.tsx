@@ -6,7 +6,7 @@ type LayoutProp = {
   children: ReactNode
   title?: string
 }
-const Layout = ({ title = "PleasureBee", children }: LayoutProp) => {
+const Layout: React.FC<LayoutProp> = ({ title = "PleasureBee", children }): JSX.Element => {
   return (
     <div className="w-full flex bg-gray-100">
       <Sidebar />

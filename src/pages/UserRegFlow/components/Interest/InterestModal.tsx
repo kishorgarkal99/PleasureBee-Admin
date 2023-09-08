@@ -20,7 +20,7 @@ type IntrestModalProp = {
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const IntrestModal: React.FC<IntrestModalProp> = ({ UIid, showModal, setShowModal }) => {
+const IntrestModal: React.FC<IntrestModalProp> = ({ UIid, showModal, setShowModal }): JSX.Element => {
 
     const [loading, setLoading] = useState<boolean>(true)
     const [keyValue, setKeyValue] = useState("")

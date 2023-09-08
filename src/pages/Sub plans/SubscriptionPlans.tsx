@@ -14,7 +14,7 @@ interface Plan {
     users: string[]
 }
 
-const SubscriptionPlans = () => {
+const SubscriptionPlans = (): JSX.Element => {
     const [openModal, setOpenModal] = useState<boolean>(false)
     const [plans, setPlans] = useState<Plan[]>([{
         id: "",

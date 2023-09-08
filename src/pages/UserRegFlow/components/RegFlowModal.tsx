@@ -21,7 +21,7 @@ type RegFlowModalProp = {
     closeModal: () => void,
 }
 
-const RegFlowModal = ({ ui, showModal, setShowModal }: RegFlowModalProp) => {
+const RegFlowModal: React.FC<RegFlowModalProp> = ({ ui, showModal, setShowModal }): JSX.Element => {
 
     const [inputValue, setInputValue] = useState("");
     const [agreed, setAgreed] = useState(false)

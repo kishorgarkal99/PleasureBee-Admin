@@ -9,7 +9,7 @@ type LoginProp = {
     callback: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const Login = ({ callback }: LoginProp) => {
+const Login: React.FC<LoginProp> = ({ callback }): JSX.Element => {
 
     const [errorMessage, setError] = useState<string>()
     const [loading, setLoading] = useState<boolean>(false)
@@ -42,7 +42,7 @@ const Login = ({ callback }: LoginProp) => {
             setError("please check your email or password")
         }
     };
-  
+
     return (
         <>
             <Loader openloader={loading} />

@@ -5,7 +5,7 @@ interface Mode {
 type ModestProp = {
     mode: Mode
 }
-const Modes = ({ mode }: ModestProp) => {
+const Modes: React.FC<ModestProp> = ({ mode }: ModestProp): JSX.Element => {
     return (
         <div>
             <span className="text-gray-500 text-base mr-2">

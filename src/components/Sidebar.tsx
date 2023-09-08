@@ -36,7 +36,7 @@ const sideBarItems = [
     {
         menuTitle: "Custom plans",
         icon: ranking,
-        url: "/plans_custom"
+        url: "/plans/custom"
     },
     {
         menuTitle: "Analytics",
@@ -44,9 +44,9 @@ const sideBarItems = [
         url: "/analytics"
     },
     {
-        menuTitle: "Registration Flow",
+        menuTitle: "Registration Flow UI",
         icon: regFlow,
-        url: "/reg_flow"
+        url: "/ui"
     },
     {
         menuTitle: "Settings",
@@ -64,7 +64,7 @@ const sideBarItems = [
         url: ""
     },
 ]
-const Sidebar = () => {
+const Sidebar = (): JSX.Element => {
     return (
         <div className="bottom-0 min-h-screen fixed">
             <aside className="shadow-xl min-h-screen rounded-lg dark:border-gray-700 z-20 md:w-64 overflow-y-auto bg-white flex-shrink-0">

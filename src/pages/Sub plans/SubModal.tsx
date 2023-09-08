@@ -17,7 +17,7 @@ type ModalProp = {
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function SubModal({ model, plan, showModal, setShowModal }: ModalProp) {
+const SubModal: React.FC<ModalProp> = ({ model, plan, showModal, setShowModal }): JSX.Element => {
     const [features, setFeatures] = useState<string>("")
     const [name, setName] = useState<string>("")
     const [newPrice, setPrice] = useState<{ monthly: number, yearly: number }>({
@@ -228,3 +228,5 @@ export default function SubModal({ model, plan, showModal, setShowModal }: Modal
         </>
     );
 }
+
+export default SubModal

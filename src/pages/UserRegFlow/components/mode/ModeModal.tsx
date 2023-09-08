@@ -17,7 +17,7 @@ type ModeModalProp = {
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
-const ModeModal: React.FC<ModeModalProp> = ({ UIid, showModal, setShowModal }) => {
+const ModeModal: React.FC<ModeModalProp> = ({ UIid, showModal, setShowModal }): JSX.Element => {
 
     const [inputValue, setInputValue] = useState("");
     // const [agreed, setAgreed] = useState(false)
