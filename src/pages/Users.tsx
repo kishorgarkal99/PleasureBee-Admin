@@ -1,145 +1,63 @@
-import { FaCheck, FaUserEdit } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa";
 import Layout from "../components/Layout";
-
-const users = [
-    {
-        fname: "Fidel",
-        lname: "Alemayehu",
-        phone: "+25190008560",
-        avatar: "https://tecdn.b-cdn.net/img/new/avatars/5.webp",
-        about: "My name is Fidel Alemayehu, and I'm a software engineer",
-        verified: false,
-        plan: "Free"
-    },
-    {
-        fname: "Arnab",
-        lname: "Ghosh",
-        phone: "+9190048560",
-        avatar: "https://tecdn.b-cdn.net/img/new/avatars/1.webp",
-        about: "My name is Arnab Ghosh, and I'm a software engineer",
-        verified: true,
-        plan: "Premium"
-    },
-    {
-        fname: "Fikireab",
-        lname: "Mekuriaw",
-        phone: "+25190008560",
-        avatar: "https://tecdn.b-cdn.net/img/new/avatars/1.webp",
-        about: "My name is Fikireab Mekuriaw, and I'm a software engineer",
-        verified: false,
-        plan: "Free"
-    },
-    {
-        fname: "Fidel",
-        lname: "Alemayehu",
-        phone: "+25190008560",
-        avatar: "https://tecdn.b-cdn.net/img/new/avatars/5.webp",
-        about: "My name is Fidel Alemayehu, and I'm a software engineer",
-        verified: false,
-        plan: "Free"
-    },
-    {
-        fname: "Fidel",
-        lname: "Alemayehu",
-        phone: "+25190008560",
-        avatar: "https://tecdn.b-cdn.net/img/new/avatars/5.webp",
-        about: "My name is Fidel Alemayehu, and I'm a software engineer",
-        verified: false,
-        plan: "Free"
-    },
-    {
-        fname: "Fidel",
-        lname: "Alemayehu",
-        phone: "+25190008560",
-        avatar: "https://tecdn.b-cdn.net/img/new/avatars/5.webp",
-        about: "My name is Fidel Alemayehu, and I'm a software engineer",
-        verified: true,
-        plan: "Premium"
-    },
-    {
-        fname: "Fidel",
-        lname: "Alemayehu",
-        phone: "+25190008560",
-        avatar: "https://tecdn.b-cdn.net/img/new/avatars/5.webp",
-        about: "My name is Fidel Alemayehu, and I'm a software engineer",
-        verified: false,
-        plan: "Free"
-    },
-    {
-        fname: "Fidel",
-        lname: "Alemayehu",
-        phone: "+25190008560",
-        avatar: "https://tecdn.b-cdn.net/img/new/avatars/5.webp",
-        about: "My name is Fidel Alemayehu, and I'm a software engineer",
-        verified: true,
-        plan: "Premium"
-    },
-    {
-        fname: "Fidel",
-        lname: "Alemayehu",
-        phone: "+25190008560",
-        avatar: "https://tecdn.b-cdn.net/img/new/avatars/5.webp",
-        about: "My name is Fidel Alemayehu, and I'm a software engineer",
-        verified: false,
-        plan: "Free"
-    },
-    {
-        fname: "Fidel",
-        lname: "Alemayehu",
-        phone: "+25190008560",
-        avatar: "https://tecdn.b-cdn.net/img/new/avatars/5.webp",
-        about: "My name is Fidel Alemayehu, and I'm a software engineer",
-        verified: true,
-        plan: "Premium"
-    },
-    {
-        fname: "Fidel",
-        lname: "Alemayehu",
-        phone: "+25190008560",
-        avatar: "https://tecdn.b-cdn.net/img/new/avatars/5.webp",
-        about: "My name is Fidel Alemayehu, and I'm a software engineer",
-        verified: false,
-        plan: "Free"
-    },
-    {
-        fname: "Fidel",
-        lname: "Alemayehu",
-        phone: "+25190008560",
-        avatar: "https://tecdn.b-cdn.net/img/new/avatars/5.webp",
-        about: "My name is Fidel Alemayehu, and I'm a software engineer",
-        verified: true,
-        plan: "Premium"
-    },
-    {
-        fname: "Fidel",
-        lname: "Alemayehu",
-        phone: "+25190008560",
-        avatar: "https://tecdn.b-cdn.net/img/new/avatars/5.webp",
-        about: "My name is Fidel Alemayehu, and I'm a software engineer",
-        verified: false,
-        plan: "Free"
-    },
-    {
-        fname: "Fidel",
-        lname: "Alemayehu",
-        phone: "+25190008560",
-        avatar: "https://tecdn.b-cdn.net/img/new/avatars/5.webp",
-        about: "My name is Fidel Alemayehu, and I'm a software engineer",
-        verified: true,
-        plan: "Premium"
-    },
-    {
-        fname: "Fidel",
-        lname: "Alemayehu",
-        phone: "+25190008560",
-        avatar: "https://tecdn.b-cdn.net/img/new/avatars/5.webp",
-        about: "My name is Fidel Alemayehu, and I'm a software engineer",
-        verified: false,
-        plan: "Free"
-    },
-]
+import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
+import { db } from "../config/firebase";
+import { useState, useEffect } from 'react'
+import { fa } from "@faker-js/faker";
 
 const Users = (): JSX.Element => {
+    const [reload, setLoad] = useState<boolean>(false)
+    const [users, setUsers] = useState([{
+        id: "",
+        userName: "",
+        about: "",
+        phoneNumber: "",
+        avatar: [""],
+        isVerified: false,
+        subscription: "",
+    }])
+
+    const verifyUser = async (i: number) => {
+        const userID = users[i].id
+        try {
+            await updateDoc(doc(db, "Users", userID), {
+                isVerified: true
+            })
+            setLoad(true)
+            console.log(`user at ${i} verified`)
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    const getUsers = async () => {
+        await getDocs(collection(db, "Users"))
+            .then((querySnapshot) => {
+                try {
+                    const newData = querySnapshot.docs
+                        .map((doc) => ({
+                            id: doc.id.toString(),
+                            userName: doc.data().userName?.toString(),
+                            avatar: doc.data().imageURL,
+                            about: doc.data().about?.toString(),
+                            phoneNumber: doc.data().phone?.toString(),
+                            isVerified: doc.data()?.isVerified,
+                            subscription: doc.data().subscription?.toString()
+                        }));
+                    setUsers(newData)
+                } catch (error) {
+                    console.error(error)
+                }
+            })
+    }
+
+    useEffect(() => {
+        getUsers()
+    }, [])
+    useEffect(() => {
+        getUsers()
+    }, [reload])
+
     return (
         <Layout title="PleasureBee/Users" >
             <div className="m-4 shadow-xl min-h-full rounded-lg bg-gray-100">
@@ -162,7 +80,7 @@ const Users = (): JSX.Element => {
                                             <div className="relative hidden w-8 h-8 mr-3 rounded-full md:block">
                                                 <img
                                                     className="object-cover w-full h-full rounded-full"
-                                                    src={user.avatar}
+                                                    src={user.avatar[0]}
                                                     alt=""
                                                     loading="lazy"
                                                 />
@@ -172,7 +90,7 @@ const Users = (): JSX.Element => {
                                                 ></div>
                                             </div>
                                             <div>
-                                                <p className="font-semibold">{`${user.fname} ${user.lname}`}</p>
+                                                <p className="font-semibold">{user.userName}</p>
                                                 <p className="text-xs text-gray-600 ">
                                                     {user.about ? user.about : ""}
                                                 </p>
@@ -180,35 +98,36 @@ const Users = (): JSX.Element => {
                                         </div>
                                     </td>
 
-                                    <td className="px-4 py-3 text-sm">{user.phone}</td>
+                                    <td className="px-4 py-3 text-sm">{user.phoneNumber}</td>
 
                                     <td className="px-4 py-3 text-xs">
                                         <span
-                                            className={`px-2 py-1 font-semibold leading-tight  ${user.verified
+                                            className={`px-2 py-1 font-semibold leading-tight  ${user.isVerified
                                                 ? "bg-green-100 text-green-700"
                                                 : "bg-red-100 text-red-700"
                                                 } rounded-full `}
                                         >
-                                            {user.verified ? "verified" : "not verified"}
+                                            {user.isVerified ? "verified" : "not verified"}
                                         </span>
                                     </td>
 
                                     <td className="px-4 py-3 text-xs">
                                         <span
-                                            className={`px-2 py-1 font-semibold leading-tight  ${user.plan === "Premium"
+                                            className={`px-2 py-1 font-semibold leading-tight  ${user.subscription === "Premium"
                                                 ? "bg-purple-900 text-yellow-300"
                                                 : "bg-gray-200 text-green-700"
                                                 } rounded-full `}
                                         >
-                                            {user.plan === "Premium" ? "Premium" : "Free"}
+                                            {user.subscription === "Premium" ? "Premium" : "Free"}
                                         </span>
                                     </td>
 
                                     <td className="px-4 py-3">
                                         <div className="flex items-center space-x-4 text-sm">
                                             {
-                                                !user.verified ?
+                                                !user.isVerified ?
                                                     <button
+                                                        onClick={() => verifyUser(index)}
                                                         className="flex items-center justify-between px-2 py-2 text-md font-medium leading-5 text-green-700 rounded-lg  focus:outline-none hover:bg-gray-200"
                                                         aria-label="Edit"
                                                     >
@@ -216,12 +135,6 @@ const Users = (): JSX.Element => {
                                                     </button>
                                                     : <div className="w-8" />
                                             }
-                                            <button
-                                                className="flex items-center text-lg justify-between px-2 py-2  font-medium leading-5 text-pink-700 rounded-lg  focus:outline-none hover:bg-gray-200"
-                                                aria-label="Edit"
-                                            >
-                                                <FaUserEdit />
-                                            </button>
                                         </div>
                                     </td>
                                 </tr>
