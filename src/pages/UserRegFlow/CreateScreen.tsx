@@ -1,16 +1,46 @@
-import { FaPlus } from "react-icons/fa";
+import { FaMinus, FaPlus } from "react-icons/fa";
 import Layout from "../../components/Layout"
 import { useState } from "react";
-import DynamicField from "./components/DynamicUI";
+import { IconButton, TextArea, TextInput } from "../../components/Widgets";
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "../../config/firebase";
 
+interface UI {
+    title: string,
+    description: string,
+    content: string[]
+}
+
+interface DynamicFieldProps {
+    onRemove: () => void
+    fieldType: string
+}
 
 const CreateScreen = (): JSX.Element => {
 
     const [fields, setFields] = useState<JSX.Element[]>([]);
     const [showModal, setShowModal] = useState<boolean>(false);
 
+    const [content, setContent] = useState<string>("");
+
+    const [ui, setUi] = useState<UI>({
+        title: "",
+        description: "",
+        content: [""]
+    })
+
+    const onTitleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+        setUi(prevState => ({ ...prevState, title: e.target.value }))
+    }
+    const onDescChange: React.ChangeEventHandler<HTMLTextAreaElement> = (e) => {
+        setUi(prevState => ({ ...prevState, description: e.target.value }))
+    }
+    const onContentChange: React.ChangeEventHandler<HTMLTextAreaElement> = (e) => {
+        setContent(e.target.value)
+    }
+
     const fieldTypes: string[] = [
-        'title', 'description', 'content array of string',
+        'text', 'text area', 'content array',
     ];
 
     const addField = (fType: string) => {
@@ -24,6 +54,46 @@ const CreateScreen = (): JSX.Element => {
     }
     const removeField = (index: number) => {
         setFields((prevFields) => prevFields.filter((_, i) => i !== index))
+    }
+
+
+    const DynamicField: React.FC<DynamicFieldProps> = ({ onRemove, fieldType }): JSX.Element => {
+
+        const renderInput = () => {
+            switch (fieldType) {
+                case "text":
+                    return <TextInput name="title" inputType="text" plcHolder="Entere a title here" onChange={onTitleChange} />
+                case "text area":
+                    return <TextArea name="description" plcHolder="Entere a screen description here" onChange={onDescChange} />
+                case "content array":
+                    return <TextArea name="description" plcHolder="Entere comma separated values of content here" onChange={onContentChange} />
+
+                default:
+                    return <input type="text" />
+            }
+        }
+        return (
+            <div className="w-full flex flex-col justify-center">
+                <div className="flex items-center gap-2 my-1">
+                    {renderInput()}
+                    <IconButton onclick={onRemove}>
+                        <FaMinus />
+                    </IconButton>
+                </div>
+            </div>
+        )
+    }
+
+    const onSubmit = async () => {
+        const contArray = content.split(",")
+        setUi(prevState => ({ ...prevState, content: contArray }))
+        try {
+            const docRef = await addDoc(collection(db, "UI"), ui)
+            console.log("Registered with ID: ", docRef.id)
+            console.log(ui)
+        } catch (e) {
+            console.error("Error: ", e);
+        }
     }
 
     return (
@@ -66,13 +136,26 @@ const CreateScreen = (): JSX.Element => {
                         <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
                     </>
                 ) : null}
+                <div className="flex flex-col gap-2 my-1">
+                    <p>Question/title</p>
+                    <TextInput name="title" inputType="text" plcHolder="Enter question or title here" onChange={onTitleChange} />
+                </div>
+
                 {fields.map((field) => field)}
-                <button
-                    onClick={() => setShowModal(true)}
-                    className="mt-4 flex right-0 justify-center items-center px-4 py-2 text-white transition-colors duration-150 bg-pink-500 border border-transparent rounded-lg active:bg-pink-600 hover:bg-pink-700 focus:outline-none focus:shadow-outline-purple">
-                    <FaPlus className="w-4 h-4 mr-2" />
-                    <span className="ml-0.5 text-xl">Add Field</span>
-                </button>
+                <div className="flex items-center justify-end gap-4">
+                    <button
+                        onClick={() => setShowModal(true)}
+                        className="mt-4 flex right-0 justify-center items-center px-4 py-2 text-white transition-colors duration-150 bg-pink-500 border border-transparent rounded-lg active:bg-pink-600 hover:bg-pink-700 focus:outline-none focus:shadow-outline-purple">
+                        <FaPlus className="w-4 h-4 mr-2" />
+                        <span className="ml-0.5 text-xl">Add Field</span>
+                    </button>
+
+                    <button
+                        onClick={onSubmit}
+                        className="mt-4 flex right-0 justify-center items-center px-4 py-2 text-white transition-colors duration-150 bg-pink-500 border border-transparent rounded-lg active:bg-pink-600 hover:bg-pink-700 focus:outline-none focus:shadow-outline-purple">
+                        <span className="ml-0.5 text-xl">Submit</span>
+                    </button>
+                </div>
             </div>
         </Layout>
     )

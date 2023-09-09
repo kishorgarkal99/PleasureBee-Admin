@@ -44,7 +44,7 @@ const sideBarItems = [
         url: "/analytics"
     },
     {
-        menuTitle: "Registration Flow UI",
+        menuTitle: "Registration Flow",
         icon: regFlow,
         url: "/ui"
     },
@@ -73,7 +73,7 @@ const Sidebar = (): JSX.Element => {
                         <div className="mb-2 p-4">
                             <NavLink
                                 to="/"
-                                className="flex items-center transition duration-200 transform hover:scale-110"
+                                className="flex items-center transition duration-200 transform hover:scale-105"
                             >
                                 <img
                                     src={heartlock}
@@ -89,7 +89,7 @@ const Sidebar = (): JSX.Element => {
                                 <NavLink
                                     key={item.menuTitle}
                                     to={item.url}
-                                    className="inline-flex items-center px-4 py-3 transition duration-200 transform hover:scale-125"
+                                    className="inline-flex items-center px-4 py-3 transition duration-200 transform hover:scale-105"
                                 >
                                     <img
                                         className="w-6 h-6 "
@@ -104,7 +104,7 @@ const Sidebar = (): JSX.Element => {
                         <div className="mb-4 px-4 ">
                             <NavLink
                                 to="/"
-                                className="flex items-center transition duration-200 transform hover:scale-110"
+                                className="flex items-center transition duration-200 transform hover:scale-105"
                             >
                                 <img
                                     src={heartlock}

@@ -12,6 +12,7 @@ import Modes from "./components/mode/ModeOptions"
 import IntrestModal from "./components/Interest/InterestModal"
 import ModeModal from "./components/mode/ModeModal"
 import RegFlowModal from "./components/RegFlowModal"
+import { Link } from "react-router-dom"
 
 const UserRegFlow = (): JSX.Element => {
 
@@ -100,11 +101,11 @@ const UserRegFlow = (): JSX.Element => {
                     <div className="min-h-screen rounded-lg bg-gray-100">
                         <div className="mx-auto max-w-7xl">
                             <div className="fixed right-4 bottom-16 flex justify-between">
-                                <button
-                                    onClick={() => setShowModal(true)}
+                                <Link
+                                    to={"/ui/create"}
                                     className="flex justify-center items-center px-4 py-4 bg-white text-md  text-pink-700 outline-0 transition-colors duration-200 bg-pink-700 border-2 border-pink-300 rounded-full hover:bg-gradient-to-r from-pink-700 to-blue-400 hover:text-white hover:border-0 shadow-xl">
                                     <FaPlus className="w-6 h-6" />
-                                </button>
+                                </Link>
                             </div>
                             <div className="grid grid-flow-row grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4 lg:px-8 ">
                                 {uIs.map((ui, index) => (
