@@ -87,7 +87,7 @@ const UserRegFlow = (): JSX.Element => {
     return (
         <Layout title="PleasureBee/User Resgistration Flow">
             {uIs.length === 0 ?
-                <div className="w-full bg-gray-100 h-full flex items-center justify-center">
+                <div className="w-full bg-gray-100 mt-20 flex items-center justify-center">
                     <Loader openloader={true} />
                 </div>
                 :

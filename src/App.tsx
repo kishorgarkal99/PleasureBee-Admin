@@ -8,6 +8,7 @@ import SubscriptionPlans from "./pages/Sub plans/SubscriptionPlans";
 import CustomPlan from "./pages/Sub plans/CustomPlan";
 import Analytics from "./pages/Analytics";
 import CreateScreen from "./pages/UserRegFlow/CreateScreen";
+import ProtectedRoutes from "./utils/ProtectedRoutes";
 
 function App() {
   return (
@@ -21,13 +22,17 @@ function App() {
             </Layout>
           }
         />
-        <Route path="/" element={<Home />} />
-        <Route path="/users" element={<Users />} />
-        <Route path="/ui" element={<UserRegFlow />} />
-        <Route path="/ui/create" element={<CreateScreen />} />
-        <Route path="/plans" element={<SubscriptionPlans />} />
-        <Route path="/plans/custom" element={<CustomPlan />} />
-        <Route path="/analytics" element={<Analytics />} />
+
+        <Route element={<ProtectedRoutes />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/users" element={<Users />} />
+          <Route path="/ui" element={<UserRegFlow />} />
+          <Route path="/ui/create" element={<CreateScreen />} />
+          <Route path="/plans" element={<SubscriptionPlans />} />
+          <Route path="/plans/custom" element={<CustomPlan />} />
+          <Route path="/analytics" element={<Analytics />} />
+        </Route>
+
       </Routes>
     </Router>
   );

@@ -5,6 +5,7 @@ import { IconButton } from '../../components/Widgets';
 import SubModal from './SubModal';
 import { db } from '../../config/firebase';
 import { collection, getDocs } from 'firebase/firestore';
+import Loader from '../../components/Loader';
 
 interface Plan {
     id: string,
@@ -16,6 +17,7 @@ interface Plan {
 
 const SubscriptionPlans = (): JSX.Element => {
     const [openModal, setOpenModal] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(false)
     const [plans, setPlans] = useState<Plan[]>([{
         id: "",
         name: "",
@@ -37,6 +39,7 @@ const SubscriptionPlans = (): JSX.Element => {
     }
 
     const getPlans = async () => {
+        setLoading(true)
         await getDocs(collection(db, "SubscriptionPlan"))
             .then((querySnapshot) => {
                 try {
@@ -53,6 +56,7 @@ const SubscriptionPlans = (): JSX.Element => {
                     console.error(error)
                 }
             })
+        setLoading(false)
     }
 
     useEffect(() => {
@@ -71,55 +75,62 @@ const SubscriptionPlans = (): JSX.Element => {
                     <h1 className="text-2xl font-bold text-center text-gray-500 mb-4">
                         BUSINESS MODEL
                     </h1>
-                    <div className="grid grid-cos-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {plans.reverse().map((plan, index) => (
-                            <div key={index} className="w-full rounded-lg shadow-xl bg-white flex flex-col justify-between">
-                                <div>
-                                    <div className="w-full flex items-center justify-center bg-pink-500 text-white p-2">
-                                        <div className="w-1/2">
-                                            <h2 className="text-2xl font-semibold text-right">
-                                                {plan.name}
-                                            </h2>
-                                        </div>
-                                        <div className="w-1/2 flex justify-between items-center">
-                                            <div />
-                                            <IconButton onclick={() => handleOpen(index)}>
-                                                <FaPen className="w-4 h-4" />
-                                            </IconButton>
-                                        </div>
-                                    </div>
-                                    <div className="py-4 px-8">
-                                        <ul className="list-disc list-image-[url(assets/icons/listIcon.svg)] text-base px-4 space-y-2">
-                                            {plan.features.split(",").map((feature, index) => (
-                                                <>
-                                                    <li key={index} className="hover:bg-gray-100">
-                                                        {feature.trim()}
-                                                    </li>
-                                                    <hr className="w-4/5" />
-                                                </>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                </div>
-                                {
-                                    plan.name !== "Freemium" && <div className="py-4 px-8 flex justify-center items-center gap-1">
-                                        <div className="bg-slate-300 text-2xl text-purple-500 font-bold p-2 rounded-md">
-                                            <span>${plan.price.monthly}</span>
-                                            <span className="text-base font-normal text-gray-600">
-                                                /monthly
-                                            </span>
-                                        </div>
-                                        <div className="bg-slate-700 text-2xl text-pink-500 font-bold p-2 rounded-md">
-                                            <span>${plan.price.yearly}</span>
-                                            <span className="text-base font-normal text-gray-200">
-                                                /yearly
-                                            </span>
-                                        </div>
-                                    </div>
-                                }
+                    {
+                        loading
+                            ? <div className="flex justify-center items-center w-full mt-10">
+                                <Loader openloader={loading} />
                             </div>
-                        ))}
-                    </div>
+                            :
+                            <div className="grid grid-cos-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                {plans.reverse().map((plan, index) => (
+                                    <div key={index} className="w-full rounded-lg shadow-xl bg-white flex flex-col justify-between">
+                                        <div>
+                                            <div className="w-full flex items-center justify-center bg-pink-500 text-white p-2">
+                                                <div className="w-1/2">
+                                                    <h2 className="text-2xl font-semibold text-right">
+                                                        {plan.name}
+                                                    </h2>
+                                                </div>
+                                                <div className="w-1/2 flex justify-between items-center">
+                                                    <div />
+                                                    <IconButton onclick={() => handleOpen(index)}>
+                                                        <FaPen className="w-4 h-4" />
+                                                    </IconButton>
+                                                </div>
+                                            </div>
+                                            <div className="py-4 px-8">
+                                                <ul className="list-disc list-image-[url(assets/icons/listIcon.svg)] text-base px-4 space-y-2">
+                                                    {plan.features.split(",").map((feature, index) => (
+                                                        <>
+                                                            <li key={index} className="hover:bg-gray-100">
+                                                                {feature.trim()}
+                                                            </li>
+                                                            <hr className="w-4/5" />
+                                                        </>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        {
+                                            plan.name !== "Freemium" && <div className="py-4 px-8 flex justify-center items-center gap-1">
+                                                <div className="bg-slate-300 text-2xl text-purple-500 font-bold p-2 rounded-md">
+                                                    <span>${plan.price.monthly}</span>
+                                                    <span className="text-base font-normal text-gray-600">
+                                                        /monthly
+                                                    </span>
+                                                </div>
+                                                <div className="bg-slate-700 text-2xl text-pink-500 font-bold p-2 rounded-md">
+                                                    <span>${plan.price.yearly}</span>
+                                                    <span className="text-base font-normal text-gray-200">
+                                                        /yearly
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                ))}
+                            </div>
+                    }
                     <div className="flex justify-between">
                         <div />
                         <button
