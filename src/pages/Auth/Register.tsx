@@ -4,7 +4,7 @@ import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
 import { auth, db } from '../../config/firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import Loader from '../../components/Loader';
+import { SmallLoader } from '../../components/Loader';
 
 type RegProp = {
   callback: React.Dispatch<React.SetStateAction<boolean>>
@@ -68,11 +68,15 @@ const Register: React.FC<RegProp> = ({ callback }): JSX.Element => {
     } else {
       setError("This email is already used in another account")
     }
+
+    setLoading(false)
   }
 
   return (
     <>
-      <Loader openloader={loading} />
+      <div className="flex justify-center items-center p-4 w-full">
+        <SmallLoader openloader={loading} />
+      </div>
       <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-sm">
         <div className="space-y-4">
           {

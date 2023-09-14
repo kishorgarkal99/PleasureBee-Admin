@@ -7,7 +7,7 @@ interface Plan {
     name: string,
     features: string,
     price: { monthly: number, yearly: number },
-    users: string[]
+    users: { monthly: string[], yearly: string[] }
 }
 
 type ModalProp = {
@@ -61,7 +61,7 @@ const SubModal: React.FC<ModalProp> = ({ model, plan, showModal, setShowModal })
                     name: name,
                     features: features.split(","),
                     price: newPrice,
-                    users: []
+                    users: { monthly: [], yearly: [] }
                 }
                 try {
                     const docRef = await addDoc(collection(db, model), newPlan)

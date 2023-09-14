@@ -3,7 +3,7 @@ import google from '../../assets/icons/google.svg'
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../../config/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import Loader from '../../components/Loader';
+import { SmallLoader } from '../../components/Loader';
 
 type LoginProp = {
     callback: React.Dispatch<React.SetStateAction<boolean>>
@@ -29,23 +29,25 @@ const Login: React.FC<LoginProp> = ({ callback }): JSX.Element => {
     };
 
     const onSubmit = () => {
-        setLoading(true)
         signIn(email, password)
     }
     const signIn = async (email: string, password: string) => {
+        setLoading(true)
         try {
             await signInWithEmailAndPassword(auth, email, password)
             navigate("/")
-            setLoading(false)
         } catch (err) {
             console.error(err);
             setError("please check your email or password")
         }
+        setLoading(false)
     };
 
     return (
         <>
-            <Loader openloader={loading} />
+            <div className="flex justify-center items-center p-4 w-full">
+                <SmallLoader openloader={loading} />
+            </div>
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                 <div className="space-y-4">
                     {
