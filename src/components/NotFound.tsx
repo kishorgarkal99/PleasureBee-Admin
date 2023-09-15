@@ -1,11 +1,15 @@
 import { FaSearch } from 'react-icons/fa'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 type NotFoundProp = {
   title: string,
   message: string
 }
 const NotFound = ({ title, message }: NotFoundProp) => {
+  const navigate = useNavigate()
+  const handleNav = () => {
+    navigate(-1)
+  }
   return (
     <main className="w-full grid min-h-3/4 place-items-center px-6 py-8">
       <div className="flex flex-col items-center justify-center">
@@ -20,15 +24,16 @@ const NotFound = ({ title, message }: NotFoundProp) => {
           {message}
         </p>
         <div className="mt-10 flex items-center justify-center gap-x-6">
-          <Link
-            to="/"
-            className="rounded-lg bg-pink-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-pink-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink-600"
-          >
+          <button
+            onClick={handleNav}
+            className="rounded-lg bg-pink-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-pink-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink-600">
             Go back home
-          </Link>
-          <Link to="/" className="text-sm font-semibold text-gray-900 bg-gray-100">
+          </button>
+          <button
+            onClick={handleNav}
+            className="text-sm font-semibold text-gray-900 bg-gray-100">
             Contact support <span aria-hidden="true">&rarr;</span>
-          </Link>
+          </button>
         </div>
       </div>
     </main>
