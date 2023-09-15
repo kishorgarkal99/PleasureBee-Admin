@@ -52,7 +52,7 @@ const SubscriptionPlans = (): JSX.Element => {
             state: {
                 planName: planName,
                 planTerm: planTerm,
-                userIDs: ["24LaiRtaoJdqS6WIuaayO6JDP6B3", "2VZUpsBAcHeuFPbOMzoZQRrRSn53"]
+                userIDs: users
             } as State
         });
     }
@@ -110,7 +110,7 @@ const SubscriptionPlans = (): JSX.Element => {
                             :
                             <div className="grid grid-cos-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                                 {plans.reverse().map((plan, index) => (
-                                    <div key={index} className="w-full rounded-lg shadow-xl bg-white flex flex-col justify-between">
+                                    <div key={index} className="w-full rounded-lg shadow-xl bg-white flex flex-col justify-between select-none">
                                         <div className="w-full">
                                             <div className="w-full flex items-center justify-center bg-pink-500 text-white p-2">
                                                 <div className="w-1/2">
@@ -138,7 +138,7 @@ const SubscriptionPlans = (): JSX.Element => {
                                                         </div>
                                                         <hr />
                                                         <div className="w-full flex gap-2">
-                                                            <div onClick={() => handleNavigate(plan.name, "yearly", plan.users.yearly, plan.id)} className="w-full text-gray-500 hover:bg-pink-100">
+                                                            <div onClick={() => handleNavigate(plan.name, "yearly", plan.users.yearly, plan.id)} className="p-2 rounded-md w-full text-gray-500 hover:bg-pink-100">
                                                                 <p className="mb-2 text-sm font-medium text-gray-500">
                                                                     Yearly
                                                                 </p>
@@ -147,7 +147,7 @@ const SubscriptionPlans = (): JSX.Element => {
                                                                     {`${plan.users.yearly.length} users`}
                                                                 </p>
                                                             </div>
-                                                            <div onClick={() => handleNavigate(plan.name, "monthly", plan.users.monthly, plan.id)} className="w-full px-1 text-gray-500 hover:bg-pink-100">
+                                                            <div onClick={() => handleNavigate(plan.name, "monthly", plan.users.monthly, plan.id)} className="p-2 rounded-md w-full text-gray-500 hover:bg-pink-100">
                                                                 <p className="mb-2 text-sm font-medium text-gray-500">
                                                                     Monthly
                                                                 </p>
@@ -172,7 +172,7 @@ const SubscriptionPlans = (): JSX.Element => {
                                                         </div>
                                                         <hr />
                                                         <div className="w-full flex gap-2">
-                                                            <div onClick={() => handleNavigate(plan.name, "yearly", plan.users.yearly, plan.id)} className="w-full text-gray-500 hover:bg-pink-100">
+                                                            <div onClick={() => handleNavigate(plan.name, "yearly", plan.users.yearly, plan.id)} className="p-2 rounded-md w-full text-gray-500 hover:bg-pink-100">
                                                                 <p className="mb-2 text-sm font-medium text-gray-500">
                                                                     Yearly
                                                                 </p>
@@ -181,7 +181,7 @@ const SubscriptionPlans = (): JSX.Element => {
                                                                     {`${plan.users.yearly.length} users`}
                                                                 </p>
                                                             </div>
-                                                            <div onClick={() => handleNavigate(plan.name, "monthly", plan.users.monthly, plan.id)} className="w-full px-1 text-gray-500 hover:bg-pink-100">
+                                                            <div onClick={() => handleNavigate(plan.name, "monthly", plan.users.monthly, plan.id)} className="p-2 rounded-md w-full text-gray-500 hover:bg-pink-100">
                                                                 <p className="mb-2 text-sm font-medium text-gray-500">
                                                                     Monthly
                                                                 </p>
@@ -205,7 +205,7 @@ const SubscriptionPlans = (): JSX.Element => {
                                                         </div>
                                                         <hr />
                                                         <div className="w-full flex gap-2">
-                                                            <div onClick={() => handleNavigate(plan.name, "yearly", plan.users.yearly, plan.id)} className="w-full text-gray-500 hover:bg-pink-100">
+                                                            <div onClick={() => handleNavigate(plan.name, "yearly", plan.users.yearly, plan.id)} className="p-2 rounded-md w-full text-gray-500 hover:bg-pink-100">
                                                                 <p className="mb-2 text-sm font-medium text-gray-500">
                                                                     Yearly
                                                                 </p>
@@ -214,7 +214,7 @@ const SubscriptionPlans = (): JSX.Element => {
                                                                     {`${plan.users.yearly.length} users`}
                                                                 </p>
                                                             </div>
-                                                            <div onClick={() => handleNavigate(plan.name, "monthly", plan.users.monthly, plan.id)} className="w-full px-1 text-gray-500 hover:bg-pink-100">
+                                                            <div onClick={() => handleNavigate(plan.name, "monthly", plan.users.monthly, plan.id)} className="p-2 rounded-md w-full text-gray-500 hover:bg-pink-100">
                                                                 <p className="mb-2 text-sm font-medium text-gray-500">
                                                                     Monthly
                                                                 </p>
@@ -228,6 +228,9 @@ const SubscriptionPlans = (): JSX.Element => {
                                                 </div>
                                             </div>
                                             <div className="py-4 px-8">
+                                                <p className="mb-2 text-base font-semibold text-gray-500">
+                                                    Features
+                                                </p>
                                                 <ul className="list-disc list-image-[url(assets/icons/listIcon.svg)] text-base px-4 space-y-2">
                                                     {plan.features.split(",").map((feature, index) => (
                                                         <>

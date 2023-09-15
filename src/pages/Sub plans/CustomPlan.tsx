@@ -6,7 +6,7 @@ import SubModal from './SubModal';
 import { db } from '../../config/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import Loader from '../../components/Loader';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 interface Plan {
     id: string,
     name: string,
@@ -14,8 +14,16 @@ interface Plan {
     price: { monthly: number, yearly: number },
     users: { monthly: string[], yearly: string[] }
 }
+interface State {
+    planName: string,
+    planTerm: string,
+    userIDs: string[]
+}
 
 const CustomPlan = (): JSX.Element => {
+    
+    const navigate = useNavigate()
+
     const [openModal, setOpenModal] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
     const [plans, setPlans] = useState<Plan[]>([{
@@ -37,6 +45,18 @@ const CustomPlan = (): JSX.Element => {
         setPlan(plans[i])
         setOpenModal(true)
     }
+
+
+        // handle navigation to Subusers
+        const handleNavigate = (planName: string, planTerm: string, users: string[], planId: string) => {
+            navigate(`/plans/${planId}`, {
+                state: {
+                    planName: planName,
+                    planTerm: planTerm,
+                    userIDs: users
+                } as State
+            });
+        }
 
     const getCustomPlans = async () => {
         setLoading(true)
@@ -87,154 +107,160 @@ const CustomPlan = (): JSX.Element => {
                             <Loader openloader={loading} />
                         </div>
                         : <div className="grid grid-cos-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                            {plans.reverse().map((plan, index) => (
-                                <div key={index} className="w-full rounded-lg shadow-xl bg-white flex flex-col justify-between">
-                                    <div>
-                                        <div className="w-full flex items-center justify-center bg-pink-500 text-white p-2">
-                                            <div className="w-1/2">
-                                                <h2 className="text-2xl font-semibold text-right">
-                                                    {plan.name}
-                                                </h2>
-                                            </div>
-                                            <div className="w-1/2 flex justify-between items-center">
-                                                <div />
-                                                <IconButton onclick={() => handleOpen(index)}>
-                                                    <FaPen className="w-4 h-4" />
-                                                </IconButton>
-                                            </div>
+                        {plans.reverse().map((plan, index) => (
+                            <div key={index} className="w-full rounded-lg shadow-xl bg-white flex flex-col justify-between select-none">
+                                <div className="w-full">
+                                    <div className="w-full flex items-center justify-center bg-pink-500 text-white p-2">
+                                        <div className="w-1/2">
+                                            <h2 className="text-2xl font-semibold text-right">
+                                                {plan.name}
+                                            </h2>
                                         </div>
-                                        <div className="grid grid-cos-1 gap-2 items-center bg-gray-100">
-                                            <div className="w-full flex items-center rounded-lg shadow-md bg-white p-2 ">
-                                                <div className="p-3 mr-4 bg-gradient-to-r from-pink-700 to-pink-600 rounded-full shadow-lg">
-                                                    <FaUsers className="w-8 h-8 text-white" />
-                                                </div>
-                                                <div className="w-full flex flex-col">
-                                                    <div className="w-full text-gray-500">
-                                                        <p className="mb-2 text-base font-semibold text-gray-500">
-                                                            Total Subs
-                                                        </p>
-                                                    </div>
-                                                    <hr />
-                                                    <div className="w-full flex gap-2">
-                                                        <Link to={`/plans/${plan.id}`} className="w-full text-gray-500 hover:bg-pink-100">
-                                                            <p className="mb-2 text-sm font-medium text-gray-500">
-                                                                Yearly
-                                                            </p>
-                                                            <hr />
-                                                            <p className="text-lg font-semibold">
-                                                                {`${plan.users.yearly.length} users`}
-                                                            </p>
-                                                        </Link>
-                                                        <Link to={`/plans/${plan.id}`} className="w-full px-1 text-gray-500 hover:bg-pink-100">
-                                                            <p className="mb-2 text-sm font-medium text-gray-500">
-                                                                Monthly
-                                                            </p>
-                                                            <hr />
-                                                            <p className="text-lg font-semibold">
-                                                                {`${plan.users.monthly.length} users`}
-                                                            </p>
-                                                        </Link>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className="w-full flex items-center rounded-lg shadow-md bg-white p-2 ">
-                                                <div className="p-3 mr-4 bg-gradient-to-r from-pink-700 to-pink-600 rounded-full shadow-lg">
-                                                    <FaUserCheck className="w-8 h-8 text-white" />
-                                                </div>
-                                                <div className="w-full flex flex-col">
-                                                    <div className="w-full text-gray-500">
-                                                        <p className="mb-2 text-base font-semibold text-gray-500">
-                                                            Active Users
-                                                        </p>
-                                                    </div>
-                                                    <hr />
-                                                    <div className="w-full flex gap-2">
-                                                        <Link to={`/plans/${plan.id}`} className="w-full text-gray-500 hover:bg-pink-100">
-                                                            <p className="mb-2 text-sm font-medium text-gray-500">
-                                                                Yearly
-                                                            </p>
-                                                            <hr />
-                                                            <p className="text-lg font-semibold">
-                                                                {`${plan.users.yearly.length} users`}
-                                                            </p>
-                                                        </Link>
-                                                        <Link to={`/plans/${plan.id}`} className="w-full px-1 text-gray-500 hover:bg-pink-100">
-                                                            <p className="mb-2 text-sm font-medium text-gray-500">
-                                                                Monthly
-                                                            </p>
-                                                            <hr />
-                                                            <p className="text-lg font-semibold">
-                                                                {`${plan.users.monthly.length} users`}
-                                                            </p>
-                                                        </Link>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="w-full flex items-center rounded-lg shadow-md bg-white p-2 ">
-                                                <div className="p-3 mr-4 bg-gradient-to-r from-pink-700 to-pink-600 rounded-full shadow-lg">
-                                                    <FaUserMinus className="w-8 h-8 text-white" />
-                                                </div>
-                                                <div className="w-full flex flex-col">
-                                                    <div className="w-full text-gray-500">
-                                                        <p className="mb-2 text-base font-semibold text-gray-500">
-                                                            Left Users
-                                                        </p>
-                                                    </div>
-                                                    <hr />
-                                                    <div className="w-full flex gap-2">
-                                                        <Link to={`/plans/${plan.id}`} className="w-full text-gray-500 hover:bg-pink-100">
-                                                            <p className="mb-2 text-sm font-medium text-gray-500">
-                                                                Yearly
-                                                            </p>
-                                                            <hr />
-                                                            <p className="text-lg font-semibold">
-                                                                {`${plan.users.yearly.length} users`}
-                                                            </p>
-                                                        </Link>
-                                                        <Link to={`/plans/${plan.id}`} className="w-full px-1 text-gray-500 hover:bg-pink-100">
-                                                            <p className="mb-2 text-sm font-medium text-gray-500">
-                                                                Monthly
-                                                            </p>
-                                                            <hr />
-                                                            <p className="text-lg font-semibold">
-                                                                {`${plan.users.monthly.length} users`}
-                                                            </p>
-                                                        </Link>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="py-4 px-8">
-                                            <ul className="list-disc list-image-[url(assets/icons/listIcon.svg)] text-base px-4 space-y-2">
-                                                {plan.features.split(",").map((feature, index) => (
-                                                    <>
-                                                        <li key={index} className="hover:bg-gray-100">
-                                                            {feature.trim()}
-                                                        </li>
-                                                        <hr className="w-4/5" />
-                                                    </>
-                                                ))}
-                                            </ul>
+                                        <div className="w-1/2 flex justify-between items-center">
+                                            <div />
+                                            <IconButton onclick={() => handleOpen(index)}>
+                                                <FaPen className="w-4 h-4" />
+                                            </IconButton>
                                         </div>
                                     </div>
-                                    <div className="py-4 px-8 flex justify-center items-center gap-1">
-                                        <div className="bg-slate-300 text-2xl text-purple-500 font-bold p-2 rounded-md">
+                                    <div className="grid grid-cos-1 gap-2 items-center bg-gray-100">
+                                        <div className="w-full flex items-center rounded-lg shadow-md bg-white p-2 ">
+                                            <div className="p-3 mr-4 bg-gradient-to-r from-pink-700 to-pink-600 rounded-full shadow-lg">
+                                                <FaUsers className="w-8 h-8 text-white" />
+                                            </div>
+                                            <div className="w-full flex flex-col">
+                                                <div className="w-full text-gray-500">
+                                                    <p className="mb-2 text-base font-semibold text-gray-500">
+                                                        Total Subs
+                                                    </p>
+                                                </div>
+                                                <hr />
+                                                <div className="w-full flex gap-2">
+                                                    <div onClick={() => handleNavigate(plan.name, "yearly", plan.users.yearly, plan.id)} className="p-2 rounded-md w-full text-gray-500 hover:bg-pink-100">
+                                                        <p className="mb-2 text-sm font-medium text-gray-500">
+                                                            Yearly
+                                                        </p>
+                                                        <hr />
+                                                        <p className="text-lg font-semibold">
+                                                            {`${plan.users.yearly.length} users`}
+                                                        </p>
+                                                    </div>
+                                                    <div onClick={() => handleNavigate(plan.name, "monthly", plan.users.monthly, plan.id)} className="p-2 rounded-md w-full text-gray-500 hover:bg-pink-100">
+                                                        <p className="mb-2 text-sm font-medium text-gray-500">
+                                                            Monthly
+                                                        </p>
+                                                        <hr />
+                                                        <p className="text-lg font-semibold">
+                                                            {`${plan.users.monthly.length} users`}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="w-full flex items-center rounded-lg shadow-md bg-white p-2 ">
+                                            <div className="p-3 mr-4 bg-gradient-to-r from-pink-700 to-pink-600 rounded-full shadow-lg">
+                                                <FaUserCheck className="w-8 h-8 text-white" />
+                                            </div>
+                                            <div className="w-full flex flex-col">
+                                                <div className="w-full text-gray-500">
+                                                    <p className="mb-2 text-base font-semibold text-gray-500">
+                                                        Active Users
+                                                    </p>
+                                                </div>
+                                                <hr />
+                                                <div className="w-full flex gap-2">
+                                                    <div onClick={() => handleNavigate(plan.name, "yearly", plan.users.yearly, plan.id)} className="p-2 rounded-md w-full text-gray-500 hover:bg-pink-100">
+                                                        <p className="mb-2 text-sm font-medium text-gray-500">
+                                                            Yearly
+                                                        </p>
+                                                        <hr />
+                                                        <p className="text-lg font-semibold">
+                                                            {`${plan.users.yearly.length} users`}
+                                                        </p>
+                                                    </div>
+                                                    <div onClick={() => handleNavigate(plan.name, "monthly", plan.users.monthly, plan.id)} className="p-2 rounded-md w-full text-gray-500 hover:bg-pink-100">
+                                                        <p className="mb-2 text-sm font-medium text-gray-500">
+                                                            Monthly
+                                                        </p>
+                                                        <hr />
+                                                        <p className="text-lg font-semibold">
+                                                            {`${plan.users.monthly.length} users`}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="w-full flex items-center rounded-lg shadow-md bg-white p-2 ">
+                                            <div className="p-3 mr-4 bg-gradient-to-r from-pink-700 to-pink-600 rounded-full shadow-lg">
+                                                <FaUserMinus className="w-8 h-8 text-white" />
+                                            </div>
+                                            <div className="w-full flex flex-col">
+                                                <div className="w-full text-gray-500">
+                                                    <p className="mb-2 text-base font-semibold text-gray-500">
+                                                        Left Users
+                                                    </p>
+                                                </div>
+                                                <hr />
+                                                <div className="w-full flex gap-2">
+                                                    <div onClick={() => handleNavigate(plan.name, "yearly", plan.users.yearly, plan.id)} className="p-2 rounded-md w-full text-gray-500 hover:bg-pink-100">
+                                                        <p className="mb-2 text-sm font-medium text-gray-500">
+                                                            Yearly
+                                                        </p>
+                                                        <hr />
+                                                        <p className="text-lg font-semibold">
+                                                            {`${plan.users.yearly.length} users`}
+                                                        </p>
+                                                    </div>
+                                                    <div onClick={() => handleNavigate(plan.name, "monthly", plan.users.monthly, plan.id)} className="p-2 rounded-md w-full text-gray-500 hover:bg-pink-100">
+                                                        <p className="mb-2 text-sm font-medium text-gray-500">
+                                                            Monthly
+                                                        </p>
+                                                        <hr />
+                                                        <p className="text-lg font-semibold">
+                                                            {`${plan.users.monthly.length} users`}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="py-4 px-8">
+                                        <p className="mb-2 text-base font-semibold text-gray-500">
+                                            Features
+                                        </p>
+                                        <ul className="list-disc list-image-[url(assets/icons/listIcon.svg)] text-base px-4 space-y-2">
+                                            {plan.features.split(",").map((feature, index) => (
+                                                <>
+                                                    <li key={index} className="hover:bg-gray-100">
+                                                        {feature.trim()}
+                                                    </li>
+                                                    <hr className="w-4/5" />
+                                                </>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                </div>
+                                {
+                                    plan.name !== "Freemium" && <div className="py-4 px-8 flex justify-center items-center gap-1">
+                                        <div className="bg-slate-300 text-2xl text-purple-500 font-semibold p-2 rounded-md">
                                             <span>${plan.price.monthly}</span>
                                             <span className="text-base font-normal text-gray-600">
                                                 /monthly
                                             </span>
                                         </div>
-                                        <div className="bg-slate-700 text-2xl text-pink-500 font-bold p-2 rounded-md">
+                                        <div className="bg-slate-700 text-2xl text-pink-500 font-semibold p-2 rounded-md">
                                             <span>${plan.price.yearly}</span>
                                             <span className="text-base font-normal text-gray-200">
                                                 /yearly
                                             </span>
                                         </div>
                                     </div>
-                                </div>
-                            ))}
-                        </div>}
+                                }
+                            </div>
+                        ))}
+                    </div>
+                        }
                 </div>
             </Layout>
         </>
