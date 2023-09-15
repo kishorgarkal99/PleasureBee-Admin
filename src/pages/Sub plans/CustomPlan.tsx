@@ -65,6 +65,7 @@ const CustomPlan = (): JSX.Element => {
     useEffect(() => {
         getCustomPlans()
     }, [openModal])
+
     return (
         <>
             <SubModal model="CustomSubPlan" plan={plan} showModal={openModal} setShowModal={setOpenModal} />
@@ -115,7 +116,7 @@ const CustomPlan = (): JSX.Element => {
                                                     </div>
                                                     <hr />
                                                     <div className="w-full flex gap-2">
-                                                        <Link to={`/plans/${plan.id}/users`} className="w-full text-gray-500 hover:bg-pink-100">
+                                                        <Link to={`/plans/${plan.id}`} className="w-full text-gray-500 hover:bg-pink-100">
                                                             <p className="mb-2 text-sm font-medium text-gray-500">
                                                                 Yearly
                                                             </p>
@@ -124,7 +125,7 @@ const CustomPlan = (): JSX.Element => {
                                                                 {`${plan.users.yearly.length} users`}
                                                             </p>
                                                         </Link>
-                                                        <Link to={`/plans/${plan.id}/users`} className="w-full px-1 text-gray-500 hover:bg-pink-100">
+                                                        <Link to={`/plans/${plan.id}`} className="w-full px-1 text-gray-500 hover:bg-pink-100">
                                                             <p className="mb-2 text-sm font-medium text-gray-500">
                                                                 Monthly
                                                             </p>
@@ -149,7 +150,7 @@ const CustomPlan = (): JSX.Element => {
                                                     </div>
                                                     <hr />
                                                     <div className="w-full flex gap-2">
-                                                        <Link to={`/plans/${plan.id}/users`} className="w-full text-gray-500 hover:bg-pink-100">
+                                                        <Link to={`/plans/${plan.id}`} className="w-full text-gray-500 hover:bg-pink-100">
                                                             <p className="mb-2 text-sm font-medium text-gray-500">
                                                                 Yearly
                                                             </p>
@@ -158,7 +159,7 @@ const CustomPlan = (): JSX.Element => {
                                                                 {`${plan.users.yearly.length} users`}
                                                             </p>
                                                         </Link>
-                                                        <Link to={`/plans/${plan.id}/users`} className="w-full px-1 text-gray-500 hover:bg-pink-100">
+                                                        <Link to={`/plans/${plan.id}`} className="w-full px-1 text-gray-500 hover:bg-pink-100">
                                                             <p className="mb-2 text-sm font-medium text-gray-500">
                                                                 Monthly
                                                             </p>
@@ -182,7 +183,7 @@ const CustomPlan = (): JSX.Element => {
                                                     </div>
                                                     <hr />
                                                     <div className="w-full flex gap-2">
-                                                        <Link to={`/plans/${plan.id}/users`} className="w-full text-gray-500 hover:bg-pink-100">
+                                                        <Link to={`/plans/${plan.id}`} className="w-full text-gray-500 hover:bg-pink-100">
                                                             <p className="mb-2 text-sm font-medium text-gray-500">
                                                                 Yearly
                                                             </p>
@@ -191,7 +192,7 @@ const CustomPlan = (): JSX.Element => {
                                                                 {`${plan.users.yearly.length} users`}
                                                             </p>
                                                         </Link>
-                                                        <Link to={`/plans/${plan.id}/users`} className="w-full px-1 text-gray-500 hover:bg-pink-100">
+                                                        <Link to={`/plans/${plan.id}`} className="w-full px-1 text-gray-500 hover:bg-pink-100">
                                                             <p className="mb-2 text-sm font-medium text-gray-500">
                                                                 Monthly
                                                             </p>

@@ -47,6 +47,7 @@ const IntrestModal: React.FC<IntrestModalProp> = ({ UIid, showModal, setShowModa
         setUI(prevState => ({ ...prevState, description: e.target.value, }))
     }
 
+    // Add to options
     const handleAddItem = () => {
         if (keyValue === "" || avatarValue === "") {
             setErrorMessage("Please fill the fields");
@@ -88,7 +89,7 @@ const IntrestModal: React.FC<IntrestModalProp> = ({ UIid, showModal, setShowModa
         }
     }
 
-
+// delete item from options
     const handleDeleteItem = (key: string, index: number) => {
         const updatedContent = [...ui.content]
         if (Object.prototype.hasOwnProperty.call(updatedContent[index].options, key)) {

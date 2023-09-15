@@ -6,7 +6,7 @@ import SubModal from './SubModal';
 import { db } from '../../config/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import Loader from '../../components/Loader';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 interface Plan {
     id: string,
@@ -15,7 +15,11 @@ interface Plan {
     price: { monthly: number, yearly: number },
     users: { monthly: string[], yearly: string[] }
 }
-
+interface State {
+    planName: string,
+    planTerm: string,
+    userIDs: string[]
+}
 const SubscriptionPlans = (): JSX.Element => {
     const [openModal, setOpenModal] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
@@ -34,9 +38,23 @@ const SubscriptionPlans = (): JSX.Element => {
         users: { monthly: [], yearly: [] }
     })
 
+    const navigate = useNavigate()
+
+
     const handleOpen = (i: number) => {
         setPlan(plans[i])
         setOpenModal(true)
+    }
+
+    // handle navigation to Subusers
+    const handleNavigate = (planName: string, planTerm: string, users: string[], planId: string) => {
+        navigate(`/plans/${planId}`, {
+            state: {
+                planName: planName,
+                planTerm: planTerm,
+                userIDs: ["24LaiRtaoJdqS6WIuaayO6JDP6B3", "2VZUpsBAcHeuFPbOMzoZQRrRSn53"]
+            } as State
+        });
     }
 
     const getPlans = async () => {
@@ -120,7 +138,7 @@ const SubscriptionPlans = (): JSX.Element => {
                                                         </div>
                                                         <hr />
                                                         <div className="w-full flex gap-2">
-                                                            <Link to={`/plans/${plan.id}/users`} className="w-full text-gray-500 hover:bg-pink-100">
+                                                            <div onClick={() => handleNavigate(plan.name, "yearly", plan.users.yearly, plan.id)} className="w-full text-gray-500 hover:bg-pink-100">
                                                                 <p className="mb-2 text-sm font-medium text-gray-500">
                                                                     Yearly
                                                                 </p>
@@ -128,8 +146,8 @@ const SubscriptionPlans = (): JSX.Element => {
                                                                 <p className="text-lg font-semibold">
                                                                     {`${plan.users.yearly.length} users`}
                                                                 </p>
-                                                            </Link>
-                                                            <Link to={`/plans/${plan.id}/users`} className="w-full px-1 text-gray-500 hover:bg-pink-100">
+                                                            </div>
+                                                            <div onClick={() => handleNavigate(plan.name, "monthly", plan.users.monthly, plan.id)} className="w-full px-1 text-gray-500 hover:bg-pink-100">
                                                                 <p className="mb-2 text-sm font-medium text-gray-500">
                                                                     Monthly
                                                                 </p>
@@ -137,7 +155,7 @@ const SubscriptionPlans = (): JSX.Element => {
                                                                 <p className="text-lg font-semibold">
                                                                     {`${plan.users.monthly.length} users`}
                                                                 </p>
-                                                            </Link>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -154,7 +172,7 @@ const SubscriptionPlans = (): JSX.Element => {
                                                         </div>
                                                         <hr />
                                                         <div className="w-full flex gap-2">
-                                                            <Link to={`/plans/${plan.id}/users`} className="w-full text-gray-500 hover:bg-pink-100">
+                                                            <div onClick={() => handleNavigate(plan.name, "yearly", plan.users.yearly, plan.id)} className="w-full text-gray-500 hover:bg-pink-100">
                                                                 <p className="mb-2 text-sm font-medium text-gray-500">
                                                                     Yearly
                                                                 </p>
@@ -162,8 +180,8 @@ const SubscriptionPlans = (): JSX.Element => {
                                                                 <p className="text-lg font-semibold">
                                                                     {`${plan.users.yearly.length} users`}
                                                                 </p>
-                                                            </Link>
-                                                            <Link to={`/plans/${plan.id}/users`} className="w-full px-1 text-gray-500 hover:bg-pink-100">
+                                                            </div>
+                                                            <div onClick={() => handleNavigate(plan.name, "monthly", plan.users.monthly, plan.id)} className="w-full px-1 text-gray-500 hover:bg-pink-100">
                                                                 <p className="mb-2 text-sm font-medium text-gray-500">
                                                                     Monthly
                                                                 </p>
@@ -171,7 +189,7 @@ const SubscriptionPlans = (): JSX.Element => {
                                                                 <p className="text-lg font-semibold">
                                                                     {`${plan.users.monthly.length} users`}
                                                                 </p>
-                                                            </Link>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -187,7 +205,7 @@ const SubscriptionPlans = (): JSX.Element => {
                                                         </div>
                                                         <hr />
                                                         <div className="w-full flex gap-2">
-                                                            <Link to={`/plans/${plan.id}/users`} className="w-full text-gray-500 hover:bg-pink-100">
+                                                            <div onClick={() => handleNavigate(plan.name, "yearly", plan.users.yearly, plan.id)} className="w-full text-gray-500 hover:bg-pink-100">
                                                                 <p className="mb-2 text-sm font-medium text-gray-500">
                                                                     Yearly
                                                                 </p>
@@ -195,8 +213,8 @@ const SubscriptionPlans = (): JSX.Element => {
                                                                 <p className="text-lg font-semibold">
                                                                     {`${plan.users.yearly.length} users`}
                                                                 </p>
-                                                            </Link>
-                                                            <Link to={`/plans/${plan.id}/users`} className="w-full px-1 text-gray-500 hover:bg-pink-100">
+                                                            </div>
+                                                            <div onClick={() => handleNavigate(plan.name, "monthly", plan.users.monthly, plan.id)} className="w-full px-1 text-gray-500 hover:bg-pink-100">
                                                                 <p className="mb-2 text-sm font-medium text-gray-500">
                                                                     Monthly
                                                                 </p>
@@ -204,7 +222,7 @@ const SubscriptionPlans = (): JSX.Element => {
                                                                 <p className="text-lg font-semibold">
                                                                     {`${plan.users.monthly.length} users`}
                                                                 </p>
-                                                            </Link>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>

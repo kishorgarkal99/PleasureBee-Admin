@@ -8,7 +8,7 @@ import CustomPlan from "./pages/Sub plans/CustomPlan";
 import Analytics from "./pages/Analytics";
 import CreateScreen from "./pages/UserRegFlow/CreateScreen";
 import ProtectedRoutes from "./utils/ProtectedRoutes";
-import SubUsers from "./pages/Sub plans/SubUsers";
+import SubscriptionUsers from "./pages/Sub plans/SubUsers";
 
 function App() {
   return (
@@ -24,7 +24,7 @@ function App() {
           <Route path="/ui/create" element={<CreateScreen />} />
           <Route path="/plans" element={<SubscriptionPlans />} />
           <Route path="/plans/custom" element={<CustomPlan />} />
-          <Route path="/plans/:id/users" element={<SubUsers />} />
+          <Route path="/plans/:id" element={<SubscriptionUsers />} />
           <Route path="/analytics" element={<Analytics />} />
         </Route>
 
